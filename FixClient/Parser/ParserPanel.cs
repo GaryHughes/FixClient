@@ -1,7 +1,12 @@
 using System.Drawing;
+using System.Drawing.Design;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Forms.Integration;
+using System.Windows.Media;
 
 namespace FixClient;
 
@@ -9,13 +14,15 @@ public partial class ParserPanel : FixClientPanel
 {
     readonly ToolStripCheckBox _showAdminMessageCheckBox;
 
-    readonly ToolStripDropDownButton _statusButton;
-    readonly ToolStripMenuItem _statusNoneMenuItem;
-    readonly ToolStripMenuItem _statusInfoMenuItem;
-    readonly ToolStripMenuItem _statusWarnMenuItem;
-    readonly ToolStripMenuItem _statusErrorMenuItem;
+    readonly TextBlock _textBlock = new TextBlock()
+    {
+        FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+        Background = System.Windows.Media.Brushes.White,
+        Padding = new System.Windows.Thickness(10)
+        
+    };
 
-    readonly RichTextBox _textbox;
+    string? _filename;
 
     public ParserPanel()
     {
@@ -24,39 +31,19 @@ public partial class ParserPanel : FixClientPanel
         #region ToolStrip
         var loadButton = new ToolStripButton(Properties.Resources.Open)
         {
-            ImageTransparentColor = Color.Magenta,
+            ImageTransparentColor = System.Drawing.Color.Magenta,
             ToolTipText = "Load a Glue/Gate/FIX Router/Desk Server log file"
         };
         loadButton.Click += async (sender, ev) => await LoadClientMessagesButtonClick(sender, ev);
 
         _showAdminMessageCheckBox = new ToolStripCheckBox();
-        _showAdminMessageCheckBox.CheckChanged += ShowAdminMessageCheckBoxCheckChanged;
-
-        _statusNoneMenuItem = new ToolStripMenuItem { Text = "None", Checked = true, CheckOnClick = true };
-        //_statusNoneMenuItem.Click += StatusMenuItemClick;
-
-        _statusInfoMenuItem = new ToolStripMenuItem { Text = "Info", Checked = true, CheckOnClick = true };
-        //_statusInfoMenuItem.Click += StatusMenuItemClick;
-
-        _statusWarnMenuItem = new ToolStripMenuItem { Text = "Warn", Checked = true, CheckOnClick = true };
-        //_statusWarnMenuItem.Click += StatusMenuItemClick;
-
-        _statusErrorMenuItem = new ToolStripMenuItem { Text = "Error", Checked = true, CheckOnClick = true };
-        //_statusErrorMenuItem.Click += StatusMenuItemClick;
-
-        _statusButton = new ToolStripDropDownButton("Message Status");
-
-        _statusButton.DropDownItems.Add(_statusNoneMenuItem);
-        _statusButton.DropDownItems.Add(_statusInfoMenuItem);
-        _statusButton.DropDownItems.Add(_statusWarnMenuItem);
-        _statusButton.DropDownItems.Add(_statusErrorMenuItem);
+        _showAdminMessageCheckBox.CheckChanged += async (sender, ev) => await ShowAdminMessageCheckBoxCheckChanged(sender, ev);
 
         var toolStrip = new ToolStrip(new ToolStripItem[]
         {
             loadButton,
             new ToolStripLabel("Show Administrative Messages"),
             _showAdminMessageCheckBox,
-            _statusButton
         })
         {
             GripStyle = ToolStripGripStyle.Hidden,
@@ -66,22 +53,22 @@ public partial class ParserPanel : FixClientPanel
 
         #endregion
 
-        _textbox = new()
+        var host = new ElementHost()
         {
             Dock = DockStyle.Fill,
-            BorderStyle = BorderStyle.None,
-            Font = new Font(FontFamily.GenericMonospace, Font.Size)
+            Child = new ScrollViewer() { Content = _textBlock }
         };
 
         TopToolStripPanel.Join(toolStrip);
-        ContentPanel.Controls.Add(_textbox);
-
-        ShowAdminMessageCheckBoxCheckChanged(this, EventArgs.Empty);
+        ContentPanel.Controls.Add(host);
     }
 
-    void ShowAdminMessageCheckBoxCheckChanged(object? sender, EventArgs e)
+    async Task ShowAdminMessageCheckBoxCheckChanged(object? sender, EventArgs e)
     {
-        //UpdateMessageFilter();
+        if (_filename is string filename)
+        {
+            await LoadFile(filename);
+        }
     }
 
     async Task LoadClientMessagesButtonClick(object? sender, EventArgs e)
@@ -93,35 +80,45 @@ public partial class ParserPanel : FixClientPanel
             return;
         }
 
+        await LoadFile(dlg.FileName);
+    }
+
+    async Task LoadFile(string filename)
+    { 
         Cursor? original = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
 
         try
         {
-            _textbox.Text = string.Empty;
-
+            _textBlock.Text = string.Empty;
+             
             var orderBook = new Fix.OrderBook();
 
-            var url = new Uri($"file://{Path.GetFullPath(dlg.FileName)}");
+            var url = new Uri($"file://{Path.GetFullPath(filename)}");
 
             await foreach (var message in Fix.Parser.Parse(url))
             {
-                //if (message.Administrative)
-                //{
-                //    continue;
-                //}
+                if (!_showAdminMessageCheckBox.Checked && message.Administrative)
+                {
+                    continue;
+                }
 
-                _textbox.AppendText(message.PrettyPrint() + "\r\n");
+                _textBlock.Text += message.PrettyPrint() + "\r\n";
 
                 if (orderBook.Process(message) == Fix.OrderBookMessageEffect.Modified)
                 {
-                    var report = new Fix.OrderReport(orderBook);
+                    var report = new Fix.OrderReport(orderBook)
+                    {
+                        SeparatorCharacter = '\u2500'
+                    };
                     using var stream = new MemoryStream();
                     report.Print(stream);
                     stream.Flush();
-                    _textbox.AppendText("\r\n" + Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Position));
+                    _textBlock.Text += Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Position) + "\r\n";
                 }
             }
+
+            _filename = filename;
         }
         catch (Exception ex)
         {

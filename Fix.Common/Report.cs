@@ -41,9 +41,12 @@ public class Report
 
     public string? Title { get; set; } = null;
 
+    public char SeparatorCharacter { get; set; } = '-';
+
     public List<Column> Columns { get; } = new List<Column>();
     List<string[]> Rows { get; } = new List<string[]>();
     string?[]? Footer { get; set; } = null;
+
 
     public void AddColumn(string name, ColumnJustification justification = ColumnJustification.Left)
     {
@@ -97,7 +100,7 @@ public class Report
         //
         // Print a separator between the title column headers and column headers
         //
-        builder.AppendLine("-".PadLeft(totalWidth, '-'));
+        builder.AppendLine($"{SeparatorCharacter}".PadLeft(totalWidth, SeparatorCharacter));
         //
         // Print the column headers
         //
@@ -139,7 +142,7 @@ public class Report
         //
         // Print a separator between the column headers and the data rows
         //
-        builder.AppendLine("-".PadLeft(totalWidth, '-'));
+        builder.AppendLine($"{SeparatorCharacter}".PadLeft(totalWidth, SeparatorCharacter));
         //
         // Print the data rows        
         //
@@ -174,7 +177,7 @@ public class Report
         //
         // Print a footer.
         //
-        builder.Append("-".PadLeft(totalWidth, '-'));
+        builder.Append($"{SeparatorCharacter}".PadLeft(totalWidth, SeparatorCharacter));
 
         if (Footer != null)
         {

@@ -233,7 +233,7 @@ public partial class Message : ICloneable
         using var writer = new StreamWriter(stream, Encoding.ASCII, 4096, true);
         var description = Describe();
 
-        writer.WriteLine(description.MsgTypeDescription + " (" + (Incoming ? "incoming" : "outgoing") + ")\n{");
+        writer.WriteLine(description.MsgTypeDescription + " (" + (Incoming ? "incoming" : "outgoing") + ")\r\n{");
 
         int widestName = 0;
 

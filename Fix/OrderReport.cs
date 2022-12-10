@@ -12,9 +12,14 @@ public class OrderReport
 
     public OrderBook OrderBook { get; }
 
+    public char SeparatorCharacter { get; set; } = '-';
+
     public void Print(Stream stream)
     {
-        var report = new Common.Report();
+        var report = new Common.Report
+        {
+            SeparatorCharacter = SeparatorCharacter
+        };
 
         report.AddColumn("Sender");
         report.AddColumn("Target");
