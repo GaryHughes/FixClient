@@ -8,8 +8,7 @@
     <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
     <SelfContained>true</SelfContained>
 	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	<LangVersion>latest</LangVersion>
+ 	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

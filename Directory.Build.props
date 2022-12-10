@@ -9,7 +9,8 @@
     <RepositoryUrl>https://github.com/GaryHughes/FixClient</RepositoryUrl>
     <PackageProjectUrl>https://github.com/GaryHughes/FixClient</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	<SelfContained>True</SelfContained>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
  </PropertyGroup>
 </Project>
