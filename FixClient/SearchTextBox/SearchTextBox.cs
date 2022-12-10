@@ -28,7 +28,7 @@ class SearchTextBox : CueTextBox
         {
             if (string.IsNullOrEmpty(Text))
             {
-                OnTextChanged(null);
+                OnTextChanged(new EventArgs());
             }
             else
             {

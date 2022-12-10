@@ -256,8 +256,11 @@ partial class HistoryPanel : FixClientPanel
             return;
         }
 
-        e.CellStyle.ForeColor = message.Incoming ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
-        e.FormattingApplied = true;
+        if (e.CellStyle is not null)
+        {
+            e.CellStyle.ForeColor = message.Incoming ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
+            e.FormattingApplied = true;
+        }
     }
 
     void MessageGridCellValueNeeded(object? sender, DataGridViewCellValueEventArgs e)

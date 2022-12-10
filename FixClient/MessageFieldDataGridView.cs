@@ -228,15 +228,18 @@ public partial class MessageFieldDataGridView : DataGridView
                     custom = (bool)customValue;
                 }
 
-                if (custom)
+                if (e.CellStyle is not null)
                 {
-                    e.CellStyle.ForeColor = Color.Brown;
-                }
-                else
-                {
-                    object requiredValue = dataRow[FieldDataTable.ColumnRequired];
-                    var required = (bool)requiredValue;
-                    e.CellStyle.ForeColor = required ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
+                    if (custom)
+                    {
+                        e.CellStyle.ForeColor = Color.Brown;
+                    }
+                    else
+                    {
+                        object requiredValue = dataRow[FieldDataTable.ColumnRequired];
+                        var required = (bool)requiredValue;
+                        e.CellStyle.ForeColor = required ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
+                    }
                 }
             }
         }

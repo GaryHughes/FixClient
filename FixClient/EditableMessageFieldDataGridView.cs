@@ -74,37 +74,38 @@ public partial class EditableMessageFieldDataGridView : MessageFieldDataGridView
         if (sender is not ComboBox comboBox)
             return;
 
-        string text = comboBox.GetItemText(comboBox.Items[e.Index]);
-
-        e.DrawBackground();
-
-        using (SolidBrush br = new(e.ForeColor))
+        if (comboBox.GetItemText(comboBox.Items[e.Index]) is string text)
         {
-            if (e.Font is Font font)
-            {
-                e.Graphics.DrawString(text, font, br, e.Bounds);
-            }
-        }
+            e.DrawBackground();
 
-        if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-        {
-            if (comboBox.Items[e.Index] is not EnumDescription enumDescription)
+            using (SolidBrush br = new(e.ForeColor))
             {
-                return;
+                if (e.Font is Font font)
+                {
+                    e.Graphics.DrawString(text, font, br, e.Bounds);
+                }
             }
 
-            var tooltipText = $"{enumDescription.Value} - {enumDescription.Description}".SplitInParts(100);
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            {
+                if (comboBox.Items[e.Index] is not EnumDescription enumDescription)
+                {
+                    return;
+                }
 
-            Point position = comboBox.PointToClient(Cursor.Position);
-            position.Y += 40;
-            _toolTip.Show(tooltipText, comboBox, position);
-        }
-        else
-        {
-            _toolTip.Hide(comboBox);
-        }
+                var tooltipText = $"{enumDescription.Value} - {enumDescription.Description}".SplitInParts(100);
 
-        e.DrawFocusRectangle();
+                Point position = comboBox.PointToClient(Cursor.Position);
+                position.Y += 40;
+                _toolTip.Show(tooltipText, comboBox, position);
+            }
+            else
+            {
+                _toolTip.Hide(comboBox);
+            }
+
+            e.DrawFocusRectangle();
+        }
     }
 
     static VersionField? FindFieldDefinition(int tag)

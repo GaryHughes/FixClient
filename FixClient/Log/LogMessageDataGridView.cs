@@ -82,15 +82,18 @@ public sealed partial class LogMessageDataGridView : DataGridView
                         level = (LogLevel)levelValue;
                     }
 
-                    if (level == LogLevel.Warn)
+                    if (e.CellStyle is not null)
                     {
-                        e.CellStyle.BackColor = LookAndFeel.Color.LogWarningBackColor;
-                        e.CellStyle.ForeColor = LookAndFeel.Color.LogWarningForeColor;
-                    }
-                    else if (level == LogLevel.Error)
-                    {
-                        e.CellStyle.BackColor = LookAndFeel.Color.LogErrorBackColor;
-                        e.CellStyle.ForeColor = LookAndFeel.Color.LogErrorForeColor;
+                        if (level == LogLevel.Warn)
+                        {
+                            e.CellStyle.BackColor = LookAndFeel.Color.LogWarningBackColor;
+                            e.CellStyle.ForeColor = LookAndFeel.Color.LogWarningForeColor;
+                        }
+                        else if (level == LogLevel.Error)
+                        {
+                            e.CellStyle.BackColor = LookAndFeel.Color.LogErrorBackColor;
+                            e.CellStyle.ForeColor = LookAndFeel.Color.LogErrorForeColor;
+                        }
                     }
                 }
             }

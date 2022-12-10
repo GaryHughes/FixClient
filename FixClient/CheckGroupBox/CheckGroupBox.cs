@@ -204,7 +204,10 @@ public partial class CheckGroupBox : GroupBox
     {
         if (m_bDisableChildrenIfUnchecked == true)
         {
-            e.Control.Enabled = Checked;
+            if (e.Control is not null)
+            {
+                e.Control.Enabled = Checked;
+            }
         }
     }
     #endregion Events

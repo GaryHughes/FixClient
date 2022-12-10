@@ -89,10 +89,7 @@ partial class MainForm : Form
             if (value == _currentSession)
                 return;
 
-            if (_currentSession != null)
-            {
-                _currentSession.Dispose();
-            }
+            _currentSession?.Dispose();
 
             _currentSession = value;
         }
@@ -977,6 +974,11 @@ partial class MainForm : Form
     {
         try
         {
+            if (e.ClickedItem is null)
+            {
+                return;
+            }
+
             CurrentSession = new Session(this);
             _logPanel.Session = CurrentSession;
             CurrentSession.FileName = e.ClickedItem.ToolTipText;

@@ -111,16 +111,19 @@ public partial class FieldDataGridView : DataGridView
                 return;
             }
 
-            var custom = (bool)row[FieldDataTable.ColumnCustom];
-            var required = (bool)row[FieldDataTable.ColumnRequired];
+            if (e.CellStyle is not null)
+            {
+                var custom = (bool)row[FieldDataTable.ColumnCustom];
+                var required = (bool)row[FieldDataTable.ColumnRequired];
 
-            if (custom)
-            {
-                e.CellStyle.ForeColor = LookAndFeel.Color.Custom;
-            }
-            else
-            {
-                e.CellStyle.ForeColor = required ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
+                if (custom)
+                {
+                    e.CellStyle.ForeColor = LookAndFeel.Color.Custom;
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = required ? LookAndFeel.Color.Incoming : LookAndFeel.Color.Outgoing;
+                }
             }
         }
         finally

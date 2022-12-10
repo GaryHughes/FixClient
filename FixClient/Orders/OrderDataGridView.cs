@@ -218,8 +218,12 @@ public sealed partial class OrderDataGridView : DataGridView
                 e.Value = side.ToString();
             }
 
-            e.CellStyle.ForeColor = color;
-            e.FormattingApplied = true;
+            if (e.CellStyle is not null)
+            {
+                e.CellStyle.ForeColor = color;
+                e.FormattingApplied = true;
+            }
+
             return;
         }
 
@@ -263,8 +267,12 @@ public sealed partial class OrderDataGridView : DataGridView
                 e.Value = status.ToString();
             }
 
-            e.CellStyle.ForeColor = color;
-            e.FormattingApplied = true;
+            if (e.CellStyle is not null)
+            {
+                e.CellStyle.ForeColor = color;
+                e.FormattingApplied = true;
+            }
+
             return;
         }
 
