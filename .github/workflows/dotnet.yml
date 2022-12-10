@@ -28,5 +28,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: FixClient
-        path: FixClient/bin/Release/net6.0-windows/win-x64/publish/FixClient.exe
+        path: FixClient/bin/Release/net7.0-windows/win-x64/publish/FixClient.exe
     
