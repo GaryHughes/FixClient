@@ -26,24 +26,24 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 
 ## Installation
 
-* Install the [.NET 5.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-5.0.5-windows-x64-installer)
-    * **NB** FIX Client is not compatible with **.NET 5.0.4** Please see [here](https://github.com/GaryHughes/FixClient/issues/2) for details.  
 * FIX Client is distributed as .NET single file application, just download FixClient.exe from a [release](https://github.com/GaryHughes/FixClient/releases) and run it.
+* For releases prior to 5.1.0 Install the [.NET 5.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-5.0.5-windows-x64-installer)
+    * **NB** FIX Client is not compatible with **.NET 5.0.4** Please see [here](https://github.com/GaryHughes/FixClient/issues/2) for details.  
 
 ## Building
 
 ### Command Line
-* Install the [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-5.0.202-windows-x64-installer)
+* Install the [.NET 7.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-windows-x64-installer]
 * Clone this repository and change into the repository root directory.
-* On the command line type `dotnet publish -c Release -r win-x64`
-* The resulting executable can be retrieved from `FixClient/bin/Release/net5.0-windows/win-x64/publish/FixClient.exe` 
+* On the command line type `dotnet publish -c Release`
+* The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
 
 ### Visual Studio
-* Install [Visual Studio Community Edition 2019](https://visualstudio.microsoft.com/vs/community/)
+* Install [Visual Studio Community Edition 2022](https://visualstudio.microsoft.com/vs/community/)
 * Open `Fix.sln` in the repository root directory.
 * Select `Build` -> `Publish FIX Client` from the menu.
 * Client the `Publish` button.
-* The resulting executable can be retrieved from `FixClient/bin/Release/net5.0-windows/win-x64/publish/FixClient.exe` 
+* The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
 
 ## Acknowledgements
 
