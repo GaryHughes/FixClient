@@ -9,5 +9,6 @@
     <RepositoryUrl>https://github.com/GaryHughes/FixClient</RepositoryUrl>
     <PackageProjectUrl>https://github.com/GaryHughes/FixClient</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<SelfContained>True</SelfContained>
  </PropertyGroup>
 </Project>
