@@ -1,5 +1,5 @@
 ﻿--------------------------------------------------------------------------------
-5.1.0
+5.2.0
 
 •	Upgrade to .NET 7.0
 •	Fix the value description column in the parser view.

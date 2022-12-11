@@ -15,7 +15,7 @@ If this is the first time you've run FIX Client follow the installation instruct
 
 ### Stable
 This branch is actively developed. The main difference between this and the legacy 4.x branch is that the data dictionary is now built on the FIX Orchestra standard.
-* Download the latest release [5.0.0](https://github.com/GaryHughes/FixClient/releases/tag/v5.0.0)
+* Download the latest release [5.2.0](https://github.com/GaryHughes/FixClient/releases/tag/v5.2.0)
 * The libraries FIX Client is built upon are available via nuget [here](https://www.nuget.org/packages?q=Geh.Fix).
     * Documentation for Fix.Dictionary can be found [here](Fix.Dictionary/README.md).
     * Sample code can be found in the [Examples.](https://github.com/GaryHughes/FixClient/tree/master/Examples)
