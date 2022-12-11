@@ -46,4 +46,24 @@ jobs:
         asset_path: FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe
         asset_name: FixClient.exe
         asset_content_type: application/exe     
- 
+    - name: Publish Fix.Common
+      uses: tedd/publish-nuget-neo@v1
+      with:
+          PROJECT_FILE_PATH: Fix.Common/Fix.Common.csproj
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
+          TAG_COMMIT: false
+          VERSION_FILE_PATH: Directory.Build.props    
+    - name: Publish Fix.Dictionary
+      uses: tedd/publish-nuget-neo@v1
+      with:
+          PROJECT_FILE_PATH: Fix.Dictionary/Fix.Dictionary.csproj
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
+          TAG_COMMIT: false
+          VERSION_FILE_PATH: Directory.Build.props
+    - name: Publish Fix
+      uses: tedd/publish-nuget-neo@v1
+      with:
+          PROJECT_FILE_PATH: Fix/Fix.csproj
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
+          TAG_COMMIT: false
+          VERSION_FILE_PATH: Directory.Build.props
