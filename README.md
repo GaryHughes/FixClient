@@ -8,6 +8,7 @@ FIX Client is a Windows desktop program designed for manually testing [FIX proto
 
 ![fixciient](FIXClient.png)
 
+***
 ## Releases
 
 If this is the first time you've run FIX Client follow the installation instructions below.
@@ -24,14 +25,15 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 * This branch is not actively maintained but bug fixes will be considered.
 * Download the latest stable release [4.0.0](https://github.com/GaryHughes/FixClient/releases/tag/v4.0.0)
 
+***
 ## Installation
 
 * FIX Client is distributed as .NET single file application, just download FixClient.exe from a [release](https://github.com/GaryHughes/FixClient/releases) and run it.
 * For releases prior to 5.1.0 Install the [.NET 5.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-5.0.5-windows-x64-installer)
     * **NB** FIX Client is not compatible with **.NET 5.0.4** Please see [here](https://github.com/GaryHughes/FixClient/issues/2) for details.  
 
+***
 ## Building
-
 ### Command Line
 * Install the [.NET 7.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-windows-x64-installer]
 * Clone this repository and change into the repository root directory.
@@ -45,6 +47,7 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 * Client the `Publish` button.
 * The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
 
+***
 ## Acknowledgements
 
 This repository includes parts of the www.fixtrading.org XML Repository Copyright (c) FIX Protocol Ltd. All Rights Reserved.
