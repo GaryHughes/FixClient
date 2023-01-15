@@ -145,10 +145,9 @@ public partial class CustomisePanel : FixClientPanel
         {
             foreach (CustomField field in category.Fields)
             {
-                var definition = Session.Version.Fields[field.Tag];
-
-                if (definition != null)
+                try
                 {
+                    var _ = Session.Version.Fields[field.Tag];
                     MessageBox.Show(this,
                                     string.Format(
                                     "{0} already had a field with tag = {1} ignoring custom field {1} = {2}",
@@ -158,12 +157,13 @@ public partial class CustomisePanel : FixClientPanel
                                     Application.ProductName,
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
-                    continue;
                 }
-
-                if (!Session.CustomFields.ContainsKey(field.Tag))
+                catch (ArgumentOutOfRangeException)
                 {
-                    AddField(field);
+                    if (!Session.CustomFields.ContainsKey(field.Tag))
+                    {
+                        AddField(field);
+                    }
                 }
             }
             Session.WriteCustomFields();
