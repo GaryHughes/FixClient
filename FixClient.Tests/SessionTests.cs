@@ -123,7 +123,7 @@ public class SessionTests
         Assert.AreEqual("SENDER", original.SenderCompId);
         Assert.AreEqual("TARGET", original.TargetCompId);
         Assert.AreEqual(30, original.HeartBtInt);
-        Assert.AreEqual(true, original.OutgoingTimestampFormat);
+        Assert.AreEqual(Fix.Field.TimestampFormatLong, original.OutgoingTimestampFormat);
         Assert.AreEqual(1, original.IncomingSeqNum);
         Assert.AreEqual(1, original.OutgoingSeqNum);
         Assert.AreEqual(true, original.BrokenNewSeqNo);
@@ -158,7 +158,7 @@ public class SessionTests
         Assert.AreEqual("INITIATOR", clone.SenderCompId);
         Assert.AreEqual("ACCEPTOR", clone.TargetCompId);
         Assert.AreEqual(60, clone.HeartBtInt);
-        Assert.AreEqual(false, clone.OutgoingTimestampFormat);
+        Assert.AreEqual(Fix.Field.TimestampFormatShort, clone.OutgoingTimestampFormat);
         Assert.AreEqual(2, clone.IncomingSeqNum);
         Assert.AreEqual(2, clone.OutgoingSeqNum);
         Assert.AreEqual(false, clone.BrokenNewSeqNo);
