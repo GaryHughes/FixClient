@@ -25,9 +25,22 @@ public class Field : ICloneable
     public const string TimestampFormatShort = "yyyyMMdd-HH:mm:ss";
     public const string TimestampFormatLong = "yyyyMMdd-HH:mm:ss.fff";
 
-    public static string TimeString(bool fractionalSeconds = false)
+    public static string TimestampString(string timestampFormat = TimestampFormatLong) => DateTime.UtcNow.ToString(timestampFormat);
+
+    public static bool IsTimestampFormatStringValid(string format)
     {
-        return DateTime.UtcNow.ToString(fractionalSeconds ? TimestampFormatLong : TimestampFormatShort);
+        try
+        {
+            var result = DateTime.ParseExact(DateTime.Now.ToString(format, CultureInfo.InvariantCulture),
+                                             format,
+                                             CultureInfo.InvariantCulture,
+                                             DateTimeStyles.NoCurrentDateDefault);
+            return result != default;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public static readonly Field Invalid = new(0, string.Empty);
