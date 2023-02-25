@@ -610,6 +610,11 @@ partial class OrdersPanel : FixClientPanel
 
         foreach (DataGridViewRow row in _orderGrid.Rows)
         {
+            if (_session is null)
+            {
+                return;
+            }
+
             try
             {
                 var view = row.DataBoundItem as DataRowView;
@@ -632,7 +637,7 @@ partial class OrdersPanel : FixClientPanel
 
                 MessagesPanel.UpdateMessage(message, order);
 
-                message.Fields.Set(FIX_5_0SP2.Fields.TransactTime, Fix.Field.TimeString(Session.MillisecondTimestamps));
+                message.Fields.Set(FIX_5_0SP2.Fields.TransactTime, Fix.Field.TimestampString(_session.OutgoingTimestampFormat));
 
                 if (order.Side is FieldValue side)
                 {

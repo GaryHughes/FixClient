@@ -313,7 +313,7 @@ public partial class Session : Fix.PersistentSession
         OnError(message);
     }
 
-    #endregion
+    #endregion 
 
     #region Custom Fields
 

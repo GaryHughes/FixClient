@@ -1371,7 +1371,7 @@ partial class MessagesPanel : FixClientPanel
             int nextAllocId = Session.NextAllocId;
             int nextListSeqNo = 1;
             int index = 0;
-            string time = Fix.Field.TimeString(Session.MillisecondTimestamps);
+            string time = Fix.Field.TimestampString(Session.OutgoingTimestampFormat);
 
             foreach (Fix.Field field in message.Fields)
             {
@@ -1523,7 +1523,7 @@ partial class MessagesPanel : FixClientPanel
         if (_fieldTable == null)
             return;
 
-        string time = Fix.Field.TimeString(_session.MillisecondTimestamps);
+        string time = Fix.Field.TimestampString(_session.OutgoingTimestampFormat);
 
         foreach (FieldDataRow row in _fieldTable.Rows)
         {

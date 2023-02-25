@@ -44,6 +44,7 @@ public partial class Session : ICloneable
     Timer? _heartbeatTimer;
     Timer? _testRequestTimer;
     bool _logonReceived;
+    string _outgoingTimestampFormat = Field.TimestampFormatLong;
 
     #region Events
 
@@ -142,7 +143,7 @@ public partial class Session : ICloneable
         AutoSendingTime = true;
         OutgoingSeqNum = 1;
         IncomingSeqNum = 1;
-        MillisecondTimestamps = true;
+        OutgoingTimestampFormat = Field.TimestampFormatLong;
         FragmentMessages = true;
         TestRequestDelay = 2;
         ValidateDataFields = true;
@@ -160,7 +161,7 @@ public partial class Session : ICloneable
         SenderCompId = session.SenderCompId;
         TargetCompId = session.TargetCompId;
         HeartBtInt = session.HeartBtInt;
-        MillisecondTimestamps = session.MillisecondTimestamps;
+        OutgoingTimestampFormat = session.OutgoingTimestampFormat;
         IncomingSeqNum = session.IncomingSeqNum;
         OutgoingSeqNum = session.OutgoingSeqNum;
         BrokenNewSeqNo = session.BrokenNewSeqNo;
@@ -217,9 +218,19 @@ public partial class Session : ICloneable
     public int HeartBtInt { get; set; }
 
     [Category(CategoryCommon)]
-    [DisplayName("Millisecond Timestamps")]
+    [DisplayName("Outgoing Timestamp Format")]
     [JsonProperty]
-    public bool MillisecondTimestamps { get; set; }
+    public string OutgoingTimestampFormat { 
+        get => _outgoingTimestampFormat;
+        set
+        {
+            if (!Field.IsTimestampFormatStringValid(value))
+            {
+                throw new Exception($"'{value}' is not a valid DateTime format string");    
+            }
+            _outgoingTimestampFormat = value;
+        } 
+    }
 
     [Category(CategoryCommon)]
     [DisplayName("Incoming MsgSegNum")]

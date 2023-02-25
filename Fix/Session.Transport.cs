@@ -168,7 +168,7 @@ public partial class Session
                 message.Fields.Set(FIX_5_0SP2.Fields.MsgSeqNum, AllocateOutgoingSeqNum());
             }
 
-            message.Fields.Set(FIX_5_0SP2.Fields.SendingTime, Field.TimeString(MillisecondTimestamps));
+            message.Fields.Set(FIX_5_0SP2.Fields.SendingTime, Field.TimestampString(OutgoingTimestampFormat));
 
             if (_writer != null)
             {
