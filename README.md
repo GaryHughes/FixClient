@@ -45,7 +45,7 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 * Install [Visual Studio Community Edition 2022](https://visualstudio.microsoft.com/vs/community/)
 * Open `Fix.sln` in the repository root directory.
 * Select `Build` -> `Publish FIX Client` from the menu.
-* Client the `Publish` button.
+* Click the `Publish` button.
 * The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
 
 ***
