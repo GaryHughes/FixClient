@@ -1,12 +1,8 @@
-using System.Drawing;
-using System.Drawing.Design;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
-using System.Windows.Media;
 
 namespace FixClient;
 
@@ -19,7 +15,7 @@ public partial class ParserPanel : FixClientPanel
         FontFamily = new System.Windows.Media.FontFamily("Consolas"),
         Background = System.Windows.Media.Brushes.White,
         Padding = new System.Windows.Thickness(10)
-        
+
     };
 
     string? _filename;
@@ -84,14 +80,14 @@ public partial class ParserPanel : FixClientPanel
     }
 
     async Task LoadFile(string filename)
-    { 
+    {
         Cursor? original = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
 
         try
         {
             _textBlock.Text = string.Empty;
-             
+
             var orderBook = new Fix.OrderBook();
 
             var url = new Uri($"file://{Path.GetFullPath(filename)}");

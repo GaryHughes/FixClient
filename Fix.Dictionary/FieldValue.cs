@@ -25,7 +25,7 @@ public partial class Dictionary
         {
             if (string.IsNullOrEmpty(Name))
             {
-                if (FIX_5_0SP2.Fields.TryGetValue(Tag, out var fieldDfinition) && 
+                if (FIX_5_0SP2.Fields.TryGetValue(Tag, out var fieldDfinition) &&
                     fieldDfinition.Values.TryGetValue(Value, out var valueDefinition))
                 {
                     Name = valueDefinition.Name;

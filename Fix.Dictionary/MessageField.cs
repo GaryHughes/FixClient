@@ -18,6 +18,6 @@ public static partial class Dictionary
         public string Description => field.Description;
         public bool Required { get; }
         public int Depth { get; }
-        
+
     }
 }

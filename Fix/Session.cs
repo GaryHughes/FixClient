@@ -10,10 +10,10 @@
 //
 /////////////////////////////////////////////////
 global using System;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
 using System.Timers;
-using Newtonsoft.Json;
 using static Fix.Dictionary;
 
 namespace Fix;
@@ -220,16 +220,17 @@ public partial class Session : ICloneable
     [Category(CategoryCommon)]
     [DisplayName("Outgoing Timestamp Format")]
     [JsonProperty]
-    public string OutgoingTimestampFormat { 
+    public string OutgoingTimestampFormat
+    {
         get => _outgoingTimestampFormat;
         set
         {
             if (!Field.IsTimestampFormatStringValid(value))
             {
-                throw new Exception($"'{value}' is not a valid DateTime format string");    
+                throw new Exception($"'{value}' is not a valid DateTime format string");
             }
             _outgoingTimestampFormat = value;
-        } 
+        }
     }
 
     [Category(CategoryCommon)]

@@ -1,5 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Fix;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FixDictionary.Tests;
 

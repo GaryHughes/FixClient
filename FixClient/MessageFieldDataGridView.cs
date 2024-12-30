@@ -53,7 +53,7 @@ public partial class MessageFieldDataGridView : DataGridView
         //
         DataGridViewColumn column;
 
-        column = new DataGridViewIndentColumn
+        column = new DataGridViewControls.DataGridViewIndentColumn
         {
             Name = FieldDataTable.ColumnIndent,
             DataPropertyName = FieldDataTable.ColumnIndent,

@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////
 using System.ComponentModel;
 
-namespace FixClient;
+namespace FixClient.DataGridViewControls;
 
 public class DataGridViewIndentColumn : DataGridViewColumn
 {
@@ -21,7 +21,7 @@ public class DataGridViewIndentColumn : DataGridViewColumn
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get
         {

@@ -142,12 +142,12 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
     public override object Clone()
     {
         var dataGridViewCell = base.Clone() as DataGridViewImageColumnHeaderCell ?? throw new NullReferenceException("DataGridViewColumnHeaderCell.Clone() returned a null reference");
-        
+
         dataGridViewCell.ImageBeforeValue = ImageBeforeValue;
         dataGridViewCell.ImagePadding = ImagePadding;
         dataGridViewCell.Image = Image;
         dataGridViewCell.Icon = Icon;
-        
+
         return dataGridViewCell;
     }
 
