@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -417,6 +418,7 @@ partial class MainForm : Form
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [AllowNull]
     public override sealed string Text
     {
         get { return base.Text; }

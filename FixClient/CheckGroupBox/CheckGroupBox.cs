@@ -21,6 +21,7 @@
 //        * Publicly release modified versions of the code or publicly release works derived from
 //          the code without express written authorization.
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -62,6 +63,7 @@ public partial class CheckGroupBox : GroupBox
     /// The text associated with the control.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [AllowNull]
     public override string Text
     {
         get
