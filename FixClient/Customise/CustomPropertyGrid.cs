@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////
 using System.Collections;
+using System.ComponentModel;
 
 namespace FixClient;
 
@@ -25,6 +26,7 @@ public class CustomPropertyGrid : PropertyGrid
         Refresh();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool ExpandOnTab { get; set; }
 
     /*
@@ -62,11 +64,15 @@ public class CustomPropertyGrid : PropertyGrid
     {
         if ((keyData == Keys.Tab) || (keyData == (Keys.Tab | Keys.Shift)))
         {
-            GridItem selectedItem = SelectedGridItem;
-            GridItem root = selectedItem;
-            while (root.Parent != null)
+            GridItem? selectedItem = SelectedGridItem;
+            GridItem? root = selectedItem;
+            while (root?.Parent != null)
             {
                 root = root.Parent;
+            }
+            if (root is null)
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
             }
             // Find all expanded items and put them in a list.
             var items = new ArrayList();
@@ -90,7 +96,7 @@ public class CustomPropertyGrid : PropertyGrid
                         SelectedGridItem = item;
                     }
 
-                    if (ExpandOnTab && (SelectedGridItem.GridItems.Count > 0))
+                    if (ExpandOnTab && (SelectedGridItem?.GridItems.Count > 0))
                     {
                         SelectedGridItem.Expanded = false;
                     }
@@ -109,7 +115,7 @@ public class CustomPropertyGrid : PropertyGrid
                         SelectedGridItem = item;
                     }
 
-                    if (ExpandOnTab && (SelectedGridItem.GridItems.Count > 0))
+                    if (ExpandOnTab && (SelectedGridItem?.GridItems.Count > 0))
                     {
                         SelectedGridItem.Expanded = true;
                     }
@@ -122,7 +128,7 @@ public class CustomPropertyGrid : PropertyGrid
         return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    void AddExpandedItems(GridItem parent, IList items)
+    static void AddExpandedItems(GridItem parent, IList items)
     {
         if (parent.PropertyDescriptor != null)
         {

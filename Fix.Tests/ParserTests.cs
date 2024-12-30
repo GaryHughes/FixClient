@@ -13,14 +13,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using static Fix.Dictionary;
 
 namespace FixTests;
 
 [TestClass]
 public class ParserTests
 {
-    public async Task<Fix.MessageCollection> ParseMessageCollection<Parser>(string filename) where Parser: Fix.LogParser, new()
+    public async Task<Fix.MessageCollection> ParseMessageCollection<Parser>(string filename) where Parser : Fix.LogParser, new()
     {
         var result = new Fix.MessageCollection();
         var url = new Uri($"file://{Path.GetFullPath(filename)}");
@@ -44,7 +43,7 @@ public class ParserTests
         var messages = await ParseMessageCollection<Fix.Parsers.KlsLogParser>("t_kls.log");
         Assert.AreEqual(95, messages.Count);
     }
-        
+
     [TestMethod]
     [DeploymentItem("Logs/t_atlas.log")]
     public async Task TestAtlasParser()
@@ -52,7 +51,7 @@ public class ParserTests
         var messages = await ParseMessageCollection<Fix.Parsers.GenericLogParser>("t_atlas.log");
         Assert.AreEqual(473, messages.Count);
     }
-        
+
     [TestMethod]
     [DeploymentItem("Logs/t_gate_driver.log")]
     public async Task TestGateDriverParser()
@@ -60,7 +59,7 @@ public class ParserTests
         var messages = await ParseMessageCollection<Fix.Parsers.FormattedLogParser>("t_gate_driver.log");
         Assert.AreEqual(43, messages.Count);
     }
-        
+
     [TestMethod]
     [DeploymentItem("Logs/t_gate_ci.log")]
     public async Task TestGateCiParser()
@@ -76,7 +75,7 @@ public class ParserTests
         var messages = await ParseMessageCollection<Fix.Parsers.GenericLogParser>("t_gate_raw_driver.log");
         Assert.AreEqual(1466, messages.Count);
     }
-        
+
     [TestMethod]
     [DeploymentItem("Logs/t_gate_raw_ci.log")]
     public async Task TestParseGateRawCiLog()

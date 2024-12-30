@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using static Fix.Dictionary;
@@ -34,6 +35,7 @@ public partial class EditableMessageFieldDataGridView : MessageFieldDataGridView
         InitializeComponent();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Fix.Message? Message { get; set; }
 
     protected override void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
@@ -260,8 +262,11 @@ public partial class EditableMessageFieldDataGridView : MessageFieldDataGridView
             // The user has selected an item in a combo box for an field with an enumerated value so
             // update the source field as well.
             //
-            dataRow[FieldDataTable.ColumnValue] = (string)CurrentCell.Value;
-            Message.Fields[index].Value = (string)CurrentCell.Value;
+            if (CurrentCell?.Value is string stringValue)
+            {
+                dataRow[FieldDataTable.ColumnValue] = stringValue;
+                Message.Fields[index].Value = stringValue;
+            }
             OnFieldValueChanged();
             return;
         }

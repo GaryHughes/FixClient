@@ -1,5 +1,5 @@
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace FixDictionary.Tests;
 
@@ -42,7 +42,7 @@ public class MessageTests
     [TestMethod]
     public void TestMessageFieldsLength()
     {
-        Assert.AreEqual(104, Fix.Dictionary.FIX_4_2.Messages.OrderSingle.Fields.Count);    
+        Assert.AreEqual(104, Fix.Dictionary.FIX_4_2.Messages.OrderSingle.Fields.Count);
     }
 
     [TestMethod]

@@ -1,7 +1,7 @@
+using Fix;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Fix;
 
 namespace FixDictionary.Tests;
 
@@ -19,7 +19,7 @@ public class FieldTests
     {
         Assert.IsNull(Dictionary.FIX_4_2.Fields[Dictionary.FIX_4_2.Fields.MaxTag + 1]);
     }
-        
+
     [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void TestIndexerWithTagZero()
     {
@@ -54,7 +54,8 @@ public class FieldTests
     public void TestIndexWithTagEqualToMaxTag()
     {
         var field = Dictionary.FIX_4_2.Fields.Last();
-        if (field is null) {
+        if (field is null)
+        {
             Assert.Fail("field is null");
             return;
         }
@@ -65,12 +66,13 @@ public class FieldTests
     public void TestIndexWithTagGreaterThanMaxTag()
     {
         var field = Dictionary.FIX_4_2.Fields.Last();
-        if (field is null) {
+        if (field is null)
+        {
             Assert.Fail("field is null");
             return;
         }
         Assert.IsNull(Dictionary.FIX_4_2.Fields[field.Tag + 1]);
-    } 
+    }
 
     [TestMethod]
     public void TestTryGetValueWithTagZeroFails()
@@ -90,7 +92,8 @@ public class FieldTests
     public void TestTryGetValueWithTagEqualToMaxTag()
     {
         var field = Dictionary.FIX_4_2.Fields.Last();
-        if (field is null) {
+        if (field is null)
+        {
             Assert.Fail("field is null");
             return;
         }
@@ -102,13 +105,14 @@ public class FieldTests
     public void TestTryGetValueWithTagGreaterThanMaxTag()
     {
         var field = Dictionary.FIX_4_2.Fields.Last();
-        if (field is null) {
+        if (field is null)
+        {
             Assert.Fail("field is null");
             return;
         }
         Assert.IsFalse(Dictionary.FIX_4_2.Fields.TryGetValue(field.Tag + 1, out var expected));
         Assert.IsFalse(Dictionary.IsValid(expected));
-    } 
+    }
 
     [TestMethod]
     public void TestFieldSequenceGaps()
@@ -132,7 +136,7 @@ public class FieldTests
         Assert.AreEqual(956, Fix.Dictionary.FIX_4_4.Fields.MaxTag);
         Assert.AreEqual(50002, Fix.Dictionary.FIX_5_0SP2.Fields.MaxTag);
     }
-        
+
     [TestMethod]
     public void TestFieldCollectionContains()
     {
@@ -154,4 +158,4 @@ public class FieldTests
         var day = Dictionary.FIX_5_0SP2.TimeInForce.Day;
         Assert.AreEqual("A buy or sell order that, if not executed expires at the end of the trading day on which it was entered.", day.Description);
     }
-}    
+}

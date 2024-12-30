@@ -1,7 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Fix.Common;
 
 namespace Fix;
 
@@ -23,9 +21,9 @@ public static partial class Dictionary
         }
 
         public int Count => _fields.Count;
-        public MessageField this[int index] => _fields[index];
+        public MessageField this[int index] => _fields.GetAt(index).Value;
 
-        public virtual IEnumerator<MessageField> GetEnumerator() => _fields.OrderedValues.GetEnumerator();
+        public virtual IEnumerator<MessageField> GetEnumerator() => _fields.Values.GetEnumerator();
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 

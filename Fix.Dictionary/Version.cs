@@ -31,6 +31,6 @@ public static partial class Dictionary
         }
 
         public override string ToString() => BeginString;
-          
+
     }
 }

@@ -12,7 +12,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Fix.Dictionary;
@@ -386,7 +385,7 @@ public class OrderBookTests
                         Assert.AreEqual(25.42m, order.Price);
                         order = book.Orders[1];
                         Assert.AreEqual(10000, order.OrderQty);
-                        Assert.AreEqual(25.46, order.Price);
+                        Assert.AreEqual(25.46m, order.Price);
                     }
                     break;
 
@@ -449,7 +448,7 @@ public class OrderBookTests
     [TestMethod]
     public async Task TestCancel()
     {
-        var text =            
+        var text =
             "{\n" +
             "BeginString    (8) - FIX.4.2\n" +
             "BodyLength    (9) - 216\n" +
@@ -1021,7 +1020,7 @@ public class OrderBookTests
     [DeploymentItem("Logs/t_fill_while_cancel_pending.log")]
     public async Task TestFillWhileCancelPending()
     {
-        Fix.MessageCollection messages = await Fix .MessageCollection.Parse("t_fill_while_cancel_pending.log");
+        Fix.MessageCollection messages = await Fix.MessageCollection.Parse("t_fill_while_cancel_pending.log");
         Assert.IsNotNull(messages);
         Assert.AreEqual(6, messages.Count);
 
@@ -1070,7 +1069,7 @@ public class OrderBookTests
     [DeploymentItem("Logs/t_fill_while_amend_pending.log")]
     public async Task TestFillWhileAmendPending()
     {
-        Fix.MessageCollection messages = await Fix .MessageCollection.Parse("t_fill_while_amend_pending.log");
+        Fix.MessageCollection messages = await Fix.MessageCollection.Parse("t_fill_while_amend_pending.log");
         Assert.IsNotNull(messages);
         Assert.AreEqual(6, messages.Count);
 

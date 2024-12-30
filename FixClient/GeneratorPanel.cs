@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Drawing;
 
 namespace FixClient;
@@ -130,6 +131,7 @@ public partial class GeneratorPanel : FixClientPanel
     //    UpdateUiState();
     //}
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get

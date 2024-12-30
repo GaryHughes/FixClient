@@ -1,6 +1,6 @@
 <Project>
  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <Version>5.2.0</Version>
@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/GaryHughes/FixClient</RepositoryUrl>
     <PackageProjectUrl>https://github.com/GaryHughes/FixClient</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<SelfContained>True</SelfContained>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
  </PropertyGroup>

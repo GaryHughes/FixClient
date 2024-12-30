@@ -9,6 +9,8 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
+
 namespace FixClient;
 
 partial class SessionForm : Form
@@ -34,6 +36,7 @@ partial class SessionForm : Form
         _gridPlaceHolder.Controls.Add(_propertyGrid);
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool Readonly
     {
         get { return _propertyGrid.Enabled; }
@@ -44,6 +47,7 @@ partial class SessionForm : Form
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get { return _session; }

@@ -259,7 +259,7 @@ public class SessionTestsBase<TSession> where TSession : Fix.Session, new()
 
         if (message is null)
         {
-            throw new Exception("message is null");                
+            throw new Exception("message is null");
         }
 
         Assert.AreEqual(definition.MsgType, message.MsgType, $"Found MsgType={MsgTypeName(message.MsgType)} when we expected MsgType={definition.Name}\n{message}");

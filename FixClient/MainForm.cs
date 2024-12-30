@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -63,7 +64,7 @@ partial class MainForm : Form
 
     readonly MenuStrip _mainMenu;
 
-    List<string> _mru = new();
+    List<string> _mru = [];
 
     readonly MessagesPanel _messagesPanel;
     readonly OrdersPanel _ordersPanel;
@@ -415,6 +416,7 @@ partial class MainForm : Form
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public override sealed string Text
     {
         get { return base.Text; }
@@ -827,20 +829,19 @@ partial class MainForm : Form
             filename = current.SenderCompId + "-" + current.TargetCompId + ".session";
         }
 
-        using (SaveFileDialog dlg = new())
-        {
-            dlg.Filter = "txt files (*.session)|*.session|All files (*.*)|*.*";
-            dlg.FilterIndex = 2;
-            dlg.RestoreDirectory = true;
-            dlg.FileName = filename;
+        using SaveFileDialog dlg = new();
+        
+        dlg.Filter = "txt files (*.session)|*.session|All files (*.*)|*.*";
+        dlg.FilterIndex = 2;
+        dlg.RestoreDirectory = true;
+        dlg.FileName = filename;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                CurrentSession.FileName = dlg.FileName;
-                CurrentSession.Write();
-                AddToMru(dlg.FileName);
-                return true;
-            }
+        if (dlg.ShowDialog() == DialogResult.OK)
+        {
+            CurrentSession.FileName = dlg.FileName;
+            CurrentSession.Write();
+            AddToMru(dlg.FileName);
+            return true;
         }
 
         return false;

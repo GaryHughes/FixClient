@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Fix.Common;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Fix.Common.Tests;
 

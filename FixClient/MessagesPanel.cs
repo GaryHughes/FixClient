@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -504,7 +505,7 @@ partial class MessagesPanel : FixClientPanel
 
         editor.Text = string.Format("{0} - {1}", fieldTag, fieldName);
 
-        if (row.Cells[FieldDataTable.ColumnValue].Value.ToString() is string goa)
+        if (row.Cells[FieldDataTable.ColumnValue].Value?.ToString() is string goa)
         {
             editor.Goa = goa;
         }
@@ -545,7 +546,7 @@ partial class MessagesPanel : FixClientPanel
 
         ContextMenuRowIndex = _fieldTable.Rows.IndexOf(row);
 
-        if (Session.CustomFields.Any())
+        if (Session.CustomFields.Count != 0)
         {
             _insertContextMenuItem.DropDownItems.Clear();
 
@@ -565,7 +566,7 @@ partial class MessagesPanel : FixClientPanel
 
         _repeatContextMenuItem.Enabled = _fieldGrid.SelectedRows.Count > 0;
         _removeContextMenuItem.Enabled = _fieldGrid.SelectedRows.Count > 0;
-        _insertContextMenuItem.Enabled = Session.CustomFields.Any();
+        _insertContextMenuItem.Enabled = Session.CustomFields.Count != 0;
         _resetContextMenuItem.Enabled = _messageGrid.SelectedRows.Count > 0;
 
         e.ContextMenuStrip = _contextMenu;
@@ -587,10 +588,10 @@ partial class MessagesPanel : FixClientPanel
             return;
         }
 
-        var item = (ToolStripMenuItem)sender;
-        var field = (CustomField)item.Tag;
-
-        message.Fields.Insert(ContextMenuRowIndex, new Fix.Field(field.Tag.ToString(), string.Empty));
+        if (sender is ToolStripMenuItem item && item.Tag is CustomField field)
+        {
+            message.Fields.Insert(ContextMenuRowIndex, new Fix.Field(field.Tag.ToString(), string.Empty));
+        }
 
         MessageGridSelectionChanged(this, EventArgs.Empty);
     }
@@ -673,9 +674,7 @@ partial class MessagesPanel : FixClientPanel
             // If the user selects the rows bottom up thats the order the rows will be in SelectedRows so we need to 
             // reverse the order here.
             //
-            int tmp = end;
-            end = begin;
-            begin = tmp;
+            (begin, end) = (end, begin);
         }
         //
         // Update some fields automatically to make life easier for the user.
@@ -768,9 +767,7 @@ partial class MessagesPanel : FixClientPanel
             // If the user selects the rows bottom up thats the order the rows will be in SelectedRows so we need to 
             // reverse the order here.
             //
-            int tmp = end;
-            end = begin;
-            begin = tmp;
+            (begin, end) = (end, begin);
         }
 
         Fix.Message? message = SelectedMessage;
@@ -1219,6 +1216,7 @@ partial class MessagesPanel : FixClientPanel
         _fieldSearchTextBox.Enabled = Session != null;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get
@@ -1713,10 +1711,7 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.New);
 
-        if (order.OrderID == null)
-        {
-            order.OrderID = Session.NextOrderId.ToString();
-        }
+        order.OrderID ??= Session.NextOrderId.ToString();
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
@@ -1762,10 +1757,7 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Rejected);
 
-        if (order.OrderID == null)
-        {
-            order.OrderID = Session.NextOrderId.ToString();
-        }
+        order.OrderID ??= Session.NextOrderId.ToString();
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
@@ -1811,10 +1803,7 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Filled);
 
-        if (order.OrderID == null)
-        {
-            order.OrderID = Session.NextOrderId.ToString();
-        }
+        order.OrderID ??= Session.NextOrderId.ToString();
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
@@ -1905,10 +1894,7 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Canceled);
 
-        if (order.OrderID == null)
-        {
-            order.OrderID = Session.NextOrderId.ToString();
-        }
+        order.OrderID ??= Session.NextOrderId.ToString();
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());

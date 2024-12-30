@@ -627,6 +627,7 @@ partial class HistoryPanel : FixClientPanel
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get

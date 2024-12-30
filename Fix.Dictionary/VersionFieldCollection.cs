@@ -1,8 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Fix;
 
@@ -68,8 +65,8 @@ public static partial class Dictionary
         public bool TryGetValue(string name, out VersionField field)
         {
             var value = (from candidate in Fields
-                            where candidate?.Name.ToLower() == name.ToLower()
-                            select candidate).FirstOrDefault();
+                         where candidate?.Name.ToLower() == name.ToLower()
+                         select candidate).FirstOrDefault();
 
             if (value is null)
             {

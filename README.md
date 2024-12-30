@@ -36,17 +36,17 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 ## Building
 ### Command Line
 
-* Install the [.NET 7.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.100-windows-x64-installer)
+* Install the [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-9.0.100-windows-x64-installer)
 * Clone this repository and change into the repository root directory.
 * On the command line type `dotnet publish -c Release`
-* The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
+* The resulting executable can be retrieved from `FixClient/bin/Release/net9.0-windows/win-x64/publish/FixClient.exe` 
 
 ### Visual Studio
 * Install [Visual Studio Community Edition 2022](https://visualstudio.microsoft.com/vs/community/)
 * Open `Fix.sln` in the repository root directory.
 * Select `Build` -> `Publish FIX Client` from the menu.
 * Click the `Publish` button.
-* The resulting executable can be retrieved from `FixClient/bin/Release/net7.0-windows/win10-x64/publish/FixClient.exe` 
+* The resulting executable can be retrieved from `FixClient/bin/Release/net9.0-windows/win-x64/publish/FixClient.exe` 
 
 ***
 ## Acknowledgements

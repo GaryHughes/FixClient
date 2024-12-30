@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Drawing;
 
 namespace FixClient;
@@ -41,12 +42,14 @@ public partial class ToolStripCheckBox : ToolStripControlHost
 
     public event EventHandler? CheckChanged;
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool Checked
     {
         get { return _checkBox.Checked; }
         set { _checkBox.Checked = value; }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public new string Text
     {
         get { return _checkBox.Text; }

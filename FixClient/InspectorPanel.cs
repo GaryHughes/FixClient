@@ -203,6 +203,7 @@ public partial class InspectorPanel : Panel
         Controls.Add(splitterTwo);
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Fix.Dictionary.Message? Message
     {
         set
@@ -213,6 +214,7 @@ public partial class InspectorPanel : Panel
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Fix.Field? Field
     {
         set
