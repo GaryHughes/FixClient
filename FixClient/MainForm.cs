@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -415,6 +416,7 @@ partial class MainForm : Form
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public override sealed string Text
     {
         get { return base.Text; }

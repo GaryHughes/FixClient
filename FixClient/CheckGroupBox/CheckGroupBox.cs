@@ -61,6 +61,7 @@ public partial class CheckGroupBox : GroupBox
     /// <summary>
     /// The text associated with the control.
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public override string Text
     {
         get

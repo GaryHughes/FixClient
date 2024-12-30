@@ -48,10 +48,7 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
         set
         {
             _icon = value;
-            if (DataGridView != null)
-            {
-                DataGridView.UpdateCellValue(ColumnIndex, -1);
-            }
+            DataGridView?.UpdateCellValue(ColumnIndex, -1);
         }
     }
 
@@ -96,10 +93,7 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
             if (ImageBeforeValue != value)
             {
                 _imageBeforeValue = value;
-                if (DataGridView != null)
-                {
-                    DataGridView.InvalidateCell(this);
-                }
+                DataGridView?.InvalidateCell(this);
             }
         }
     }
@@ -145,16 +139,15 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
     /// <summary>
     /// Custom Clone implementation that copies the cell specific properties.
     /// </summary>
-    public override object? Clone()
+    public override object Clone()
     {
-        var dataGridViewCell = base.Clone() as DataGridViewImageColumnHeaderCell;
-        if (dataGridViewCell != null)
-        {
-            dataGridViewCell.ImageBeforeValue = ImageBeforeValue;
-            dataGridViewCell.ImagePadding = ImagePadding;
-            dataGridViewCell.Image = Image;
-            dataGridViewCell.Icon = Icon;
-        }
+        var dataGridViewCell = base.Clone() as DataGridViewImageColumnHeaderCell ?? throw new NullReferenceException("DataGridViewColumnHeaderCell.Clone() returned a null reference");
+        
+        dataGridViewCell.ImageBeforeValue = ImageBeforeValue;
+        dataGridViewCell.ImagePadding = ImagePadding;
+        dataGridViewCell.Image = Image;
+        dataGridViewCell.Icon = Icon;
+        
         return dataGridViewCell;
     }
 
@@ -194,10 +187,7 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
     {
         if (_image != null || _icon != null)
         {
-            if (cellStyle == null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle);
             cellStyle.Padding = GetAdjustedCellPadding(cellStyle);
         }
 
@@ -210,10 +200,7 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
     /// </summary>
     protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView == null)
         {
@@ -264,17 +251,14 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates dataGridViewElementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
     {
-        if (cellStyle == null)
-        {
-            throw new ArgumentNullException(nameof(cellStyle));
-        }
+        ArgumentNullException.ThrowIfNull(cellStyle);
 
         Padding cellStylePadding = cellStyle.Padding;
         int imageHeight = 0, imageWidth = 0;

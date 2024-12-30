@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Threading;
@@ -61,6 +62,7 @@ public partial class DictionaryPanel : FixClientPanel
         #endregion
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Fix.Message Message
     {
         set

@@ -9,6 +9,8 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
+
 namespace FixClient;
 
 public partial class GoaEditor : Form
@@ -28,6 +30,7 @@ public partial class GoaEditor : Form
         }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public string Goa
     {
         get

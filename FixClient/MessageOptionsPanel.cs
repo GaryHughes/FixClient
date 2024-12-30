@@ -149,6 +149,7 @@ public partial class MessageOptionsPanel : Panel
         _session.Write();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get { return _session; }

@@ -757,7 +757,7 @@ public partial class Session : Fix.PersistentSession
     {
         if (_syncContext.InvokeRequired)
         {
-            _syncContext.BeginInvoke(new MethodInvoker(() => WriteFilters()));
+            _syncContext.BeginInvoke(new System.Windows.Forms.MethodInvoker(() => WriteFilters()));
             return;
         }
 
@@ -858,7 +858,7 @@ public partial class Session : Fix.PersistentSession
     {
         if (_syncContext.InvokeRequired)
         {
-            _syncContext.BeginInvoke(new MethodInvoker(() => WriteTemplates()));
+            _syncContext.BeginInvoke(new System.Windows.Forms.MethodInvoker(() => WriteTemplates()));
             return;
         }
 

@@ -9,6 +9,8 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
+
 namespace FixClient;
 
 public class DataGridViewIndentColumn : DataGridViewColumn
@@ -18,6 +20,7 @@ public class DataGridViewIndentColumn : DataGridViewColumn
     {
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override DataGridViewCell CellTemplate
     {
         get

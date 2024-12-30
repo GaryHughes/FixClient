@@ -18,17 +18,17 @@ public class DataGridViewIndentCell : DataGridViewCell
     static readonly Brush DefaultBrush = new SolidBrush(LookAndFeel.Color.GridCellBackground);
 
     static readonly Brush[] Brushes =
-    {
+    [
         new SolidBrush(LookAndFeel.Color.GridCellBackground),
         new SolidBrush(Color.FromArgb(226, 226, 226)),
         new SolidBrush(Color.FromArgb(204, 204, 204)),
         new SolidBrush(Color.FromArgb(152, 152, 152)),
         new SolidBrush(Color.FromArgb(120, 120, 120)),
         new SolidBrush(Color.Black)
-    };
+    ];
 
     protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
-                                    DataGridViewElementStates cellState, object value, object formattedValue, string errorText,
+                                    DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText,
                                     DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                     DataGridViewPaintParts paintParts)
     {

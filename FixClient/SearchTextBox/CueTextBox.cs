@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace FixClient;
@@ -26,6 +27,7 @@ class CueTextBox : ButtonTextBox
 
     string? _cue;
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public string? Cue
     {
         get

@@ -9,6 +9,8 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
+
 namespace FixClient;
 
 public partial class PasteMessageForm : Form
@@ -18,18 +20,21 @@ public partial class PasteMessageForm : Form
         InitializeComponent();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool FilterEmptyFields
     {
         get { return filterEmptyFieldsCheckBox.Checked; }
         set { filterEmptyFieldsCheckBox.Checked = value; }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool DefineUnknownAsCustom
     {
         get { return defineUnknownAsCustomCheckBox.Checked; }
         set { defineUnknownAsCustomCheckBox.Checked = value; }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool ResetExistingMessage
     {
         get { return resetMessageCheckBox.Checked; }

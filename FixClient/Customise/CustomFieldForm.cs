@@ -115,6 +115,7 @@ public partial class CustomFieldForm : Form
     {
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public CustomField Field
     {
         get

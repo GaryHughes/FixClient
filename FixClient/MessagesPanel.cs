@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -1219,6 +1220,7 @@ partial class MessagesPanel : FixClientPanel
         _fieldSearchTextBox.Enabled = Session != null;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get

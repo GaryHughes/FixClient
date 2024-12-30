@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using static Fix.Dictionary;
@@ -50,6 +51,7 @@ public sealed partial class OrderDataGridView : DataGridView
         ReadOnly = true;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public bool DisplayExDestination { get; set; }
 
     protected override void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e)

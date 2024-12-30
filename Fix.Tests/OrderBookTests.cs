@@ -386,7 +386,7 @@ public class OrderBookTests
                         Assert.AreEqual(25.42m, order.Price);
                         order = book.Orders[1];
                         Assert.AreEqual(10000, order.OrderQty);
-                        Assert.AreEqual(25.46, order.Price);
+                        Assert.AreEqual(25.46m, order.Price);
                     }
                     break;
 

@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -33,6 +34,7 @@ public partial class ConnectForm : Form
         Load += ConnectFormLoad;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Stream? Stream { get; private set; }
 
     void ConnectFormLoad(object? sender, EventArgs e)

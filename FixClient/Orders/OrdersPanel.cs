@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Data;
 using System.Text;
 using static Fix.Dictionary;
@@ -880,6 +881,7 @@ partial class OrdersPanel : FixClientPanel
         _reportMenuItem.Enabled = enabled;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session? Session
     {
         get

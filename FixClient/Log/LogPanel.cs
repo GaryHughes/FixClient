@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 
@@ -78,6 +79,7 @@ public partial class LogPanel : FixClientPanel
         handle = Handle;
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Session Session
     {
         set

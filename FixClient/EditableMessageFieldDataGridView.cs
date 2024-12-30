@@ -9,6 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using static Fix.Dictionary;
@@ -34,6 +35,7 @@ public partial class EditableMessageFieldDataGridView : MessageFieldDataGridView
         InitializeComponent();
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Fix.Message? Message { get; set; }
 
     protected override void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
