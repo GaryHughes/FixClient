@@ -48,7 +48,6 @@ public class SessionTests : SessionTestsBase<Fix.Session>
     #endregion
 
     [TestMethod]
-    [DeploymentItem("Logs/t_orion_resend.history")]
     public void TestIgnoreSequenceResetDuringUserInitatedResend()
     {
         Assert.AreEqual(Fix.State.Connected, Acceptor.State);
