@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_release:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
