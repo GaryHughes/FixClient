@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FixClient.Views.OrdersView">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button>Cancel</Button>
+            <Button>Amend</Button>
+            <Button>Status</Button>
+            <Button>ListExecute</Button>
+            <Button>ListStatus</Button>
+            <Button>ListCancel</Button>
+        </StackPanel>
+        <TextBox x:Name="SearchTextBox"></TextBox>
+        <DataGrid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Side" Width="Auto"/>
+                <DataGridTextColumn Header="Symbol" Width="Auto"/>
+                <DataGridTextColumn Header="Quantity" Width="Auto"/>
+                <DataGridTextColumn Header="Limit" Width="Auto"/>
+                <DataGridTextColumn Header="TIF" Width="Auto"/>
+                <DataGridTextColumn Header="Status" Width="Auto"/>
+                <DataGridTextColumn Header="Done" Width="Auto"/>
+                <DataGridTextColumn Header="Leaves" Width="Auto"/>
+                <DataGridTextColumn Header="AvgPx" Width="Auto"/>
+                <DataGridTextColumn Header="ClOrdID" Width="Auto"/>
+                <DataGridTextColumn Header="OrigClOrdID" Width="Auto"/>
+                <DataGridTextColumn Header="ListID" Width="Auto"/>
+                <DataGridTextColumn Header="Text" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl>

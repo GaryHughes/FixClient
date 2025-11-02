@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FixClient.Views.LogView">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button>Clear</Button>
+        </StackPanel>
+        <TextBox x:Name="SearchTextBox"></TextBox>
+        <DataGrid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Timestamp" Width="Auto"/>
+                <DataGridTextColumn Header="Message" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</UserControl>
