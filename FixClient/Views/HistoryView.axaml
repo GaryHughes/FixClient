@@ -2,7 +2,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FixClient.ViewModels"
+             xmlns:fix="using:Fix"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FixClient.Views.HistoryView">
-    History
+             x:Class="FixClient.Views.HistoryView"
+             x:DataType="vm:MainWindowViewModel">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding ClearMessagesCommand}">Clear</Button>
+            <Button Command="{Binding ResendMessageCommand}">Reset</Button>
+            <Button Command="{Binding ExportMessagesCommand}">Export</Button>
+            <!-- TAIL -->
+        </StackPanel>
+        <Grid ColumnDefinitions="*,*">
+            <StackPanel Grid.Column="0">
+                <TextBox x:Name="MessageSearchTextBox"></TextBox>
+                <DataGrid x:Name="HistoryMessagesDataGrid"
+                            ItemsSource="{Binding Session.HistoryMessages}" 
+                            IsReadOnly="True"
+                            SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="SendingTime" Width="Auto" Binding="{Binding SendingTime}"/>
+                        <DataGridTextColumn Header="MsgSeqNum" Width="Auto" Binding="{Binding MsgSeqNum}"/>
+                        <DataGridTextColumn Header="Status" Width="Auto" Binding="{Binding Status}"/>
+                        <DataGridTextColumn Header="MsgType" Width="Auto" Binding="{Binding Definition.Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBox x:Name="FieldSearchTextBox"></TextBox>
+                <DataGrid ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tag" Width="Auto" Binding="{Binding Tag}"/>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Tag}"/>
+                        <DataGridTextColumn Header="Value" Width="Auto" Binding="{Binding Value}"/>
+                        <DataGridTextColumn Header="Description" Width="Auto" Binding="{Binding Tag}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
 </UserControl>

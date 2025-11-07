@@ -2,17 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FixClient.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FixClient.Views.LogView">
+             x:Class="FixClient.Views.LogView"
+             x:DataType="vm:MainWindowViewModel">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Button>Clear</Button>
+            <Button Command="{Binding ClearLogMessagesCommand }" >Clear</Button>
         </StackPanel>
         <TextBox x:Name="SearchTextBox"></TextBox>
-        <DataGrid>
+        <DataGrid ItemsSource="{Binding Session.LogEvents}" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Timestamp" Width="Auto"/>
-                <DataGridTextColumn Header="Message" Width="*"/>
+                <DataGridTextColumn Header="Timestamp" Width="Auto" Binding="{Binding TimeStamp}"/>
+                <DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}"/>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>

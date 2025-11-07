@@ -1,25 +1,9 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Message.Fields.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using static Fix.Dictionary;
 
 namespace Fix;
 
-public class MissingFieldException : Exception
-{
-    public MissingFieldException(Dictionary.VersionField field)
-    : base($"Message does not contain a {field.Name} field")
-    {
-    }
-}
+public class MissingFieldException(Dictionary.VersionField field) 
+    : Exception($"Message does not contain a {field.Name} field");
 
 public partial class Message
 {
@@ -89,26 +73,14 @@ public partial class Message
 
     public string SenderCompID
     {
-        get
-        {
-            return Fields.Find(FIX_5_0SP2.Fields.SenderCompID)?.Value ?? string.Empty;
-        }
-        set
-        {
-            Fields.Set(FIX_5_0SP2.Fields.SenderCompID, value);
-        }
+        get => Fields.Find(FIX_5_0SP2.Fields.SenderCompID)?.Value ?? string.Empty;
+        set => Fields.Set(FIX_5_0SP2.Fields.SenderCompID, value);
     }
 
     public string TargetCompID
     {
-        get
-        {
-            return Fields.Find(FIX_5_0SP2.Fields.TargetCompID)?.Value ?? string.Empty;
-        }
-        set
-        {
-            Fields.Set(FIX_5_0SP2.Fields.TargetCompID, value);
-        }
+        get => Fields.Find(FIX_5_0SP2.Fields.TargetCompID)?.Value ?? string.Empty;
+        set => Fields.Set(FIX_5_0SP2.Fields.TargetCompID, value);
     }
 
     public string? SendingTime => Fields.Find(FIX_5_0SP2.Fields.SendingTime)?.Value;
