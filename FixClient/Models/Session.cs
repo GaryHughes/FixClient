@@ -15,18 +15,38 @@ public partial class Session : Fix.PersistentSession
 
     public Session()
     {
-        void AddHistoryMessage(Fix.Message message)
+        void DecorateMessage(Fix.Message message)
         {
             message.Definition = Dictionary.FIX_5_0SP2.Messages[message.MsgType];
+            foreach (var field in message.Fields)
+            {
+                field.Definition = field.Describe(message.Definition);
+            }
+        }
+        
+        void AddHistoryMessage(Fix.Message message)
+        {
             HistoryMessages.Add(message);
         }
         
         Information += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() => LogEvents.Add(ev));
         Warning += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() => LogEvents.Add(ev)); 
         Error += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() => LogEvents.Add(ev));
-        MessageSent += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() => AddHistoryMessage(ev.Message));
-        MessageReceived += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() => AddHistoryMessage(ev.Message));
+        
+        MessageSent += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            DecorateMessage(ev.Message);
+            AddHistoryMessage(ev.Message);
+        });
+        
+        MessageReceived += (sender, ev) => Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            DecorateMessage(ev.Message);
+            AddHistoryMessage(ev.Message);
+        });
     }
+    
+    //public DataDictionaryInspectorProperties? SelectedHistoryMessageProperties { get; private set; }
     
     public Fix.Behaviour Behaviour { get; set; }
     public string BindHost { get; set; }

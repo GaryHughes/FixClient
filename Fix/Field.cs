@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Field.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -124,6 +113,7 @@ public class Field : ICloneable
     public int Tag { get; }
     public string Value { get; set; } = string.Empty;
     public bool Data { get; set; }
+    public FieldDescription? Definition { get; set; }
 
     public static explicit operator bool(Field field)
     {

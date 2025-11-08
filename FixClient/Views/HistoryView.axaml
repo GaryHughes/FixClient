@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:FixClient.ViewModels"
              xmlns:fix="using:Fix"
+             xmlns:v="using:FixClient.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FixClient.Views.HistoryView"
              x:DataType="vm:MainWindowViewModel">
@@ -14,13 +15,14 @@
             <Button Command="{Binding ExportMessagesCommand}">Export</Button>
             <!-- TAIL -->
         </StackPanel>
-        <Grid ColumnDefinitions="*,*">
+        <Grid ColumnDefinitions="*,*,*">
             <StackPanel Grid.Column="0">
                 <TextBox x:Name="MessageSearchTextBox"></TextBox>
                 <DataGrid x:Name="HistoryMessagesDataGrid"
                             ItemsSource="{Binding Session.HistoryMessages}" 
                             IsReadOnly="True"
-                            SelectionMode="Single">
+                            SelectionMode="Single"
+                            SelectionChanged="HistoryMessagesDataGrid_OnSelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="SendingTime" Width="Auto" Binding="{Binding SendingTime}"/>
                         <DataGridTextColumn Header="MsgSeqNum" Width="Auto" Binding="{Binding MsgSeqNum}"/>
@@ -31,15 +33,19 @@
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <TextBox x:Name="FieldSearchTextBox"></TextBox>
-                <DataGrid ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" 
+                          IsReadOnly="True"
+                          SelectionChanged="DataGrid_OnSelectionChanged"
+                          >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tag" Width="Auto" Binding="{Binding Tag}"/>
-                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Tag}"/>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Definition.Name}"/>
                         <DataGridTextColumn Header="Value" Width="Auto" Binding="{Binding Value}"/>
-                        <DataGridTextColumn Header="Description" Width="Auto" Binding="{Binding Tag}"/>
+                        <DataGridTextColumn Header="Description" Width="Auto" Binding="{Binding Definition.ValueDefinition.Description}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
+            <v:DataDictionaryInspectorView Grid.Column="2" DataContext="{Binding HistoryDataDictionaryInspectorProperties}"/>
         </Grid>
     </StackPanel>
 </UserControl>

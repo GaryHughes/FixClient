@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Fix;
+using FixClient.Models;
 using FixClient.Views;
 
 namespace FixClient.ViewModels;
@@ -24,6 +25,8 @@ public partial class MainWindowViewModel : ObservableObject
     private TcpClient? _tcpClient;
     
     [ObservableProperty] private FixClient.Models.Session? _session;
+    
+    [ObservableProperty] private DataDictionaryInspectorProperties _historyDataDictionaryInspectorProperties = new();
     
     public ObservableCollection<TabItem> TabItems { get; } 
 

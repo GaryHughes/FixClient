@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:apc="clr-namespace:Avalonia.PropertyGrid.Controls;assembly=Avalonia.PropertyGrid"
+             xmlns:models="clr-namespace:FixClient.Models"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="600"
+             x:Class="FixClient.Views.DataDictionaryInspectorView"
+             x:DataType="models:DataDictionaryInspectorProperties">
+    
+    <Design.DataContext>
+        <models:DataDictionaryInspectorProperties/>
+    </Design.DataContext>
+    
+    <StackPanel>
+        <apc:PropertyGrid IsHeaderVisible="False" 
+                          IsTitleVisible="False" 
+                          IsReadOnly="True"
+                          DataContext="{Binding Message}"/>
+        
+        <apc:PropertyGrid IsHeaderVisible="False" 
+                          IsTitleVisible="False"
+                          IsReadOnly="True"
+                          DataContext="{Binding Field}"/>
+        
+        <apc:PropertyGrid IsHeaderVisible="False" 
+                          IsTitleVisible="False"
+                          IsReadOnly="True"
+                          DataContext="{Binding Value}"/>
+        
+    </StackPanel>
+    
+</UserControl>
