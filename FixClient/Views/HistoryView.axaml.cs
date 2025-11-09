@@ -28,11 +28,9 @@ public partial class HistoryView : UserControl
         }
 
         model.HistoryDataDictionaryInspectorProperties.Message = new MessageProperties(messageDefinition);
-        
-        
     }
 
-    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void HistoryFieldsDataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (DataContext is not MainWindowViewModel model)
         {

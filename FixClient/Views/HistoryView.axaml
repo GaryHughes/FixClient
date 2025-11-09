@@ -33,9 +33,10 @@
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <TextBox x:Name="FieldSearchTextBox"></TextBox>
-                <DataGrid ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" 
+                <DataGrid x:Name="HistoryFieldsDataGrid"
+                          ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" 
                           IsReadOnly="True"
-                          SelectionChanged="DataGrid_OnSelectionChanged"
+                          SelectionChanged="HistoryFieldsDataGrid_OnSelectionChanged"
                           >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tag" Width="Auto" Binding="{Binding Tag}"/>

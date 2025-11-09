@@ -46,8 +46,6 @@ public partial class Session : Fix.PersistentSession
         });
     }
     
-    //public DataDictionaryInspectorProperties? SelectedHistoryMessageProperties { get; private set; }
-    
     public Fix.Behaviour Behaviour { get; set; }
     public string BindHost { get; set; }
     public int BindPort { get; set; }

@@ -2,7 +2,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FixClient.ViewModels"
+             xmlns:v="using:FixClient.Views"
+             xmlns:fix="using:Fix"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FixClient.Views.MessagesView">
-    Messages
+             x:Class="FixClient.Views.MessagesView"
+             x:DataType="vm:MainWindowViewModel">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button>Send</Button>
+        </StackPanel>
+        <Grid ColumnDefinitions="*,*,*">
+            <StackPanel Grid.Column="0">
+                <TextBox x:Name="MessageSearchTextBox"></TextBox>
+                <DataGrid x:Name="MessagesDataGrid"
+                          ItemsSource="{Binding Session.Version.Messages}"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          SelectionChanged="MessagesDataGrid_OnSelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="MsgType" Width="Auto" Binding="{Binding MsgType}"/>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBox x:Name="FieldSearchTextBox"></TextBox>
+                <DataGrid IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tag" Width="Auto"/>
+                        <DataGridTextColumn Header="Name" Width="Auto"/>
+                        <DataGridTextColumn Header="Value" Width="Auto"/>
+                        <DataGridTextColumn Header="Description" Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <v:DataDictionaryInspectorView Grid.Column="2" DataContext="{Binding HistoryDataDictionaryInspectorProperties}"/>
+        </Grid>
+    </StackPanel>
 </UserControl>
