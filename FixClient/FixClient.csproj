@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ActiproSoftware.Controls.Avalonia" Version="25.2.1" />
+    <PackageReference Include="ActiproSoftware.Controls.Avalonia.Themes.DataGrid" Version="25.2.1" />
     <PackageReference Include="Avalonia" Version="11.3.8" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.8" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />

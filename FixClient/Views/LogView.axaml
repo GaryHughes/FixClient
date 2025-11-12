@@ -11,7 +11,7 @@
             <Button Command="{Binding ClearLogMessagesCommand }" >Clear</Button>
         </StackPanel>
         <TextBox x:Name="SearchTextBox"></TextBox>
-        <DataGrid ItemsSource="{Binding Session.LogEvents}" IsReadOnly="True">
+        <DataGrid Classes="Compact" ItemsSource="{Binding Session.LogEvents}" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Timestamp" Width="Auto" Binding="{Binding TimeStamp}"/>
                 <DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}"/>

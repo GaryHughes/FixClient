@@ -19,7 +19,8 @@
             <StackPanel Grid.Column="0">
                 <TextBox x:Name="MessageSearchTextBox"></TextBox>
                 <DataGrid x:Name="HistoryMessagesDataGrid"
-                            ItemsSource="{Binding Session.HistoryMessages}" 
+                          Classes="Compact"  
+                          ItemsSource="{Binding Session.HistoryMessages}" 
                             IsReadOnly="True"
                             SelectionMode="Single"
                             SelectionChanged="HistoryMessagesDataGrid_OnSelectionChanged">
@@ -34,6 +35,7 @@
             <StackPanel Grid.Column="1">
                 <TextBox x:Name="FieldSearchTextBox"></TextBox>
                 <DataGrid x:Name="HistoryFieldsDataGrid"
+                          Classes="Compact"
                           ItemsSource="{Binding #HistoryMessagesDataGrid.((fix:Message)SelectedItem).Fields}" 
                           IsReadOnly="True"
                           SelectionChanged="HistoryFieldsDataGrid_OnSelectionChanged"

@@ -13,9 +13,10 @@
             <Button>Send</Button>
         </StackPanel>
         <Grid ColumnDefinitions="*,*,*">
-            <StackPanel Grid.Column="0">
-                <TextBox x:Name="MessageSearchTextBox"></TextBox>
-                <DataGrid x:Name="MessagesDataGrid"
+            <Grid RowDefinitions="Auto,*" Grid.Column="0">
+                <TextBox Grid.Row="0" x:Name="MessageSearchTextBox"></TextBox>
+                <DataGrid Grid.Row="1" x:Name="MessagesDataGrid"
+                          Classes="Compact"
                           ItemsSource="{Binding Session.Version.Messages}"
                           IsReadOnly="True"
                           SelectionMode="Single"
@@ -25,10 +26,10 @@
                         <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
-            <StackPanel Grid.Column="1">
-                <TextBox x:Name="FieldSearchTextBox"></TextBox>
-                <DataGrid IsReadOnly="True">
+            </Grid>
+            <Grid RowDefinitions="Auto,*" Grid.Column="1">
+                <TextBox Grid.Row="0" x:Name="FieldSearchTextBox"></TextBox>
+                <DataGrid Grid.Row="1" IsReadOnly="True" Classes="Compact">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Tag" Width="Auto"/>
                         <DataGridTextColumn Header="Name" Width="Auto"/>
@@ -36,7 +37,7 @@
                         <DataGridTextColumn Header="Description" Width="Auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </Grid>
             <v:DataDictionaryInspectorView Grid.Column="2" DataContext="{Binding HistoryDataDictionaryInspectorProperties}"/>
         </Grid>
     </StackPanel>

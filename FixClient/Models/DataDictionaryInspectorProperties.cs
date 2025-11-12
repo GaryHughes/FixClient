@@ -15,7 +15,8 @@ public class MessageProperties(Fix.Dictionary.Message? message)
     public string? MsgType => message?.MsgType;
 
     [Category(MessageCategory)]
-    public Fix.Dictionary.Pedigree? Pedigree => message?.Pedigree;
+    [MultilineText]
+    public string? Pedigree => message?.Pedigree.ToString();
     
     [Category(MessageCategory)]
     [MultilineText]
@@ -42,7 +43,8 @@ public class FieldProperties(Fix.FieldDescription? description)
     public bool? Required => description?.Required;
 
     [Category(FieldCategory)]
-    public Fix.Dictionary.Pedigree? Pedigree => description?.Pedigree;
+    [MultilineText]
+    public string? Pedigree => description?.Pedigree.ToString();
     
     [Category(FieldCategory)]
     [MultilineText]
@@ -60,7 +62,8 @@ public class ValueProperties(Fix.Dictionary.FieldValue? value)
     public string? Value { get; } = value?.Value;
 
     [Category(ValueCategory)]
-    public Fix.Dictionary.Pedigree? Pedigree { get; } = value?.Pedigree;
+    [MultilineText]
+    public string? Pedigree { get; } = value?.Pedigree.ToString();
     
     [Category(ValueCategory)]
     [MultilineText]

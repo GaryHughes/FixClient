@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="FixClient.App"
              xmlns:local="using:FixClient"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -10,7 +11,28 @@
     </Application.DataTemplates>
   
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme DensityStyle="Compact"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        
+        <Style Selector="DataGrid.Compact">
+            <Setter Property="RowHeight" Value="26"/>
+            <Setter Property="ColumnHeaderHeight" Value="30"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        </Style>
+        
+        <Style Selector="DataGrid.Compact DataGridCell">
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        </Style>
+        
+        <Style Selector="DataGrid.Compact DataGridColumnHeader">
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#F5F5F5"/>
+        </Style>
+        
     </Application.Styles>
 </Application>
