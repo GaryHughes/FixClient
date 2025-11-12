@@ -28,6 +28,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: FixClient
-        path: FixClient/bin/Release/net9.0-windows/win-x64/publish/FixClient.exe
+        path: FixClient/bin/Release/net10.0-windows/win-x64/publish/FixClient.exe
         overwrite: true
     

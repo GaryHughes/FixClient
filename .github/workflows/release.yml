@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: FixClient/bin/Release/net9.0-windows/win-x64/publish/FixClient.exe
+        asset_path: FixClient/bin/Release/net10.0-windows/win-x64/publish/FixClient.exe
         asset_name: FixClient.exe
         asset_content_type: application/exe     
     - name: Publish Fix.Common
