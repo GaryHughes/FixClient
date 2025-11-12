@@ -1,26 +1,16 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: PersistentSession.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Fix.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 
 namespace Fix;
 
 public class PersistentSession : Session, IDisposable
 {
-    readonly object _syncObject = new();
+    readonly Lock _syncObject = new();
 
     readonly DirtyTimer _writeTimer = new();
     JsonSerializer? _serialiser;
@@ -210,10 +200,7 @@ public class PersistentSession : Session, IDisposable
     {
         try
         {
-            if (_serialiser == null)
-            {
-                _serialiser = CreateSerializer();
-            }
+            _serialiser ??= CreateSerializer();
 
             PersistentSession session;
 

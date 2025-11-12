@@ -8,28 +8,28 @@ namespace FixDictionary.Tests;
 [TestClass]
 public class FieldTests
 {
-    [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [TestMethod]
     public void TestIndexLessThanZero()
     {
-        Assert.IsNull(Dictionary.FIX_4_2.Fields[-1]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Dictionary.FIX_4_2.Fields[-1]);
     }
 
-    [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [TestMethod]
     public void TestIndexGreaterThanLength()
     {
-        Assert.IsNull(Dictionary.FIX_4_2.Fields[Dictionary.FIX_4_2.Fields.MaxTag + 1]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Dictionary.FIX_4_2.Fields[Dictionary.FIX_4_2.Fields.MaxTag + 1]);
     }
 
-    [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [TestMethod]
     public void TestIndexerWithTagZero()
     {
-        Assert.IsNull(Dictionary.FIX_4_2.Fields[0]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Dictionary.FIX_4_2.Fields[0]);
     }
 
-    [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [TestMethod]
     public void TestStringIndexerWithInvalidName()
     {
-        Assert.IsNull(Dictionary.FIX_4_2.Fields["Blah"]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Dictionary.FIX_4_2.Fields["Blah"]);
     }
 
     [TestMethod]
@@ -62,7 +62,7 @@ public class FieldTests
         Assert.IsNotNull(Dictionary.FIX_4_2.Fields[field.Tag]);
     }
 
-    [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+    [TestMethod]
     public void TestIndexWithTagGreaterThanMaxTag()
     {
         var field = Dictionary.FIX_4_2.Fields.Last();
@@ -71,7 +71,7 @@ public class FieldTests
             Assert.Fail("field is null");
             return;
         }
-        Assert.IsNull(Dictionary.FIX_4_2.Fields[field.Tag + 1]);
+        Assert.Throws<ArgumentOutOfRangeException>(() => Dictionary.FIX_4_2.Fields[field.Tag + 1]);
     }
 
     [TestMethod]

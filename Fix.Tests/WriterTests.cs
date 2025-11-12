@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: WriterTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Text;
@@ -41,7 +30,7 @@ public class WriterTests
             writer.Write(message);
         }
         stream.Close();
-        Assert.AreEqual(Encoding.ASCII.GetString(stream.ToArray()), expected);
+        Assert.AreEqual(expected, Encoding.ASCII.GetString(stream.ToArray()));
     }
 
     [TestMethod]

@@ -93,7 +93,7 @@ public partial class Message
             {
                 if (!int.TryParse(@field.Value, out int value))
                 {
-                    throw new Exception($"Message contains an invalid {field}");
+                    throw new Exception($"Message contains an invalid {@field}");
                 }
 
                 return value;

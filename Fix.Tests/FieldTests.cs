@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: FieldTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using static Fix.Dictionary;
@@ -56,10 +45,9 @@ public class FieldTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void TestInvalidStringTagConstructor()
     {
-        _ = new Fix.Field("blah", "D");
+        Assert.Throws<ArgumentException>(() => new Fix.Field("blah", "D"));
     }
 
     [TestMethod]

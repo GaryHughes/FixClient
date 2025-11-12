@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: ReaderTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -34,7 +23,7 @@ public class ReaderTests
 
             if (!int.TryParse(expected[index, 0], out int tag))
             {
-                Assert.Fail("Non numeric tag '{0}={1}'", expected[index, 0], expected[index, 1]);
+                Assert.Fail($"Non numeric tag '{expected[index, 0]}={expected[index, 1]}'");
             }
 
             Assert.AreEqual(tag, actual.Tag, "Tag");
@@ -165,27 +154,24 @@ public class ReaderTests
     */
 
     [TestMethod]
-    [ExpectedException(typeof(Exception))]
     public void TestDataFieldWithNoPrecedingSize()
     {
         byte[] data = Encoding.ASCII.GetBytes("89=��#�e���E0LX��10=147");
-        _ = new Fix.Message(data);
+        Assert.Throws<Exception>(() => new Fix.Message(data));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(Exception))]
     public void TestDataFieldWithNonNumericPrevious()
     {
         byte[] data = Encoding.ASCII.GetBytes("8=FIX.4.09=13135=C49=KODIAK56=server34=750=kgehvwap52=20090724-07:20:4194=033=158=UserRegisterRequest#7,13,13#93=XX89=\xA1\xE6\x23\x0E\xC9\x65\x95\x98\x18\x9C\x45\x30\x4C\x58\xC1\xD5\x01\x31\x30=147");
-        _ = new Fix.Message(data);
+        Assert.Throws<Exception>(() => new Fix.Message(data));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(Exception))]
     public void TestDataFieldWithNoTrailingSeparator()
     {
         byte[] data = Encoding.ASCII.GetBytes("8=FIX.4.09=13135=C49=KODIAK56=server34=750=kgehvwap52=20090724-07:20:4194=033=158=UserRegisterRequest#7,13,13#93=1689=\xA1\xE6\x23\x0E\xC9\x65\x95\x98\x18\x9C\x45\x30\x4C\x58\xC1\xD5\x31\x30=147");
-        _ = new Fix.Message(data);
+        Assert.Throws<Exception>(() => new Fix.Message(data));
     }
 
     public static byte[] StringToByteArray(string hex)
