@@ -46,7 +46,7 @@ This branch maintains historic functionality and is built on a FIX Repository ba
 * Open `Fix.sln` in the repository root directory.
 * Select `Build` -> `Publish FIX Client` from the menu.
 * Click the `Publish` button.
-* The resulting executable can be retrieved from `FixClient/bin/Release/net9.0-windows/win-x64/publish/FixClient.exe` 
+* The resulting executable can be retrieved from `FixClient/bin/Release/net10.0-windows/win-x64/publish/FixClient.exe` 
 
 ***
 ## Acknowledgements
