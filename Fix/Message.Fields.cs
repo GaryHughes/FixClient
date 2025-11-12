@@ -34,7 +34,7 @@ public partial class Message
 
             if (Fields.Find(FIX_5_0SP2.Fields.MsgType) is Field field)
             {
-                return field.Value;
+                return @field.Value;
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.MsgType);
@@ -52,7 +52,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.BeginString) is Field field)
             {
-                return field.Value;
+                return @field.Value;
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.BeginString);
@@ -65,7 +65,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.BodyLength) is Field field)
             {
-                return Convert.ToInt32(field.Value);
+                return Convert.ToInt32(@field.Value);
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.BodyLength);
@@ -78,7 +78,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.MsgSeqNum) is Field field)
             {
-                return Convert.ToInt32(field.Value);
+                return Convert.ToInt32(@field.Value);
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.MsgSeqNum);
@@ -119,7 +119,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.BeginSeqNo) is Field field)
             {
-                if (!int.TryParse(field.Value, out int value))
+                if (!int.TryParse(@field.Value, out int value))
                 {
                     throw new Exception($"Message contains an invalid {field}");
                 }
@@ -137,9 +137,9 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.EndSeqNo) is Field field)
             {
-                if (!int.TryParse(field.Value, out int value))
+                if (!int.TryParse(@field.Value, out int value))
                 {
-                    throw new Exception($"Message contains an invalid {field}");
+                    throw new Exception($"Message contains an invalid {@field}");
                 }
 
                 return value;
@@ -155,7 +155,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.GapFillFlag) is Field field)
             {
-                return (bool)field;
+                return (bool)@field;
             }
 
             return false;
@@ -168,7 +168,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.ResetSeqNumFlag) is Field field)
             {
-                return (bool)field;
+                return (bool)@field;
             }
 
             return false;
@@ -181,9 +181,9 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.NewSeqNo) is Field field)
             {
-                if (!int.TryParse(field.Value, out int value))
+                if (!int.TryParse(@field.Value, out int value))
                 {
-                    throw new Exception($"Message contains an invalid {field}");
+                    throw new Exception($"Message contains an invalid {@field}");
                 }
 
                 return value;
@@ -199,7 +199,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.PossDupFlag) is Field field)
             {
-                return (bool)field;
+                return (bool)@field;
             }
 
             return false;
