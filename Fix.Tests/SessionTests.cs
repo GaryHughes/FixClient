@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: SessionTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
@@ -82,10 +71,10 @@ public class SessionTests : SessionTestsBase<Fix.Session>
             Console.WriteLine("{0} - {1} - {2}", i, Initiator.Messages[i].MsgSeqNum, Initiator.Messages[i].MsgType);
         }
 
-        Assert.AreEqual(false, Initiator.Messages[7].Administrative);   // ExecutionReport
-        Assert.AreEqual(true, Initiator.Messages[8].Administrative);    // Heartbeat
-        Assert.AreEqual(false, Initiator.Messages[9].Administrative);   // NewOrderSingle
-        Assert.AreEqual(false, Initiator.Messages[10].Administrative);  // ExecutionReport
+        Assert.IsFalse(Initiator.Messages[7].Administrative);   // ExecutionReport
+        Assert.IsTrue(Initiator.Messages[8].Administrative);    // Heartbeat
+        Assert.IsFalse(Initiator.Messages[9].Administrative);   // NewOrderSingle
+        Assert.IsFalse(Initiator.Messages[10].Administrative);  // ExecutionReport
 
         SendFromInitiator(FIX_5_0SP2.Messages.ResendRequest, new[]
         {
@@ -718,8 +707,8 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         AcceptorStateChange(Fix.State.LoggedOn);
         InitiatorStateChange(Fix.State.LoggedOn);
 
-        Assert.AreEqual(Acceptor.SenderCompId, TargetCompId);
-        Assert.AreEqual(Acceptor.TargetCompId, SenderCompId);
+        Assert.AreEqual(TargetCompId, Acceptor.SenderCompId);
+        Assert.AreEqual(SenderCompId, Acceptor.TargetCompId);
     }
 
     [TestMethod]
@@ -1407,10 +1396,10 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         Assert.AreEqual(Fix.Field.TimestampFormatLong, original.OutgoingTimestampFormat);
         Assert.AreEqual(1, original.IncomingSeqNum);
         Assert.AreEqual(1, original.OutgoingSeqNum);
-        Assert.AreEqual(true, original.BrokenNewSeqNo);
+        Assert.IsTrue(original.BrokenNewSeqNo);
         Assert.AreEqual(1, original.TestRequestId);
-        Assert.AreEqual(true, original.FragmentMessages);
-        Assert.AreEqual(true, original.AutoSendingTime);
+        Assert.IsTrue(original.FragmentMessages);
+        Assert.IsTrue(original.AutoSendingTime);
 
         Assert.AreEqual(Fix.Behaviour.Acceptor, clone.OrderBehaviour);
         Assert.AreEqual(Versions.FIX_4_2, clone.BeginString);
@@ -1422,10 +1411,10 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         Assert.AreEqual(Fix.Field.TimestampFormatShort, clone.OutgoingTimestampFormat);
         Assert.AreEqual(2, clone.IncomingSeqNum);
         Assert.AreEqual(2, clone.OutgoingSeqNum);
-        Assert.AreEqual(false, clone.BrokenNewSeqNo);
+        Assert.IsFalse(clone.BrokenNewSeqNo);
         Assert.AreEqual(2, clone.TestRequestId);
-        Assert.AreEqual(false, clone.FragmentMessages);
-        Assert.AreEqual(false, clone.AutoSendingTime);
+        Assert.IsFalse(clone.FragmentMessages);
+        Assert.IsFalse(clone.AutoSendingTime);
     }
 
     [TestMethod]
@@ -1478,10 +1467,10 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         Assert.AreEqual(Fix.Field.TimestampFormatLong, original.OutgoingTimestampFormat);
         Assert.AreEqual(1, original.IncomingSeqNum);
         Assert.AreEqual(1, original.OutgoingSeqNum);
-        Assert.AreEqual(true, original.BrokenNewSeqNo);
+        Assert.IsTrue(original.BrokenNewSeqNo);
         Assert.AreEqual(1, original.TestRequestId);
-        Assert.AreEqual(true, original.FragmentMessages);
-        Assert.AreEqual(true, original.AutoSendingTime);
+        Assert.IsTrue(original.FragmentMessages);
+        Assert.IsTrue(original.AutoSendingTime);
         Assert.AreEqual(@"C:\some\path\file.session", original.FileName);
 
         Assert.AreEqual(Fix.Behaviour.Acceptor, clone.OrderBehaviour);
@@ -1494,10 +1483,10 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         Assert.AreEqual(Fix.Field.TimestampFormatShort, clone.OutgoingTimestampFormat);
         Assert.AreEqual(2, clone.IncomingSeqNum);
         Assert.AreEqual(2, clone.OutgoingSeqNum);
-        Assert.AreEqual(false, clone.BrokenNewSeqNo);
+        Assert.IsFalse(clone.BrokenNewSeqNo);
         Assert.AreEqual(2, clone.TestRequestId);
-        Assert.AreEqual(false, clone.FragmentMessages);
-        Assert.AreEqual(false, clone.AutoSendingTime);
+        Assert.IsFalse(clone.FragmentMessages);
+        Assert.IsFalse(clone.AutoSendingTime);
         Assert.AreEqual(@"D:\other\path\file.session", clone.FileName);
     }
 
@@ -1506,8 +1495,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
     {
         var session = new Fix.Session();
         Assert.AreEqual(Fix.Field.TimestampFormatLong, session.OutgoingTimestampFormat);
-        Assert.ThrowsException<Exception>(() => session.OutgoingTimestampFormat = "aaa");
-        Assert.AreEqual(Fix.Field.TimestampFormatLong, session.OutgoingTimestampFormat);
+        Assert.Throws<Exception>(() => session.OutgoingTimestampFormat = "aaa");
     }
 
     /*

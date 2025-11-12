@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: MessageTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using static Fix.Dictionary;
@@ -19,12 +8,11 @@ namespace FixTests;
 public class MessageTests
 {
     [TestMethod]
-    [ExpectedException(typeof(Fix.MissingFieldException))]
     public void TestNoMsgType()
     {
         byte[] data = Encoding.ASCII.GetBytes("8=FIX.4.09=12749=ITGHK56=KODIAK_KGEHVWAP34=452=20090630-23:37:1294=033=158=RemotedHost#Name=gateQA-p01,Ip=10.132.3.125,Port=7081#10=128");
         var message = new Fix.Message(data);
-        _ = message.MsgType;
+        Assert.Throws<Fix.MissingFieldException>(() => message.MsgType);
     }
 
     [TestMethod]

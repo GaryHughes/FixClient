@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Message.Fields.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using static Fix.Dictionary;
 
 namespace Fix;
@@ -121,7 +110,7 @@ public partial class Message
             {
                 if (!int.TryParse(@field.Value, out int value))
                 {
-                    throw new Exception($"Message contains an invalid {field}");
+                    throw new Exception($"Message contains an invalid {@field}");
                 }
 
                 return value;

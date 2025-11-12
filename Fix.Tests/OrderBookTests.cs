@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: OrderBookTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
@@ -30,20 +19,20 @@ public class OrderBookTests
         var book = new Fix.OrderBook();
 
         Assert.AreEqual(0, book.Orders.Count);
-        Assert.AreEqual(book.Process(orderSingle), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(orderSingle));
         Assert.AreEqual(1, book.Orders.Count);
 
         Fix.Order order = book.Orders[0];
-        Assert.AreEqual(1, order.Messages.Count);
+        Assert.HasCount(1, order.Messages);
         Assert.AreEqual("RIO", order.Symbol);
         Assert.AreEqual(40m, order.Price);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
 
-        Assert.AreEqual(book.Process(ack), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(ack));
         Assert.AreEqual(1, book.Orders.Count);
 
         order = book.Orders[0];
-        Assert.AreEqual(2, order.Messages.Count);
+        Assert.HasCount(2, order.Messages);
         Assert.AreEqual("RIO", order.Symbol);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.AreEqual(40m, order.Price);
@@ -59,21 +48,21 @@ public class OrderBookTests
         var book = new Fix.OrderBook();
 
         Assert.AreEqual(0, book.Orders.Count);
-        Assert.AreEqual(book.Process(orderSingle), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(orderSingle));
         Assert.AreEqual(1, book.Orders.Count);
 
         Fix.Order order = book.Orders[0];
-        Assert.AreEqual(1, order.Messages.Count);
+        Assert.HasCount(1, order.Messages);
         Assert.AreEqual("RIO", order.Symbol);
         Assert.AreEqual(40m, order.Price);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.IsNull(order.OrderID);
 
-        Assert.AreEqual(book.Process(ack), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(ack));
         Assert.AreEqual(1, book.Orders.Count);
 
         order = book.Orders[0];
-        Assert.AreEqual(2, order.Messages.Count);
+        Assert.HasCount(2, order.Messages);
         Assert.AreEqual("RIO", order.Symbol);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.AreEqual(40m, order.Price);
@@ -90,21 +79,21 @@ public class OrderBookTests
         var book = new Fix.OrderBook();
 
         Assert.AreEqual(0, book.Orders.Count);
-        Assert.AreEqual(book.Process(orderSingle), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(orderSingle));
         Assert.AreEqual(1, book.Orders.Count);
 
         Fix.Order order = book.Orders[0];
-        Assert.AreEqual(1, order.Messages.Count);
+        Assert.HasCount(1, order.Messages);
         Assert.AreEqual("RIO.AX", order.Symbol);
         Assert.AreEqual(39.6m, order.Price);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.IsNull(order.OrderID);
 
-        Assert.AreEqual(book.Process(ack), Fix.OrderBookMessageEffect.Rejected);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Rejected, book.Process(ack));
         Assert.AreEqual(1, book.Orders.Count);
 
         order = book.Orders[0];
-        Assert.AreEqual(1, order.Messages.Count);
+        Assert.HasCount(1, order.Messages);
         Assert.AreEqual("RIO.AX", order.Symbol);
         Assert.AreEqual(39.6m, order.Price);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
@@ -121,21 +110,21 @@ public class OrderBookTests
         var book = new Fix.OrderBook();
 
         Assert.AreEqual(0, book.Orders.Count);
-        Assert.AreEqual(book.Process(orderSingle), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(orderSingle));
         Assert.AreEqual(1, book.Orders.Count);
 
         Fix.Order order = book.Orders[0];
-        Assert.AreEqual(1, order.Messages.Count);
+        Assert.HasCount(1, order.Messages);
         Assert.AreEqual("BHP", order.Symbol);
         Assert.AreEqual(15m, order.Price);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.IsNull(order.OrderID);
 
-        Assert.AreEqual(book.Process(ack), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(ack));
         Assert.AreEqual(1, book.Orders.Count);
 
         order = book.Orders[0];
-        Assert.AreEqual(2, order.Messages.Count);
+        Assert.HasCount(2, order.Messages);
         Assert.AreEqual("BHP", order.Symbol);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.IsNotNull(order.OrderID);
@@ -144,11 +133,11 @@ public class OrderBookTests
         Assert.AreEqual(0, order.CumQty);
         Assert.AreEqual(0, order.AvgPx);
 
-        Assert.AreEqual(book.Process(report), Fix.OrderBookMessageEffect.Modified);
+        Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(report));
         Assert.AreEqual(1, book.Orders.Count);
 
         order = book.Orders[0];
-        Assert.AreEqual(3, order.Messages.Count);
+        Assert.HasCount(3, order.Messages);
         Assert.AreEqual("BHP", order.Symbol);
         Assert.AreEqual(FIX_5_0SP2.Side.Buy, order.Side);
         Assert.IsNotNull(order.OrderID);
@@ -169,14 +158,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.29=15935=849=DESK_SERVER56=FIX_CLIENT34=552=20090824-04:26:2837=2099011=241=120=039=6150=655=BHP54=138=600044=23.532=031=014=06=0151=600017=113910=038"),
             new Fix.Message("8=FIX.4.29=15935=849=DESK_SERVER56=FIX_CLIENT34=652=20090824-04:26:2837=2099011=241=120=039=5150=555=BHP54=138=600044=23.532=031=014=06=0151=600017=114010=029")
         };
-        Assert.AreEqual(5, messages.Count);
+        Assert.HasCount(5, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
 
             Fix.Order? order = null;
             Fix.Order? replacement = null;
@@ -257,14 +246,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.09=16035=849=server56=KODIAK34=32657=kgehgap52=20090824-01:56:536=011=kgehgap.1.514=017=720=031=032=037=738=3539=540=244=10.70000054=155=RDF65=AX10=026")
         };
 
-        Assert.AreEqual(5, messages.Count);
+        Assert.HasCount(5, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
 
             Fix.Order? order = null;
             Fix.Order? replacement = null;
@@ -334,7 +323,7 @@ public class OrderBookTests
 
         for (int index = 0; index < book.Orders.Count; ++index)
         {
-            Assert.AreEqual(book.Process(messages[index]), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(messages[index]));
 
             switch (index)
             {
@@ -585,7 +574,7 @@ public class OrderBookTests
         foreach (Fix.Message message in messages)
         {
             Assert.IsNotNull(message);
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
         }
 
         Fix.Order order = book.Orders[0];
@@ -604,14 +593,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.29=15235=849=QJ56=FIX_CLIENT34=1352=20110724-03:15:1620=039=511=4837=FIX_CLIENT-QJ-4917=6150=5151=041=4855=BHP.AX54=138=10032=031=014=06=010=074"),
             new Fix.Message("8=FIX.4.29=14635=849=QJ56=FIX_CLIENT34=1452=20110724-03:15:1620=039=411=4937=FIX_CLIENT-QJ-4917=7150=4151=055=BHP.AX54=138=10032=031=014=06=010=063")
         };
-        Assert.AreEqual(6, messages.Count);
+        Assert.HasCount(6, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
 
             switch (index)
             {
@@ -681,14 +670,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.29=17035=849=QJ56=FIX_CLIENT34=6752=20120109-03:17:0920=039=611=1389637=FIX_CLIENT-QJ-1389517=31150=6151=10041=1389555=BHP.AX54=138=10044=3732=031=014=06=010=208"),
             new Fix.Message("8=FIX.4.29=11335=949=QJ56=FIX_CLIENT34=6852=20120109-03:17:1337=FIX_CLIENT-QJ-1389539=841=13895434=111=1389658=asdas10=188")
         };
-        Assert.AreEqual(5, messages.Count);
+        Assert.HasCount(5, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Assert.AreEqual(1, book.Orders.Count);
             Fix.Order order = book.Orders[0];
 
@@ -729,14 +718,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.29=18035=849=QJ56=FIX_CLIENT34=15952=20120109-04:49:0220=039=611=1390437=FIX_CLIENT-QJ-1390317=40150=6151=5041=1390355=BHP.AX54=138=10044=3732=031=014=506=3730=DARK10=234"),
             new Fix.Message("8=FIX.4.29=12035=949=QJ56=FIX_CLIENT34=16052=20120109-04:49:1037=FIX_CLIENT-QJ-1390339=841=13903434=111=1390458=sadsadasdas10=056")
         };
-        Assert.AreEqual(6, messages.Count);
+        Assert.HasCount(6, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Assert.AreEqual(1, book.Orders.Count);
             Fix.Order order = book.Orders[0];
 
@@ -780,14 +769,14 @@ public class OrderBookTests
             new Fix.Message("8=FIX.4.29=17135=849=QJ56=FIX_CLIENT34=18552=20120109-05:26:2320=039=611=1391437=FIX_CLIENT-QJ-1391317=45150=6151=10041=1391355=BHP.AX54=138=10044=3732=031=014=06=010=234"),
             new Fix.Message("8=FIX.4.29=11335=949=QJ56=FIX_CLIENT34=18652=20120109-05:26:3037=FIX_CLIENT-QJ-1391339=841=13913434=211=1391458=blah10=095")
         };
-        Assert.AreEqual(5, messages.Count);
+        Assert.HasCount(5, messages);
 
         var book = new Fix.OrderBook();
 
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Assert.AreEqual(1, book.Orders.Count);
             Fix.Order order = book.Orders[0];
 
@@ -828,7 +817,7 @@ public class OrderBookTests
 
         foreach (Fix.Message message in messages)
         {
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
         }
 
         Assert.AreEqual(2, book.Orders.Count);
@@ -851,13 +840,13 @@ public class OrderBookTests
 
         foreach (Fix.Message message in messages)
         {
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
         }
 
         Assert.AreEqual(1, book.Orders.Count);
         Fix.Order order = book.Orders[0];
 
-        Assert.AreEqual(5, order.Messages.Count);
+        Assert.HasCount(5, order.Messages);
         Assert.AreEqual(0, order.LeavesQty);
     }
 
@@ -873,15 +862,15 @@ public class OrderBookTests
 
         foreach (Fix.Message message in messages)
         {
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
         }
 
         Assert.AreEqual(2, book.Orders.Count);
         Fix.Order order = book.Orders[0];
         Fix.Order replacement = book.Orders[1];
 
-        Assert.AreEqual(5, order.Messages.Count);
-        Assert.AreEqual(6, replacement.Messages.Count);
+        Assert.HasCount(5, order.Messages);
+        Assert.HasCount(6, replacement.Messages);
         Assert.AreEqual(0, order.LeavesQty);
         Assert.AreEqual(2286, replacement.LeavesQty);
     }
@@ -899,7 +888,7 @@ public class OrderBookTests
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Fix.Order original = book.Orders[0];
             Fix.Order? replacement = null;
 
@@ -965,7 +954,7 @@ public class OrderBookTests
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Fix.Order original = book.Orders[0];
             Fix.Order? replacement = null;
 
@@ -1029,7 +1018,7 @@ public class OrderBookTests
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Fix.Order order = book.Orders[0];
 
             switch (index)
@@ -1078,7 +1067,7 @@ public class OrderBookTests
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Fix.Order original = book.Orders[0];
             Fix.Order? replacement = null;
 
@@ -1143,7 +1132,7 @@ public class OrderBookTests
         for (int index = 0; index < messages.Count; ++index)
         {
             Fix.Message message = messages[index];
-            Assert.AreEqual(book.Process(message), Fix.OrderBookMessageEffect.Modified);
+            Assert.AreEqual(Fix.OrderBookMessageEffect.Modified, book.Process(message));
             Fix.Order original = book.Orders[0];
             Fix.Order? replacement = null;
 

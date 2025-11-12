@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: SessionTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FixClientTests;
@@ -126,10 +115,10 @@ public class SessionTests
         Assert.AreEqual(Fix.Field.TimestampFormatLong, original.OutgoingTimestampFormat);
         Assert.AreEqual(1, original.IncomingSeqNum);
         Assert.AreEqual(1, original.OutgoingSeqNum);
-        Assert.AreEqual(true, original.BrokenNewSeqNo);
+        Assert.IsTrue(original.BrokenNewSeqNo);
         Assert.AreEqual(1, original.TestRequestId);
-        Assert.AreEqual(true, original.FragmentMessages);
-        Assert.AreEqual(true, original.AutoSendingTime);
+        Assert.IsTrue(original.FragmentMessages);
+        Assert.IsTrue(original.AutoSendingTime);
         Assert.AreEqual(@"C:\some\path\file.session", original.FileName);
         Assert.AreEqual(Fix.Behaviour.Initiator, original.Behaviour);
         Assert.AreEqual("localhost", original.BindHost);
@@ -141,15 +130,15 @@ public class SessionTests
         Assert.AreEqual(1, original.NextAllocId);
         Assert.AreEqual(1, original.NextOrderId);
         Assert.AreEqual(1, original.NextExecId);
-        Assert.AreEqual(true, original.AutoSetMsgSeqNum);
-        Assert.AreEqual(true, original.AutoTotNoOrders);
-        Assert.AreEqual(true, original.AutoNoOrders);
-        Assert.AreEqual(true, original.AutoListId);
-        Assert.AreEqual(true, original.AutoClOrdId);
-        Assert.AreEqual(true, original.AutoListSeqNo);
-        Assert.AreEqual(true, original.AutoTransactTime);
-        Assert.AreEqual(true, original.AutoAllocId);
-        Assert.AreEqual(true, original.AutoScrollMessages);
+        Assert.IsTrue(original.AutoSetMsgSeqNum);
+        Assert.IsTrue(original.AutoTotNoOrders);
+        Assert.IsTrue(original.AutoNoOrders);
+        Assert.IsTrue(original.AutoListId);
+        Assert.IsTrue(original.AutoClOrdId);
+        Assert.IsTrue(original.AutoListSeqNo);
+        Assert.IsTrue(original.AutoTransactTime);
+        Assert.IsTrue(original.AutoAllocId);
+        Assert.IsTrue(original.AutoScrollMessages);
 
         Assert.AreEqual(Fix.Behaviour.Acceptor, clone.OrderBehaviour);
         Assert.AreEqual(Fix.Dictionary.Versions.FIX_4_2, clone.BeginString);
@@ -161,10 +150,10 @@ public class SessionTests
         Assert.AreEqual(Fix.Field.TimestampFormatShort, clone.OutgoingTimestampFormat);
         Assert.AreEqual(2, clone.IncomingSeqNum);
         Assert.AreEqual(2, clone.OutgoingSeqNum);
-        Assert.AreEqual(false, clone.BrokenNewSeqNo);
+        Assert.IsFalse(clone.BrokenNewSeqNo);
         Assert.AreEqual(2, clone.TestRequestId);
-        Assert.AreEqual(false, clone.FragmentMessages);
-        Assert.AreEqual(false, clone.AutoSendingTime);
+        Assert.IsFalse(clone.FragmentMessages);
+        Assert.IsFalse(clone.AutoSendingTime);
         Assert.AreEqual(@"D:\other\path\file.session", clone.FileName);
         Assert.AreEqual(Fix.Behaviour.Acceptor, clone.Behaviour);
         Assert.AreEqual("remotehost", clone.BindHost);
@@ -176,15 +165,15 @@ public class SessionTests
         Assert.AreEqual(4, clone.NextAllocId);
         Assert.AreEqual(4, clone.NextOrderId);
         Assert.AreEqual(4, clone.NextExecId);
-        Assert.AreEqual(false, clone.AutoSetMsgSeqNum);
-        Assert.AreEqual(false, clone.AutoTotNoOrders);
-        Assert.AreEqual(false, clone.AutoNoOrders);
-        Assert.AreEqual(false, clone.AutoListId);
-        Assert.AreEqual(false, clone.AutoClOrdId);
-        Assert.AreEqual(false, clone.AutoListSeqNo);
-        Assert.AreEqual(false, clone.AutoTransactTime);
-        Assert.AreEqual(false, clone.AutoAllocId);
-        Assert.AreEqual(false, clone.AutoScrollMessages);
+        Assert.IsFalse(clone.AutoSetMsgSeqNum);
+        Assert.IsFalse(clone.AutoTotNoOrders);
+        Assert.IsFalse(clone.AutoNoOrders);
+        Assert.IsFalse(clone.AutoListId);
+        Assert.IsFalse(clone.AutoClOrdId);
+        Assert.IsFalse(clone.AutoListSeqNo);
+        Assert.IsFalse(clone.AutoTransactTime);
+        Assert.IsFalse(clone.AutoAllocId);
+        Assert.IsFalse(clone.AutoScrollMessages);
     }
 }
 

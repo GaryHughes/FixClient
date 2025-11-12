@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: FieldCollectionTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using static Fix.Dictionary;
@@ -42,17 +31,15 @@ public class FieldCollectionTests
     Fix.FieldCollection Collection { get; set; } = new Fix.FieldCollection();
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
     public void TestFindFromByTagWithNegativeIndex()
     {
-        Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, -1);
+        Assert.Throws<IndexOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, -1));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
     public void TestFindFromByTagWithIndexOffTheEnd()
     {
-        Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, 11);
+        Assert.Throws<IndexOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, 11));
     }
 
     [TestMethod]

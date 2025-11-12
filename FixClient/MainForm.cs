@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: MainForm.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -531,7 +520,7 @@ partial class MainForm : Form
         _container.ContentPanel.ResumeLayout();
     }
 
-    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    protected override void OnFormClosing(FormClosingEventArgs e)
     {
         if (CurrentSession != null)
         {
@@ -556,7 +545,7 @@ partial class MainForm : Form
         DisconnectButtonClick(this, EventArgs.Empty);
         SaveSizeAndPosition();
         Properties.Settings.Default.Save();
-        base.OnClosing(e);
+        base.OnFormClosing(e);
     }
 
     void UpdateUiState()
