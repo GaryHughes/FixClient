@@ -48,7 +48,7 @@ public class Writer : IDisposable
 
     public Writer(Stream stream, bool leaveOpen)
     {
-        _writer = new BinaryWriter(stream, Encoding.ASCII, leaveOpen);
+        _writer = new BinaryWriter(stream, Encoding.Latin1, leaveOpen);
     }
 
     public bool FragmentMessages { get; set; }
@@ -78,7 +78,7 @@ public class Writer : IDisposable
         else
         {
             using MemoryStream stream = new();
-            using (BinaryWriter writer = new(stream, Encoding.ASCII, true))
+            using (BinaryWriter writer = new(stream, Encoding.Latin1, true))
             {
                 Write(writer, message);
             }
@@ -102,17 +102,17 @@ public class Writer : IDisposable
             if (field.Data)
             {
                 byte[] bytes = Convert.FromBase64String(field.Value);
-                writer.Write(Encoding.ASCII.GetBytes(string.Format("{0}=", field.Tag)));
+                writer.Write(Encoding.Latin1.GetBytes(string.Format("{0}=", field.Tag)));
                 writer.Write(bytes);
-                writer.Write(Encoding.ASCII.GetBytes("\x01"));
+                writer.Write(Encoding.Latin1.GetBytes("\x01"));
             }
             else
             {
-                writer.Write(Encoding.ASCII.GetBytes($"{field.Tag}={field.Value}\x01"));
+                writer.Write(Encoding.Latin1.GetBytes($"{field.Tag}={field.Value}\x01"));
             }
         }
 
-        writer.Write(Encoding.ASCII.GetBytes($"{(int)FIX_5_0SP2.Fields.CheckSum.Tag}={message.CheckSum}\x01"));
+        writer.Write(Encoding.Latin1.GetBytes($"{(int)FIX_5_0SP2.Fields.CheckSum.Tag}={message.CheckSum}\x01"));
     }
 
     public void Write(Message message)
@@ -123,9 +123,9 @@ public class Writer : IDisposable
 
     public void WriteLine(Message message)
     {
-        _writer.Write(Encoding.ASCII.GetBytes(message.Incoming ? "<" : ">"));
+        _writer.Write(Encoding.Latin1.GetBytes(message.Incoming ? "<" : ">"));
         WriteMessage(message);
-        _writer.Write(Encoding.ASCII.GetBytes("\r\n"));
+        _writer.Write(Encoding.Latin1.GetBytes("\r\n"));
         _writer.Flush();
     }
 

@@ -1,4 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using static Fix.Dictionary;
 
@@ -68,5 +71,20 @@ public class MessageTests
         var message = new Fix.Message(FIX_5_0SP2.Messages.NewOrderSingle);
         Assert.AreEqual("D", message.MsgType);
     }
-}
 
+    [TestMethod]
+    public void TestComputeCheckSumWithNonAsciiCharacters()
+    {
+        var bytes = new List<byte>();
+
+        void Append(string value) => bytes.AddRange(Encoding.Latin1.GetBytes(value));
+
+        Append("8=FIXT.1.1\x019=14\x0135=8\x0158=\xC7\xC0\xCE\x01");
+
+        var expected = bytes.Sum(b => b) % 256;
+        Append($"10={expected:D3}\x01"); // Checksum
+
+        var message = new Fix.Reader(new MemoryStream(bytes.ToArray())).Read();
+        Assert.AreEqual($"{expected:D3}", Fix.Message.ComputeCheckSum(message));
+    }
+}
