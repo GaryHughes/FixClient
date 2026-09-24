@@ -234,7 +234,7 @@ public partial class Session : ICloneable
     }
 
     [Category(CategoryCommon)]
-    [DisplayName("Incoming MsgSegNum")]
+    [DisplayName("Incoming MsgSeqNum")]
     [JsonProperty]
     public int IncomingSeqNum { get; set; }
 
@@ -245,7 +245,7 @@ public partial class Session : ICloneable
     int IncomingTargetSeqNum { get; set; }
 
     [Category(CategoryCommon)]
-    [DisplayName("Outgoing MsgSegNum")]
+    [DisplayName("Outgoing MsgSeqNum")]
     [JsonProperty]
     public int OutgoingSeqNum { get; set; }
 
