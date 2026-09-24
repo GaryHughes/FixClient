@@ -140,7 +140,7 @@ public partial class Session
             message.Incoming = false;
             message.Fields.Set(FIX_5_0SP2.Fields.BeginString, BeginString.BeginString);
 
-            if (BeginString.BeginString == "FIXT_1_1" &&
+            if (BeginString.BeginString == Versions.FIXT_1_1.BeginString &&
                 message.MsgType != FIX_5_0SP2.Messages.Logon.MsgType)
             {
                 // Remove unpopulated optional header fields.

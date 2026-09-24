@@ -316,7 +316,7 @@ public partial class Session : ICloneable
     {
         get
         {
-            if (BeginString.BeginString == "FIXT.1.1")
+            if (BeginString.BeginString == Versions.FIXT_1_1.BeginString)
                 return DefaultApplVerId;
             return BeginString;
         }
@@ -372,7 +372,7 @@ public partial class Session : ICloneable
             message.Fields.Add(new Field(field.Tag, string.Empty));
         }
 
-        if (BeginString.BeginString == "FIXT.1.1" &&
+        if (BeginString.BeginString == Versions.FIXT_1_1.BeginString &&
             message.MsgType != FIX_5_0SP2.Messages.Logon.MsgType)
         {
             if (definition.Fields.TryGetValue(FIX_5_0SP2.Fields.ApplVerID.Tag, out field))
@@ -444,7 +444,7 @@ public partial class Session : ICloneable
             logon.Fields.Set(FIX_5_0SP2.Fields.NextExpectedMsgSeqNum, IncomingSeqNum);
         }
 
-        if (BeginString.BeginString == "FIXT.1.1")
+        if (BeginString.BeginString == Versions.FIXT_1_1.BeginString)
         {
             logon.Fields.Set(FIX_5_0SP2.Fields.DefaultApplVerID.Tag, DefaultApplVerId.ApplVerID);
         }
@@ -869,7 +869,7 @@ public partial class Session : ICloneable
     {
         OnInformation($"Performing resend from BeginSeqNo = {beginSeqNo} to EndSeqNo {endSeqNo}");
 
-        if (BeginString.BeginString == "FIX.4.0" || BeginString.BeginString == "FIX.4.1")
+        if (BeginString.BeginString == Versions.FIX_4_0.BeginString || BeginString.BeginString == "FIX.4.1")
         {
             //
             // FIX 4.0 and FIX 4.1 used EndSeqNo 99999 to represent send me everthing
@@ -1176,7 +1176,7 @@ public partial class Session : ICloneable
         logon.Fields.Set(FIX_5_0SP2.EncryptMethod.None);
         logon.Fields.Set(FIX_5_0SP2.Fields.HeartBtInt, HeartBtInt);
 
-        if (BeginString.BeginString == "FIXT.1.1")
+        if (BeginString.BeginString == Versions.FIXT_1_1.BeginString)
         {
             logon.Fields.Set(FIX_5_0SP2.Fields.DefaultApplVerID.Tag, DefaultApplVerId.ApplVerID);
         }

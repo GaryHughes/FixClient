@@ -800,6 +800,87 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         Assert.AreEqual(10, Acceptor.HeartBtInt);
     }
 
+    //
+    // Dictionary.Version.ApplVerID used to always return an empty string which meant we sent
+    // DefaultApplVerID(1137) with an empty value in every FIXT.1.1 logon.
+    //
+
+    [TestMethod]
+    public void TestDefaultApplVerIdInFixtLogon()
+    {
+        Assert.AreEqual(Versions.FIXT_1_1, Initiator.BeginString);
+        Assert.AreEqual(Versions.FIXT_1_1, Acceptor.BeginString);
+        Assert.AreEqual(Versions.FIX_5_0SP2, Initiator.DefaultApplVerId);
+        Assert.AreEqual(Versions.FIX_5_0SP2, Acceptor.DefaultApplVerId);
+
+        Assert.AreEqual(Fix.State.Connected, Acceptor.State);
+        Assert.AreEqual(Fix.State.Connected, Initiator.State);
+
+        Acceptor.Open();
+        Initiator.Open();
+
+        AssertDefaultApplVerId(ReceiveAtAcceptor(FIX_5_0SP2.Messages.Logon),
+                               FIX_5_0SP2.ApplVerID.FIX50SP2.Value,
+                               "The logon sent by the initiator");
+
+        AssertDefaultApplVerId(ReceiveAtInitiator(FIX_5_0SP2.Messages.Logon),
+                               FIX_5_0SP2.ApplVerID.FIX50SP2.Value,
+                               "The logon sent by the acceptor");
+    }
+
+    [TestMethod]
+    public void TestConfiguredDefaultApplVerIdInFixtLogon()
+    {
+        Initiator.DefaultApplVerId = Versions.FIX_4_2;
+        Acceptor.DefaultApplVerId = Versions.FIX_4_4;
+
+        Assert.AreEqual(Fix.State.Connected, Acceptor.State);
+        Assert.AreEqual(Fix.State.Connected, Initiator.State);
+
+        Acceptor.Open();
+        Initiator.Open();
+
+        AssertDefaultApplVerId(ReceiveAtAcceptor(FIX_5_0SP2.Messages.Logon),
+                               FIX_5_0SP2.ApplVerID.FIX42.Value,
+                               "The logon sent by the initiator");
+
+        AssertDefaultApplVerId(ReceiveAtInitiator(FIX_5_0SP2.Messages.Logon),
+                               FIX_5_0SP2.ApplVerID.FIX44.Value,
+                               "The logon sent by the acceptor");
+    }
+
+    [TestMethod]
+    public void TestNoDefaultApplVerIdInNonFixtLogon()
+    {
+        Initiator.BeginString = Versions.FIX_4_4;
+        Acceptor.BeginString = Versions.FIX_4_4;
+
+        Assert.AreEqual(Fix.State.Connected, Acceptor.State);
+        Assert.AreEqual(Fix.State.Connected, Initiator.State);
+
+        Acceptor.Open();
+        Initiator.Open();
+
+        AssertNoDefaultApplVerId(ReceiveAtAcceptor(FIX_5_0SP2.Messages.Logon),
+                                 "The logon sent by the initiator");
+
+        AssertNoDefaultApplVerId(ReceiveAtInitiator(FIX_5_0SP2.Messages.Logon),
+                                 "The logon sent by the acceptor");
+    }
+
+    static void AssertDefaultApplVerId(Fix.Message logon, string expected, string description)
+    {
+        var field = logon.Fields.Find(FIX_5_0SP2.Fields.DefaultApplVerID);
+        Assert.IsNotNull(field, $"{description} does not contain DefaultApplVerID\n{logon}");
+        Assert.AreEqual(expected, field.Value, $"{description} contains DefaultApplVerID = '{field.Value}' when expecting '{expected}'\n{logon}");
+    }
+
+    static void AssertNoDefaultApplVerId(Fix.Message logon, string description)
+    {
+        var field = logon.Fields.Find(FIX_5_0SP2.Fields.DefaultApplVerID);
+        Assert.IsNull(field, $"{description} contains DefaultApplVerID = '{field?.Value}' when it should not be present\n{logon}");
+    }
+
     [TestMethod]
     public void TestTestRequest()
     {
