@@ -225,7 +225,7 @@ public partial class Message : ICloneable
     {
         var stream = new MemoryStream();
         PrettyPrint(stream);
-        return Encoding.UTF8.GetString(stream.GetBuffer());
+        return Encoding.Latin1.GetString(stream.GetBuffer(), 0, (int)stream.Length);
     }
 
     public void PrettyPrint(Stream stream)

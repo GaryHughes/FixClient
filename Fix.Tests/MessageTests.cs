@@ -72,19 +72,67 @@ public class MessageTests
         Assert.AreEqual("D", message.MsgType);
     }
 
+    const string Soh = "\u0001";
+
+    // Assembles a complete message with a correct BodyLength(9) and CheckSum(10) for the supplied body bytes.
+    // Use "\u0001" (or Soh) rather than "\x01" in string literals; C# \x escapes consume up to four hex digits,
+    // so "\x0135=8" is U+0135 followed by "=8", not SOH followed by "35=8".
+    internal static byte[] BuildMessage(string beginString, byte[] body)
+    {
+        var bytes = new List<byte>();
+        bytes.AddRange(Encoding.Latin1.GetBytes($"8={beginString}{Soh}9={body.Length}{Soh}"));
+        bytes.AddRange(body);
+        int checksum = bytes.Sum(b => b) % 256;
+        bytes.AddRange(Encoding.Latin1.GetBytes($"10={checksum:D3}{Soh}"));
+        return bytes.ToArray();
+    }
+
+    internal static byte[] BuildDataFieldBody(byte[] raw)
+    {
+        // RawDataLength(95) / RawData(96) - RawData is a data field so its value is opaque octets.
+        var body = new List<byte>();
+        body.AddRange(Encoding.Latin1.GetBytes($"35=B{Soh}148=Headline{Soh}95={raw.Length}{Soh}96="));
+        body.AddRange(raw);
+        body.AddRange(Encoding.Latin1.GetBytes(Soh));
+        return body.ToArray();
+    }
+
+    // Enough bytes >= 0x80 that summing them as signed values drives the total negative.
+    internal static readonly byte[] HighByteData = Enumerable.Repeat((byte)0x80, 32).Append((byte)0x01).Append((byte)0xFF).ToArray();
+
     [TestMethod]
     public void TestComputeCheckSumWithNonAsciiCharacters()
     {
-        var bytes = new List<byte>();
+        byte[] data = BuildMessage("FIXT.1.1", Encoding.Latin1.GetBytes($"35=8{Soh}58=\u00C7\u00C0\u00CE{Soh}"));
+        var message = new Fix.Reader(new MemoryStream(data)).Read();
+        Assert.IsNotNull(message);
+        Assert.AreEqual("8", message.MsgType);
+        Assert.AreEqual("\u00C7\u00C0\u00CE", message.Fields.Find(58)?.Value);
+        Assert.AreEqual("12", message.ComputeBodyLength());
+        Assert.AreEqual(message.CheckSum, message.ComputeCheckSum());
+    }
 
-        void Append(string value) => bytes.AddRange(Encoding.Latin1.GetBytes(value));
+    [TestMethod]
+    public void TestComputeCheckSumWithHighBytesInDataField()
+    {
+        byte[] data = BuildMessage("FIX.4.4", BuildDataFieldBody(HighByteData));
+        var message = new Fix.Reader(new MemoryStream(data)).Read();
+        Assert.IsNotNull(message);
+        var field = message.Fields.Find(96);
+        Assert.IsNotNull(field);
+        Assert.IsTrue(field.Data);
+        CollectionAssert.AreEqual(HighByteData, System.Convert.FromBase64String(field.Value));
+        Assert.AreEqual(message.CheckSum, message.ComputeCheckSum());
+    }
 
-        Append("8=FIXT.1.1\x019=14\x0135=8\x0158=\xC7\xC0\xCE\x01");
-
-        var expected = bytes.Sum(b => b) % 256;
-        Append($"10={expected:D3}\x01"); // Checksum
-
-        var message = new Fix.Reader(new MemoryStream(bytes.ToArray())).Read();
-        Assert.AreEqual($"{expected:D3}", Fix.Message.ComputeCheckSum(message));
+    [TestMethod]
+    public void TestPrettyPrintPreservesNonAsciiCharacters()
+    {
+        byte[] data = BuildMessage("FIX.4.4", Encoding.Latin1.GetBytes($"35=B{Soh}148=\u00C7\u00C0\u00CE{Soh}"));
+        var message = new Fix.Reader(new MemoryStream(data)).Read();
+        Assert.IsNotNull(message);
+        string text = message.PrettyPrint();
+        Assert.IsTrue(text.Contains("\u00C7\u00C0\u00CE"), text);
+        Assert.IsFalse(text.Contains('\0'), "PrettyPrint output contains trailing NUL characters");
     }
 }

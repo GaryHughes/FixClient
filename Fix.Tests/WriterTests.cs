@@ -74,5 +74,31 @@ public class WriterTests
         Assert.AreEqual(1, messagesWriting);
         Assert.AreEqual(1, messagesWritten);
     }
+
+    static byte[] RoundTrip(byte[] data)
+    {
+        var message = new Fix.Reader(new MemoryStream(data)).Read();
+        Assert.IsNotNull(message);
+        var stream = new MemoryStream();
+        using (Fix.Writer writer = new(stream, leaveOpen: true))
+        {
+            writer.Write(message);
+        }
+        return stream.ToArray();
+    }
+
+    [TestMethod]
+    public void TestWriteRoundTripsNonAsciiCharacters()
+    {
+        byte[] expected = MessageTests.BuildMessage("FIX.4.4", Encoding.Latin1.GetBytes("35=B\u0001148=\u00C7\u00C0\u00CE\u0001"));
+        CollectionAssert.AreEqual(expected, RoundTrip(expected));
+    }
+
+    [TestMethod]
+    public void TestWriteRoundTripsHighBytesInDataField()
+    {
+        byte[] expected = MessageTests.BuildMessage("FIX.4.4", MessageTests.BuildDataFieldBody(MessageTests.HighByteData));
+        CollectionAssert.AreEqual(expected, RoundTrip(expected));
+    }
 }
 
