@@ -1,1 +1,1 @@
-* Upgrade to .NET 10
+* Fix the handling of ApplVerID and DefaultApplVerID.
