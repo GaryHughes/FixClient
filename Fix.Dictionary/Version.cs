@@ -26,6 +26,16 @@ public static partial class Dictionary
         {
             get
             {
+                var name = BeginString.Replace(".", "");
+
+                foreach (var value in FIX_5_0SP2.Fields.ApplVerID.Values.Values)
+                {
+                    if (value.Name == name)
+                    {
+                        return value.Value;
+                    }
+                }
+
                 return "";
             }
         }
