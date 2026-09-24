@@ -225,29 +225,29 @@ public class Field : ICloneable
 
     public int ComputeCheckSum()
     {
-        int checksum = Encoding.ASCII.GetBytes(Tag + "=").Select(b => (int)b).Sum();
+        int checksum = Encoding.Latin1.GetBytes(Tag + "=").Select(b => (int)b).Sum();
 
         if (!string.IsNullOrEmpty(Value))
         {
             if (Data)
             {
                 byte[] bytes = Convert.FromBase64String(Value);
-                checksum += bytes.Select(b => (sbyte)b).Select(i => (int)i).Sum();
+                checksum += bytes.Select(b => (int)b).Sum();
             }
             else
             {
-                checksum += Encoding.ASCII.GetBytes(Value).Select(b => (int)b).Sum();
+                checksum += Encoding.Latin1.GetBytes(Value).Select(b => (int)b).Sum();
             }
         }
 
-        checksum += Encoding.ASCII.GetBytes("\x01").Select(b => (int)b).Sum();
+        checksum += Encoding.Latin1.GetBytes("\x01").Select(b => (int)b).Sum();
 
         return checksum;
     }
 
     public int ComputeBodyLength()
     {
-        int bodyLength = Encoding.ASCII.GetBytes(string.Format("{0}=", Tag)).Length;
+        int bodyLength = Encoding.Latin1.GetBytes(string.Format("{0}=", Tag)).Length;
 
         if (!string.IsNullOrEmpty(Value))
         {

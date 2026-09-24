@@ -53,7 +53,7 @@ public partial class Message : ICloneable
     }
 
     public Message(string data)
-    : this(Encoding.ASCII.GetBytes(data))
+    : this(Encoding.Latin1.GetBytes(data))
     {
     }
 
@@ -95,7 +95,7 @@ public partial class Message : ICloneable
 
     public static async Task<Message?> Parse(string text)
     {
-        using var stream = new MemoryStream(Encoding.ASCII.GetBytes(text));
+        using var stream = new MemoryStream(Encoding.Latin1.GetBytes(text));
 
         await foreach (var message in Parser.Parse(stream))
         {
@@ -230,7 +230,7 @@ public partial class Message : ICloneable
 
     public void PrettyPrint(Stream stream)
     {
-        using var writer = new StreamWriter(stream, Encoding.ASCII, 4096, true);
+        using var writer = new StreamWriter(stream, Encoding.Latin1, 4096, true);
         var description = Describe();
 
         writer.WriteLine(description.MsgTypeDescription + " (" + (Incoming ? "incoming" : "outgoing") + ")\r\n{");
