@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: SessionForm.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 
 namespace FixClient;
@@ -28,11 +17,8 @@ partial class SessionForm : Form
             HelpVisible = false,
             PropertySort = PropertySort.Categorized
         };
-        _propertyGrid.PropertyValueChanged += (o, args) =>
-        {
-            Session?.UpdateReadonlyAttributes();
-            _propertyGrid.Refresh();
-        };
+        // Read only state depends on other property values (e.g. BeginString), refresh so it is re-evaluated.
+        _propertyGrid.PropertyValueChanged += (o, args) => _propertyGrid.Refresh();
         _gridPlaceHolder.Controls.Add(_propertyGrid);
     }
 

@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Session.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 global using System;
 using Newtonsoft.Json;
 using System.ComponentModel;
@@ -35,6 +24,7 @@ public enum State
 };
 
 [JsonObject(MemberSerialization.OptIn)]
+[TypeDescriptionProvider(typeof(SessionTypeDescriptionProvider))]
 public partial class Session : ICloneable
 {
     protected const string CategorySession = "Session";
@@ -180,14 +170,12 @@ public partial class Session : ICloneable
     public Behaviour OrderBehaviour { get; set; }
 
     [Category(CategorySession)]
-    [ReadOnly(false)]
     [TypeConverter(typeof(Dictionary.BeginStringTypeConverter))]
     [JsonProperty]
     public Dictionary.Version BeginString { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("Default Application Version")]
-    [ReadOnly(false)]
     [TypeConverter(typeof(Dictionary.ApplVerIdTypeConverter))]
     [JsonProperty]
     public Dictionary.Version DefaultApplVerId { get; set; }
@@ -1236,23 +1224,12 @@ public partial class Session : ICloneable
     [Browsable(false)]
     public Field? SessionStatus { get; set; }
 
-    public virtual void UpdateReadonlyAttributes()
-    {
-    }
-
-    protected void SetReadOnly(string name, bool value)
-    {
-        if (TypeDescriptor.GetProperties(GetType())[name] is PropertyDescriptor descriptor)
-        {
-            if (descriptor.Attributes[typeof(ReadOnlyAttribute)] is ReadOnlyAttribute attribute)
-            {
-                if (attribute.GetType().GetField("isReadOnly", BindingFlags.NonPublic | BindingFlags.Instance) is FieldInfo field)
-                {
-                    field.SetValue(attribute, value);
-                }
-            }
-        }
-    }
+    /// <summary>
+    /// Returns true if the named property should be read only for this session in its current state,
+    /// e.g. DefaultApplVerId only applies when BeginString is FIXT.1.1. This is evaluated per instance
+    /// each time a property grid (or anything else using TypeDescriptor) asks, see SessionTypeDescriptionProvider.
+    /// </summary>
+    public virtual bool IsPropertyReadOnly(string propertyName) => false;
 
     #region ICloneable
 

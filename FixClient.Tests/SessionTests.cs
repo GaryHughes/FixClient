@@ -175,5 +175,60 @@ public class SessionTests
         Assert.IsFalse(clone.AutoAllocId);
         Assert.IsFalse(clone.AutoScrollMessages);
     }
+
+    static bool IsReadOnly(FixClient.Session session, string name)
+    {
+        var property = System.ComponentModel.TypeDescriptor.GetProperties(session)[name];
+        Assert.IsNotNull(property, $"Property {name} not found");
+        return property.IsReadOnly;
+    }
+
+    [TestMethod]
+    public void TestDefaultApplVerIdIsReadOnlyUnlessFixt()
+    {
+        var session = new FixClient.Session(new System.Windows.Forms.Control()) { BeginString = Fix.Dictionary.Versions.FIXT_1_1 };
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.DefaultApplVerId)));
+
+        session.BeginString = Fix.Dictionary.Versions.FIX_4_4;
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.DefaultApplVerId)));
+    }
+
+    [TestMethod]
+    public void TestBindEndPointIsReadOnlyForAcceptor()
+    {
+        var session = new FixClient.Session(new System.Windows.Forms.Control()) { Behaviour = Fix.Behaviour.Initiator };
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.BindHost)));
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.BindPort)));
+
+        session.Behaviour = Fix.Behaviour.Acceptor;
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.BindHost)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.BindPort)));
+    }
+
+    [TestMethod]
+    public void TestGeneratedIdsFollowOrderBehaviour()
+    {
+        var session = new FixClient.Session(new System.Windows.Forms.Control()) { OrderBehaviour = Fix.Behaviour.Initiator };
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.NextClOrdId)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.NextOrderId)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.NextExecId)));
+
+        session.OrderBehaviour = Fix.Behaviour.Acceptor;
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.NextClOrdId)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.AppendDateToClOrdID)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.NextListId)));
+        Assert.IsTrue(IsReadOnly(session, nameof(FixClient.Session.NextAllocId)));
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.NextOrderId)));
+        Assert.IsFalse(IsReadOnly(session, nameof(FixClient.Session.NextExecId)));
+    }
+
+    [TestMethod]
+    public void TestReadOnlyIsPerSession()
+    {
+        var fixt = new FixClient.Session(new System.Windows.Forms.Control()) { BeginString = Fix.Dictionary.Versions.FIXT_1_1 };
+        var fix44 = new FixClient.Session(new System.Windows.Forms.Control()) { BeginString = Fix.Dictionary.Versions.FIX_4_4 };
+        Assert.IsFalse(IsReadOnly(fixt, nameof(FixClient.Session.DefaultApplVerId)));
+        Assert.IsTrue(IsReadOnly(fix44, nameof(FixClient.Session.DefaultApplVerId)));
+    }
 }
 

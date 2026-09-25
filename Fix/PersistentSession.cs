@@ -169,8 +169,6 @@ public class PersistentSession : Session, IDisposable
                 serializer.Populate(reader, this);
             }
 
-            UpdateReadonlyAttributes();
-
             Reading = true;
             ReadMessages();
             Reading = false;

@@ -1,3 +1,4 @@
 * Fix the handling of ApplVerID and DefaultApplVerID.
 * Encode and decode messages using Latin-1, not ASCII.
 * Fix the layout and DPI scaling of various dialogs and UI components.
+* Fix the disabling of properties in the session options dialog.

@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Session.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Fix.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -72,8 +61,6 @@ public partial class Session : Fix.PersistentSession
         BindHost = string.Empty;
         Host = "127.0.0.1";
         Port = 9810;
-        UpdateReadonlyAttributes();
-
         AddDefaultFilters();
 
         _filterWriteTimer.Dirty += sender => WriteFilters();
@@ -134,13 +121,11 @@ public partial class Session : Fix.PersistentSession
 
     [Category(CategoryNetwork)]
     [DisplayName("Bind Host")]
-    [ReadOnly(false)]
     [JsonProperty]
     public string BindHost { get; set; }
 
     [Category(CategoryNetwork)]
     [DisplayName("Bind Port")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int BindPort { get; set; }
 
@@ -154,13 +139,11 @@ public partial class Session : Fix.PersistentSession
 
     [Category(CategoryInitiator)]
     [DisplayName("Next ClOrdID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int NextClOrdId { get; set; } = 1;
 
     [Category(CategoryInitiator)]
     [DisplayName("Append Date to ClOrdID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public bool AppendDateToClOrdID { get; set; }
 
@@ -176,25 +159,21 @@ public partial class Session : Fix.PersistentSession
 
     [Category(CategoryInitiator)]
     [DisplayName("Next ListID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int NextListId { get; set; } = 1;
 
     [Category(CategoryInitiator)]
     [DisplayName("Next AllocID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int NextAllocId { get; set; } = 1;
 
     [Category(CategoryAcceptor)]
     [DisplayName("Next OrderID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int NextOrderId { get; set; } = 1;
 
     [Category(CategoryAcceptor)]
     [DisplayName("Next ExecID")]
-    [ReadOnly(false)]
     [JsonProperty]
     public int NextExecId { get; set; } = 1;
 
@@ -284,17 +263,15 @@ public partial class Session : Fix.PersistentSession
         OnSessionReset();
     }
 
-    public override void UpdateReadonlyAttributes()
+    public override bool IsPropertyReadOnly(string propertyName) => propertyName switch
     {
-        SetReadOnly("DefaultApplVerId", BeginString.BeginString != "FIXT.1.1");
-        SetReadOnly("BindHost", Behaviour == Fix.Behaviour.Acceptor);
-        SetReadOnly("BindPort", Behaviour == Fix.Behaviour.Acceptor);
-        SetReadOnly("NextClOrdId", OrderBehaviour == Fix.Behaviour.Acceptor);
-        SetReadOnly("NextListId", OrderBehaviour == Fix.Behaviour.Acceptor);
-        SetReadOnly("NextAllocId", OrderBehaviour == Fix.Behaviour.Acceptor);
-        SetReadOnly("NextOrderId", OrderBehaviour == Fix.Behaviour.Initiator);
-        SetReadOnly("NextExecId", OrderBehaviour == Fix.Behaviour.Initiator);
-    }
+        // DefaultApplVerID(1137) is only sent in a FIXT.1.1 Logon, for FIX.4.x the version is the BeginString.
+        nameof(DefaultApplVerId) => BeginString?.BeginString != Versions.FIXT_1_1.BeginString,
+        nameof(BindHost) or nameof(BindPort) => Behaviour == Fix.Behaviour.Acceptor,
+        nameof(NextClOrdId) or nameof(AppendDateToClOrdID) or nameof(NextListId) or nameof(NextAllocId) => OrderBehaviour == Fix.Behaviour.Acceptor,
+        nameof(NextOrderId) or nameof(NextExecId) => OrderBehaviour == Fix.Behaviour.Initiator,
+        _ => base.IsPropertyReadOnly(propertyName)
+    };
 
     #region Logging
 
