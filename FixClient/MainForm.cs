@@ -391,7 +391,7 @@ partial class MainForm : Form
 
         Load += MainFormLoad;
 
-        Size = new Size(1280, 800);
+        Size = LogicalToDeviceUnits(new Size(1280, 800));
         Text = "FIX Client";
         Icon = Properties.Resources.FixClient;
 

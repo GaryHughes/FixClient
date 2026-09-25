@@ -169,7 +169,7 @@ partial class HistoryPanel : FixClientPanel
         {
             Dock = DockStyle.Fill,
             Orientation = Orientation.Vertical,
-            SplitterDistance = 110
+            SplitterDistance = LogicalToDeviceUnits(110)
         };
 
         var messageSplitter = new SplitContainer

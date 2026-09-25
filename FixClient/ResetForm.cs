@@ -18,7 +18,8 @@ public partial class ResetForm : Form
     public ResetForm()
     {
         InitializeComponent();
-        iconPictureBox.Image = SystemIcons.Question.ToBitmap();
+        // Use a stock icon rendered at the scaled size rather than stretching the 32px SystemIcons bitmap.
+        iconPictureBox.Image = SystemIcons.GetStockIcon(StockIconId.Help, iconPictureBox.Width).ToBitmap();
     }
 
     public Fix.OrderBook.Retain Retain

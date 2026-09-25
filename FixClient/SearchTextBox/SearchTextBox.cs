@@ -23,7 +23,7 @@ class SearchTextBox : CueTextBox
         Button.FlatAppearance.BorderSize = 0;
         Button.ForeColor = System.Drawing.Color.Gray;
         Button.Text = "X";
-        Button.Size = new System.Drawing.Size(16, 16);
+        Button.Size = LogicalToDeviceUnits(new System.Drawing.Size(16, 16));
         Button.Click += (sender, ev) =>
         {
             if (string.IsNullOrEmpty(Text))

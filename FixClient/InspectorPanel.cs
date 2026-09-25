@@ -155,7 +155,7 @@ public partial class InspectorPanel : Panel
         {
             Dock = DockStyle.Fill,
             Orientation = Orientation.Horizontal,
-            SplitterDistance = 500
+            SplitterDistance = LogicalToDeviceUnits(500)
         };
 
         var messageSplitter = new SplitContainer

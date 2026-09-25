@@ -49,7 +49,7 @@ public partial class CheckGroupBox : GroupBox
         InitializeComponent();
         m_bDisableChildrenIfUnchecked = true;
         m_checkBox.Parent = this;
-        m_checkBox.Location = new Point(CHECKBOX_X_OFFSET, CHECKBOX_Y_OFFSET);
+        m_checkBox.Location = new Point(LogicalToDeviceUnits(CHECKBOX_X_OFFSET), LogicalToDeviceUnits(CHECKBOX_Y_OFFSET));
         Checked = true;
 
         // Set the color of the CheckBox's text to the color of the label in a standard groupbox control.

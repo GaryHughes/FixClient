@@ -59,7 +59,7 @@ public partial class MessageFieldDataGridView : DataGridView
             DataPropertyName = FieldDataTable.ColumnIndent,
             ReadOnly = true,
             HeaderText = string.Empty,
-            Width = 15
+            Width = LogicalToDeviceUnits(15)
         };
         Columns.Add(column);
 

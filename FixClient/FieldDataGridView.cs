@@ -71,7 +71,7 @@ public partial class FieldDataGridView : DataGridView
         switch (e.Column.Name)
         {
             case FieldDataTable.ColumnIndent:
-                e.Column.Width = 20;
+                e.Column.Width = LogicalToDeviceUnits(20);
                 e.Column.HeaderText = string.Empty;
                 e.Column.ReadOnly = true;
                 break;

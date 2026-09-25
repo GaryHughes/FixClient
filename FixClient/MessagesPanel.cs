@@ -96,7 +96,7 @@ partial class MessagesPanel : FixClientPanel
         {
             Dock = DockStyle.Fill,
             Orientation = Orientation.Vertical,
-            SplitterDistance = 1000
+            SplitterDistance = LogicalToDeviceUnits(1000)
         };
 
         _messageTable = new MessageTypeDataTable("MessageTypes");

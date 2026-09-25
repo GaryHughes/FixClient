@@ -64,14 +64,16 @@ namespace FixClient
             this.OKbutton.Location = new System.Drawing.Point(250, 99);
             this.OKbutton.Name = "OKbutton";
             this.OKbutton.Size = new System.Drawing.Size(75, 23);
+            this.OKbutton.AutoSize = true;
+            this.OKbutton.MinimumSize = new System.Drawing.Size(75, 23);
             this.OKbutton.TabIndex = 1;
             this.OKbutton.Text = "OK";
             this.OKbutton.UseVisualStyleBackColor = true;
             // 
             // ctrlBcheckbox
             // 
-            this.ctrlBcheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ctrlBcheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ctrlBcheckbox.AutoSize = true;
             this.ctrlBcheckbox.Checked = true;
             this.ctrlBcheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ctrlBcheckbox.Location = new System.Drawing.Point(250, 12);
