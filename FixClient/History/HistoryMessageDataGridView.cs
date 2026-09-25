@@ -70,13 +70,14 @@ public sealed partial class HistoryMessageDataGridView : DataGridView
         {
             Name = MessageDataTable.ColumnStatusImage,
             AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+            // Scale the 16px status images with the row height rather than drawing them at 96 DPI size.
+            ImageLayout = DataGridViewImageCellLayout.Zoom,
             DefaultCellStyle = { NullValue = null },
             HeaderCell = new DataGridViewImageColumnHeaderCell
             {
-                Image = Properties.Resources.MessageStatusInfo,
+                Image = CreateHeaderImage(Properties.Resources.MessageStatusInfo),
                 Value = null
             },
-            //DefaultHeaderCellType = { HeaderCell.GetType() }
         };
 
         Columns.Add(column);
@@ -88,5 +89,32 @@ public sealed partial class HistoryMessageDataGridView : DataGridView
         };
 
         Columns.Add(column);
+    }
+
+    //
+    // The status icon is a blue disc with a white "i" which disappears against the blue column
+    // header, so invert it to a white disc with a header coloured "i" to match the header text.
+    //
+    static Bitmap CreateHeaderImage(Image source)
+    {
+        var bitmap = new Bitmap(source);
+
+        for (int y = 0; y < bitmap.Height; ++y)
+        {
+            for (int x = 0; x < bitmap.Width; ++x)
+            {
+                Color pixel = bitmap.GetPixel(x, y);
+
+                if (pixel.A == 0)
+                {
+                    continue;
+                }
+
+                Color colour = pixel.GetBrightness() > 0.8f ? LookAndFeel.Color.GridColumnHeader : Color.White;
+                bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, colour));
+            }
+        }
+
+        return bitmap;
     }
 }

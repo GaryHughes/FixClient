@@ -152,30 +152,36 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
     }
 
     /// <summary>
+    /// The size to draw the image or icon at. Images are authored at 96 DPI so scale them
+    /// to the grid's DPI, otherwise they render at half size on a 200% display.
+    /// </summary>
+    Size ScaledImageSize
+    {
+        get
+        {
+            Size size = _image?.Size ?? _icon?.Size ?? Size.Empty;
+            return DataGridView?.LogicalToDeviceUnits(size) ?? size;
+        }
+    }
+
+    /// <summary>
     /// Utility function that adjusts the vertical padding of the cell to account 
     /// for the additional image or icon.
     /// </summary>
     Padding GetAdjustedCellPadding(DataGridViewCellStyle cellStyle)
     {
-        if (_image != null)
+        if (_image != null || _icon != null)
         {
+            int imageWidth = ScaledImageSize.Width;
+
             if (_imageBeforeValue)
             {
-                return new Padding(cellStyle.Padding.Left + _imagePadding.Horizontal + _image.Width, cellStyle.Padding.Top, cellStyle.Padding.Right, cellStyle.Padding.Bottom);
+                return new Padding(cellStyle.Padding.Left + _imagePadding.Horizontal + imageWidth, cellStyle.Padding.Top, cellStyle.Padding.Right, cellStyle.Padding.Bottom);
             }
 
-            return new Padding(cellStyle.Padding.Left, cellStyle.Padding.Top, cellStyle.Padding.Right + _imagePadding.Horizontal + _image.Width, cellStyle.Padding.Bottom);
+            return new Padding(cellStyle.Padding.Left, cellStyle.Padding.Top, cellStyle.Padding.Right + _imagePadding.Horizontal + imageWidth, cellStyle.Padding.Bottom);
         }
 
-        if (_icon != null)
-        {
-            if (_imageBeforeValue)
-            {
-                return new Padding(cellStyle.Padding.Left + _imagePadding.Horizontal + _icon.Width, cellStyle.Padding.Top, cellStyle.Padding.Right, cellStyle.Padding.Bottom);
-            }
-
-            return new Padding(cellStyle.Padding.Left, cellStyle.Padding.Top, cellStyle.Padding.Right + _imagePadding.Horizontal + _icon.Width, cellStyle.Padding.Bottom);
-        }
         return cellStyle.Padding;
     }
 
@@ -211,13 +217,9 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
 
         if (constraintSize.Width == 0)
         {
-            if (_image != null)
+            if (_image != null || _icon != null)
             {
-                basePreferredSize.Width += _image.Width + ImagePadding.Horizontal;
-            }
-            else if (_icon != null)
-            {
-                basePreferredSize.Width += _icon.Width + ImagePadding.Horizontal;
+                basePreferredSize.Width += ScaledImageSize.Width + ImagePadding.Horizontal;
             }
         }
 
@@ -230,13 +232,9 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
                                                                                                             false /*isLastVisibleColumn*/);
             Rectangle borderWidthsRect = BorderWidths(dgvabsEffective);
             int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
-            if (_image != null)
+            if (_image != null || _icon != null)
             {
-                basePreferredSize.Height = Math.Max(basePreferredSize.Height, _image.Height + borderAndPaddingHeights + ImagePadding.Vertical);
-            }
-            else if (_icon != null)
-            {
-                basePreferredSize.Height = Math.Max(basePreferredSize.Height, _icon.Height + borderAndPaddingHeights + ImagePadding.Vertical);
+                basePreferredSize.Height = Math.Max(basePreferredSize.Height, ScaledImageSize.Height + borderAndPaddingHeights + ImagePadding.Vertical);
             }
         }
 
@@ -265,16 +263,9 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
 
         if (_image != null || _icon != null)
         {
-            if (_image != null)
-            {
-                imageHeight = _image.Height;
-                imageWidth = _image.Width;
-            }
-            else if (_icon != null)
-            {
-                imageHeight = _icon.Height;
-                imageWidth = _icon.Width;
-            }
+            Size imageSize = ScaledImageSize;
+            imageHeight = imageSize.Height;
+            imageWidth = imageSize.Width;
             cellStyle.Padding = GetAdjustedCellPadding(cellStyle);
         }
 
@@ -329,6 +320,11 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
                 }
                 valBounds.Width -= cellStylePadding.Horizontal + ImagePadding.Horizontal;
                 valBounds.Height -= cellStylePadding.Vertical + ImagePadding.Vertical;
+                if (string.IsNullOrEmpty(formattedValue as string))
+                {
+                    // Image only header, centre it rather than pinning it to one side.
+                    valBounds.X += Math.Max(0, (valBounds.Width - imageWidth) / 2);
+                }
                 if (valBounds.Width > 0 && valBounds.Height > 0)
                 {
                     switch (cellStyle.Alignment)
@@ -350,13 +346,16 @@ public class DataGridViewImageColumnHeaderCell : DataGridViewColumnHeaderCell
                     {
                         if (_image != null)
                         {
-                            var imageBounds = new Rectangle(valBounds.Location, _image.Size);
+                            var imageBounds = new Rectangle(valBounds.Location, new Size(imageWidth, imageHeight));
+                            var interpolationMode = graphics.InterpolationMode;
+                            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                             graphics.DrawImage(_image, imageBounds);
+                            graphics.InterpolationMode = interpolationMode;
                         }
                         else if (_icon != null)
                         {
-                            var iconBounds = new Rectangle(valBounds.Location, _icon.Size);
-                            graphics.DrawIconUnstretched(_icon, iconBounds);
+                            var iconBounds = new Rectangle(valBounds.Location, new Size(imageWidth, imageHeight));
+                            graphics.DrawIcon(_icon, iconBounds);
                         }
                     }
                     finally
