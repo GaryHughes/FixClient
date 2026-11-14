@@ -1,0 +1,33 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="Mixed Platforms" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Examples/">
+    <Project Path="Examples/Fix.Dictionary.Api/Fix.Dictionary.Api.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="CHANGELOG.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Fix.Common.Tests/Fix.Common.Tests.csproj" />
+  <Project Path="Fix.Common/Fix.Common.csproj" />
+  <Project Path="Fix.Dictionary.Tests/Fix.Dictionary.Tests.csproj" />
+  <Project Path="Fix.Dictionary/Fix.Dictionary.csproj" />
+  <Project Path="Fix.Tests/Fix.Tests.csproj" />
+  <Project Path="Fix/Fix.csproj" />
+  <Project Path="FixClient.Tests/FixClient.Tests.csproj" />
+  <Project Path="FixClient/FixClient.csproj" />
+  <Project Path="FixPerformanceTest/FixPerformanceTest.csproj" />
+  <Project Path="FixPersistentSessionPerformanceTest/FixPersistentSessionPerformanceTest.csproj" />
+  <Properties Name="SubversionScc">
+    <Property Name="Manager" Value="AnkhSVN - Subversion Support for Visual Studio" />
+    <Property Name="Svn-Managed" Value="True" />
+  </Properties>
+  <Properties Name="TestCaseManagementSettings" Scope="PostLoad">
+    <Property Name="CategoryFile" Value="Fix.vsmdi" />
+  </Properties>
+</Solution>
