@@ -32,7 +32,10 @@ public partial class Session
                 {
                     _writer.MessageWriting -= WriterMessageWriting;
                 }
-                _writer = new Writer(_stream, true);
+                // Writer writes each field to the stream separately when fragmenting messages, and a
+                // NetworkStream does no buffering of its own, so without this every field was a
+                // separate socket send. Writer flushes after every message.
+                _writer = new Writer(new BufferedStream(_stream), true);
                 _writer.MessageWriting += WriterMessageWriting;
             }
         }
@@ -88,7 +91,15 @@ public partial class Session
             _reader?.Close();
             _reader = null;
 
-            _writer?.Close();
+            try
+            {
+                // Flushes anything still buffered. If the connection has already failed that
+                // throws, and the data can't be sent anyway, so carry on closing.
+                _writer?.Close();
+            }
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException)
+            {
+            }
             _writer = null;
 
             var networkStream = _stream as NetworkStream;
