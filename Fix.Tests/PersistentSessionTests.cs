@@ -58,6 +58,54 @@ public class PersistentSessionTests : SessionTestsBase<Fix.PersistentSession>
     #endregion
 
     [TestMethod]
+    public void TestWriteReplacesSessionFileAndLeavesNoTemporaryFile()
+    {
+        string fileName = Initiator.FileName!;
+
+        Initiator.HeartBtInt = 45;
+        Initiator.Write();
+
+        Assert.IsTrue(File.Exists(fileName));
+        Assert.IsFalse(File.Exists(fileName + ".tmp"));
+        Assert.IsTrue(File.ReadAllText(fileName).Contains("\"HeartBtInt\": 45"));
+
+        Initiator.HeartBtInt = 46;
+        Initiator.Write();
+
+        Assert.IsFalse(File.Exists(fileName + ".tmp"));
+        Assert.IsTrue(File.ReadAllText(fileName).Contains("\"HeartBtInt\": 46"));
+    }
+
+    [TestMethod]
+    public void TestWriteKeepsPreviousSessionFileWhileItIsLocked()
+    {
+        string fileName = Initiator.FileName!;
+
+        Initiator.HeartBtInt = 45;
+        Initiator.Write();
+        string before = File.ReadAllText(fileName);
+
+        var warnings = new List<string>();
+        Initiator.Warning += (sender, ev) => warnings.Add(ev.Message);
+
+        Initiator.HeartBtInt = 46;
+
+        using (new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            Initiator.Write();
+        }
+
+        Assert.AreEqual(before, File.ReadAllText(fileName));
+        Assert.HasCount(1, warnings);
+        Assert.AreEqual(Fix.State.Connected, Initiator.State);
+
+        Initiator.Write();
+
+        Assert.IsTrue(File.ReadAllText(fileName).Contains("\"HeartBtInt\": 46"));
+        Assert.IsFalse(File.Exists(fileName + ".tmp"));
+    }
+
+    [TestMethod]
     public void TestCorrectNextExpectedMsgSeqNumAtInitiatorAndAcceptor()
     {
         Assert.AreEqual(Fix.State.Connected, Acceptor.State);

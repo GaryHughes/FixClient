@@ -210,11 +210,37 @@ public class PersistentSession : Session, IDisposable
                     return;
                 }
 
-                using FileStream stream = new(session.FileName, FileMode.Create);
-                using JsonWriter writer = new JsonTextWriter(new StreamWriter(stream));
-                writer.Formatting = Formatting.Indented;
-                JObject environment = JObject.FromObject(session, _serialiser);
-                environment.WriteTo(writer);
+                //
+                // Write to a temporary file and then move it over the session file so a crash or power
+                // failure part way through a write can't leave a truncated or empty session file.
+                //
+                string temporary = session.FileName + ".tmp";
+
+                using (FileStream stream = new(temporary, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    using (var streamWriter = new StreamWriter(stream, leaveOpen: true))
+                    using (JsonWriter writer = new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented })
+                    {
+                        JObject environment = JObject.FromObject(session, _serialiser);
+                        environment.WriteTo(writer);
+                    }
+
+                    stream.Flush(flushToDisk: true);
+                }
+
+                try
+                {
+                    ReplaceFile(temporary, session.FileName);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    //
+                    // Another program (antivirus, a file sync client) can briefly hold the session file
+                    // open. Keep the previous session file and try again on the next write.
+                    //
+                    OnWarning($"Unable to replace session file '{ex.Message}', will retry");
+                    _writeTimer.SetDirty();
+                }
             }
         }
         catch (Exception ex)
@@ -223,6 +249,24 @@ public class PersistentSession : Session, IDisposable
             if (!_closing)
             {
                 Close();
+            }
+        }
+    }
+
+    static void ReplaceFile(string source, string destination)
+    {
+        const int attempts = 3;
+
+        for (int attempt = 1; ; ++attempt)
+        {
+            try
+            {
+                File.Move(source, destination, overwrite: true);
+                return;
+            }
+            catch (Exception ex) when (attempt < attempts && ex is IOException or UnauthorizedAccessException)
+            {
+                Thread.Sleep(50 * attempt);
             }
         }
     }
