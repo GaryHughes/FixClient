@@ -206,10 +206,9 @@ public class Field : ICloneable
         return false;
     }
 
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
+    // Must agree with Equals, which compares Tag and Value. FieldValue hashes the same way, so a
+    // Field and an equal FieldValue also have the same hash code.
+    public override int GetHashCode() => HashCode.Combine(Tag, Value);
 
     public int ComputeCheckSum()
     {

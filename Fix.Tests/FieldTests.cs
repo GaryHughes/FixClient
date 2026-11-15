@@ -65,6 +65,26 @@ public class FieldTests
         Assert.AreEqual("E", two.Value);
     }
 
+    [TestMethod]
+    public void TestEqualFieldsHaveEqualHashCodes()
+    {
+        var one = new Fix.Field(35, "D");
+        var two = new Fix.Field(35, "D");
+        Assert.AreEqual(one, two);
+        Assert.AreEqual(one.GetHashCode(), two.GetHashCode());
+        Assert.HasCount(1, new HashSet<Fix.Field> { one, two });
+        Assert.HasCount(2, new HashSet<Fix.Field> { one, new Fix.Field(35, "8") });
+    }
+
+    [TestMethod]
+    public void TestFieldAndEqualFieldValueHaveEqualHashCodes()
+    {
+        var value = FIX_5_0SP2.Side.Buy;
+        var field = new Fix.Field(value);
+        Assert.IsTrue(field.Equals(value));
+        Assert.AreEqual(value.GetHashCode(), field.GetHashCode());
+    }
+
     const int RawDataLengthTag = 95;
     const int RawDataTag = 96;
 
