@@ -282,5 +282,59 @@ public class ReaderTests
         reader.Read(message);
         Assert.AreEqual(1, messagesRead);
     }
+
+    // Returns at most one byte per Read call, like a socket delivering a message in small segments.
+    sealed class TrickleStream(byte[] data) : Stream
+    {
+        int _position;
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            if (count == 0 || _position >= data.Length)
+            {
+                return 0;
+            }
+
+            buffer[offset] = data[_position++];
+            return 1;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public override void Flush() { }
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
+    [TestMethod]
+    public void TestDataFieldDeliveredInSmallReads()
+    {
+        byte[] signature = StringToByteArray("A1E6230EC9659598189C45304C58C1D5");
+        byte[] a = Encoding.ASCII.GetBytes("8=FIX.4.0\u00019=131\u000135=C\u000149=KODIAK\u000156=server\u000134=7\u000150=kgehvwap\u000152=20090724-07:20:41\u000194=0\u000133=1\u000158=UserRegisterRequest#7,13,13#\u000193=16\u000189=");
+        byte[] c = Encoding.ASCII.GetBytes("\u000110=147\u0001");
+        byte[] data = a.Concat(signature).Concat(c).ToArray();
+
+        using Fix.Reader reader = new(new TrickleStream(data));
+        var message = reader.Read();
+
+        Assert.AreEqual(14, message.Fields.Count);
+        Assert.AreEqual(Convert.ToBase64String(signature), message.Fields.Find(89)?.Value);
+        Assert.IsTrue(message.Fields.Find(89)?.Data);
+        Assert.AreEqual("147", message.CheckSum);
+    }
+
+    [TestMethod]
+    public void TestTruncatedDataFieldThrowsEndOfStream()
+    {
+        byte[] a = Encoding.ASCII.GetBytes("8=FIX.4.0\u00019=131\u000135=C\u000193=16\u000189=");
+        byte[] data = a.Concat(new byte[] { 0xA1, 0xE6, 0x23 }).ToArray();
+
+        using Fix.Reader reader = new(new TrickleStream(data));
+        Assert.Throws<EndOfStreamException>(() => reader.Read());
+    }
 }
 

@@ -229,19 +229,22 @@ public class Reader : IDisposable
 
     int ReadChars(byte[] buffer, int offset, int count)
     {
-        if (_peekChar.HasValue)
+        int read = 0;
+
+        if (_peekChar.HasValue && count > 0)
         {
             buffer[offset++] = (byte)_peekChar.Value;
             _peekChar = null;
             --count;
+            read = 1;
         }
 
-        int result = _stream.Read(buffer, offset, count);
+        // Stream.Read can return fewer bytes than requested (a data field split across TCP
+        // segments for example) and returns 0, not -1, at the end of the stream. ReadExactly
+        // keeps reading until it has them all and throws EndOfStreamException if the stream ends.
+        _stream.ReadExactly(buffer, offset, count);
 
-        if (result == -1)
-            throw new EndOfStreamException();
-
-        return result;
+        return read + count;
     }
 
     char PeekChar()
