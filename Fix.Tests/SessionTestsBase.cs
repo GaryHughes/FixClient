@@ -203,6 +203,15 @@ public class SessionTestsBase<TSession> where TSession : Fix.Session, new()
         Assert.AreEqual(expected, actual);
     }
 
+    // MessageReceived is raised before the session updates IncomingSeqNum, so straight after
+    // receiving a message a test can still see the previous value. Wait for the update rather than
+    // racing the session's receive thread.
+    protected static void WaitForIncomingSeqNum(Fix.Session session, int expected)
+    {
+        SpinWait.SpinUntil(() => session.IncomingSeqNum == expected, Timeout);
+        Assert.AreEqual(expected, session.IncomingSeqNum);
+    }
+
     protected void InitiatorStateChange(Fix.State expected)
     {
         if (_initatorStates is null)

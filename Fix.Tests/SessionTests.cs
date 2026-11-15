@@ -62,7 +62,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         ReceiveAtInitiator(FIX_5_0SP2.Messages.ExecutionReport);
 
         Assert.AreEqual(6, Initiator.OutgoingSeqNum);
-        Assert.AreEqual(7, Initiator.IncomingSeqNum);
+        WaitForIncomingSeqNum(Initiator, 7);
 
         for (int i = 0; i < Initiator.Messages.Count; ++i)
         {
@@ -85,7 +85,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
         ReceiveAtInitiator(FIX_5_0SP2.Messages.ExecutionReport);
 
         Assert.AreEqual(7, Initiator.OutgoingSeqNum);
-        Assert.AreEqual(7, Initiator.IncomingSeqNum);
+        WaitForIncomingSeqNum(Initiator, 7);
     }
 
     [TestMethod]
