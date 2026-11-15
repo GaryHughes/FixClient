@@ -156,4 +156,49 @@ public class FieldTests
         var day = Dictionary.FIX_5_0SP2.TimeInForce.Day;
         Assert.AreEqual("A buy or sell order that, if not executed expires at the end of the trading day on which it was entered.", day.Description);
     }
+
+    [TestMethod]
+    public void TestLookupByNameFindsEveryField()
+    {
+        foreach (var version in Dictionary.Versions)
+        {
+            foreach (var field in version.Fields.Where(Dictionary.IsValid))
+            {
+                Assert.IsTrue(version.Fields.TryGetValue(field.Name, out var found), $"{version.BeginString} {field.Name}");
+                Assert.AreSame(version.Fields.First(f => string.Equals(f.Name, field.Name, StringComparison.OrdinalIgnoreCase)), found);
+            }
+        }
+    }
+
+    [TestMethod]
+    public void TestLookupByNameIgnoresCase()
+    {
+        Assert.AreSame(Dictionary.FIX_5_0SP2.Fields.ClOrdID, Dictionary.FIX_5_0SP2.Fields["clordid"]);
+        Assert.AreSame(Dictionary.FIX_5_0SP2.Fields.ClOrdID, Dictionary.FIX_5_0SP2.Fields["CLORDID"]);
+    }
+
+    [TestMethod]
+    public void TestLookupByNameIgnoresCaseInTurkishCulture()
+    {
+        // ToLower in the Turkish culture maps 'I' to a dotless 'i', which broke the old comparison.
+        var saved = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("tr-TR");
+            Assert.IsTrue(Dictionary.FIX_5_0SP2.Fields.TryGetValue("clordid", out var field));
+            Assert.AreSame(Dictionary.FIX_5_0SP2.Fields.ClOrdID, field);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = saved;
+        }
+    }
+
+    [TestMethod]
+    public void TestLookupByUnknownNameFails()
+    {
+        Assert.IsFalse(Dictionary.FIX_5_0SP2.Fields.TryGetValue("NotAFieldName", out var field));
+        Assert.AreSame(Dictionary.VersionField.Dummy, field);
+        Assert.IsFalse(Dictionary.FIX_5_0SP2.Fields.TryGetValue("", out _));
+    }
 }

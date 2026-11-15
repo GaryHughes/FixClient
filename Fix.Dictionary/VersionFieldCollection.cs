@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Fix;
 
 public static partial class Dictionary
@@ -61,20 +63,34 @@ public static partial class Dictionary
 
         public bool TryGetValue(string name, out VersionField field)
         {
-            var value = (from candidate in Fields
-                         where candidate?.Name.ToLower() == name.ToLower()
-                         select candidate).FirstOrDefault();
-
-            if (value is null)
+            if (FieldsByName.TryGetValue(name, out var value))
             {
-                field = VersionField.Dummy;
-                return false;
+                field = value;
+                return true;
             }
 
-            field = value;
-
-            return true;
+            field = VersionField.Dummy;
+            return false;
         }
+
+        // Name lookups are case insensitive. Build the index on first use because the Fields array
+        // is assigned by the generated derived class constructor.
+        FrozenDictionary<string, VersionField> FieldsByName => _fieldsByName ??= CreateFieldsByName();
+
+        FrozenDictionary<string, VersionField> CreateFieldsByName()
+        {
+            var byName = new Dictionary<string, VersionField>(StringComparer.OrdinalIgnoreCase);
+            foreach (var field in Fields)
+            {
+                if (IsValid(field))
+                {
+                    byName.TryAdd(field.Name, field);
+                }
+            }
+            return byName.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+        }
+
+        FrozenDictionary<string, VersionField>? _fieldsByName;
 
         public IEnumerator<VersionField> GetEnumerator()
         {
@@ -99,6 +115,7 @@ public static partial class Dictionary
             protected set
             {
                 _fields = value;
+                _fieldsByName = null;
             }
         }
 
