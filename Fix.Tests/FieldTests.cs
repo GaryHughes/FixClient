@@ -65,6 +65,30 @@ public class FieldTests
         Assert.AreEqual("E", two.Value);
     }
 
+    const int RawDataLengthTag = 95;
+    const int RawDataTag = 96;
+
+    [TestMethod]
+    public void TestCloneKeepsDataFlag()
+    {
+        var one = new Fix.Field(RawDataTag, Convert.ToBase64String(new byte[] { 0x01, 0x02, 0x03 })) { Data = true };
+        var two = (Fix.Field)one.Clone();
+        Assert.IsTrue(two.Data);
+        Assert.AreEqual(one.Value, two.Value);
+        Assert.AreEqual(one.ComputeCheckSum(), two.ComputeCheckSum());
+        Assert.AreEqual(one.ComputeBodyLength(), two.ComputeBodyLength());
+    }
+
+    [TestMethod]
+    public void TestMessageCloneKeepsDataFlag()
+    {
+        var message = new Fix.Message();
+        message.Fields.Add(new Fix.Field(RawDataLengthTag, 3));
+        message.Fields.Add(new Fix.Field(RawDataTag, Convert.ToBase64String(new byte[] { 0x01, 0x02, 0x03 })) { Data = true });
+        var clone = (Fix.Message)message.Clone();
+        Assert.IsTrue(clone.Fields.Find(RawDataTag)?.Data);
+    }
+
     [TestMethod]
     public void TestShortTimestampDateTimeConversion()
     {

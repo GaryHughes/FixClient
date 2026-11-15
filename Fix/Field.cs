@@ -335,7 +335,7 @@ public class Field : ICloneable
 
     public object Clone()
     {
-        return new Field(Tag, Value);
+        return new Field(Tag, Value) { Data = Data };
     }
 }
 
