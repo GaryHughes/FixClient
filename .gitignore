@@ -9,3 +9,5 @@ packages
 dist
 build
 *.egg-info
+BenchmarkDotNet.Artifacts
+.bdn

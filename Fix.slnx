@@ -16,6 +16,7 @@
     <File Path="global.json" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="Fix.Benchmarks/Fix.Benchmarks.csproj" />
   <Project Path="Fix.Common.Tests/Fix.Common.Tests.csproj" />
   <Project Path="Fix.Common/Fix.Common.csproj" />
   <Project Path="Fix.Dictionary.Tests/Fix.Dictionary.Tests.csproj" />

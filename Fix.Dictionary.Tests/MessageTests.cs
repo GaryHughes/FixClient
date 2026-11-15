@@ -55,6 +55,25 @@ public class MessageTests
     }
 
     [TestMethod]
+    public void TestLookupByMsgTypeFindsEveryMessage()
+    {
+        foreach (var version in Fix.Dictionary.Versions)
+        {
+            foreach (var message in version.Messages)
+            {
+                var expected = version.Messages.First(m => m.MsgType == message.MsgType);
+                Assert.AreSame(expected, version.Messages[message.MsgType], $"{version.BeginString} {message.MsgType}");
+            }
+        }
+    }
+
+    [TestMethod]
+    public void TestLookupByUnknownMsgTypeReturnsNull()
+    {
+        Assert.IsNull(Fix.Dictionary.FIX_5_0SP2.Messages["NotAMsgType"]);
+    }
+
+    [TestMethod]
     public void TestMessageFieldNotDefined()
     {
         Assert.IsNull(Fix.Dictionary.FIX_4_4.Messages.NewOrderSingle.Fields.Where(f => f.Tag == 6000).FirstOrDefault());
