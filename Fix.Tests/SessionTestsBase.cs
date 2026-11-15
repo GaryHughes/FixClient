@@ -69,7 +69,7 @@ public class SessionTestsBase<TSession> where TSession : Fix.Session, new()
 
         if (Fix.Network.GetLocalAddress(Host) is not System.Net.IPAddress address)
         {
-            Assert.Fail("Could not resolve address for {Host}");
+            Assert.Fail($"Could not resolve address for {Host}");
             return;
         }
 
