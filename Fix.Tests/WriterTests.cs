@@ -99,5 +99,75 @@ public class WriterTests
         byte[] expected = MessageTests.BuildMessage("FIX.4.4", MessageTests.BuildDataFieldBody(MessageTests.HighByteData));
         CollectionAssert.AreEqual(expected, RoundTrip(expected));
     }
+
+    // The original string based field encoding, kept to check the buffered one.
+    static byte[] ReferenceEncoding(Fix.Message message)
+    {
+        var bytes = new List<byte>();
+        foreach (Fix.Field field in message.Fields)
+        {
+            if (field.Tag == 10)
+                continue;
+            if (field.Data)
+            {
+                bytes.AddRange(Encoding.Latin1.GetBytes($"{field.Tag}="));
+                bytes.AddRange(Convert.FromBase64String(field.Value));
+                bytes.AddRange(Encoding.Latin1.GetBytes("\x01"));
+            }
+            else
+            {
+                bytes.AddRange(Encoding.Latin1.GetBytes($"{field.Tag}={field.Value}\x01"));
+            }
+        }
+        bytes.AddRange(Encoding.Latin1.GetBytes($"10={message.CheckSum}\x01"));
+        return bytes.ToArray();
+    }
+
+    static Fix.Message SampleMessage()
+    {
+        byte[] raw = Enumerable.Range(0, 1500).Select(i => (byte)i).ToArray();
+        return new Fix.Message(new Fix.FieldCollection
+        {
+            {8, "FIX.4.4"},
+            {35, "B"},
+            {49, "SENDER"},
+            {56, "TARGET"},
+            {34, "7"},
+            {148, "Caf\u00e9 \u20ac"},
+            {58, ""},
+            {58, new string('x', 600)},
+            {95, raw.Length.ToString(System.Globalization.CultureInfo.InvariantCulture)},
+            new Fix.Field(96, Convert.ToBase64String(raw)) { Data = true },
+            new Fix.Field(96, "") { Data = true },
+        });
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void TestWriteMatchesReferenceEncoding(bool fragment)
+    {
+        var message = SampleMessage();
+        using var stream = new MemoryStream();
+        using (Fix.Writer writer = new(stream, leaveOpen: true) { FragmentMessages = fragment })
+        {
+            writer.Write(message);
+        }
+        CollectionAssert.AreEqual(ReferenceEncoding(message), stream.ToArray());
+    }
+
+    [TestMethod]
+    public void TestWriteOfInvalidDataFieldThrows()
+    {
+        var message = new Fix.Message(new Fix.FieldCollection
+        {
+            {8, "FIX.4.4"},
+            {35, "B"},
+            new Fix.Field(96, "not base64!") { Data = true },
+        });
+        using var stream = new MemoryStream();
+        using Fix.Writer writer = new(stream, leaveOpen: true);
+        Assert.Throws<FormatException>(() => writer.Write(message));
+    }
 }
 

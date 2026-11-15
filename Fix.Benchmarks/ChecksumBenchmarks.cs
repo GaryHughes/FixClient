@@ -10,62 +10,23 @@ namespace Fix.Benchmarks;
 // field. Compares the current implementations with the previous ones, which formatted and encoded
 // every field into new strings and byte arrays and summed them through LINQ.
 //
-//   NewOrderSingle  17 fields
-//   ExecutionReport 25 fields
-//   LargeData       a News message carrying 4 KB of RawData
+// The messages are described in SampleMessages.
 //
 [MemoryDiagnoser]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 [CategoriesColumn]
 public class ChecksumBenchmarks
 {
-    public enum Kind
-    {
-        NewOrderSingle,
-        ExecutionReport,
-        LargeData,
-    }
-
-    [Params(Kind.NewOrderSingle, Kind.ExecutionReport, Kind.LargeData)]
-    public Kind Message { get; set; }
+    [Params(SampleMessage.NewOrderSingle, SampleMessage.ExecutionReport, SampleMessage.LargeData)]
+    public SampleMessage Message { get; set; }
 
     Fix.Message _message = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        _message = Message switch
-        {
-            Kind.NewOrderSingle => new Fix.Message(new FieldCollection
-            {
-                {8, "FIX.4.4"}, {9, "0"}, {35, "D"}, {49, "INITIATOR"}, {56, "ACCEPTOR"}, {34, "1234"},
-                {52, "20261115-08:15:30.123"}, {11, "ORD-20261115-000123"}, {21, "1"}, {55, "BHP"},
-                {54, "1"}, {60, "20261115-08:15:30.120"}, {38, "10000"}, {40, "2"}, {44, "45.32"},
-                {59, "0"}, {1, "ACCOUNT-01"},
-            }),
-            Kind.ExecutionReport => new Fix.Message(new FieldCollection
-            {
-                {8, "FIX.4.4"}, {9, "0"}, {35, "8"}, {49, "ACCEPTOR"}, {56, "INITIATOR"}, {34, "5678"},
-                {52, "20261115-08:15:30.456"}, {37, "EXCH-0000098765"}, {11, "ORD-20261115-000123"},
-                {17, "EXEC-0000123456"}, {150, "F"}, {39, "1"}, {55, "BHP"}, {54, "1"}, {38, "10000"},
-                {44, "45.32"}, {32, "2500"}, {31, "45.31"}, {151, "7500"}, {14, "2500"}, {6, "45.31"},
-                {60, "20261115-08:15:30.450"}, {40, "2"}, {59, "0"}, {1, "ACCOUNT-01"},
-            }),
-            _ => CreateLargeData(),
-        };
+        _message = SampleMessages.Create(Message);
         _message.Fields.Add(10, "000");
-    }
-
-    static Fix.Message CreateLargeData()
-    {
-        byte[] raw = Enumerable.Range(0, 4096).Select(i => (byte)i).ToArray();
-        return new Fix.Message(new FieldCollection
-        {
-            {8, "FIX.4.4"}, {9, "0"}, {35, "B"}, {49, "ACCEPTOR"}, {56, "INITIATOR"}, {34, "42"},
-            {52, "20261115-08:15:30.456"}, {148, "Market update"},
-            {95, raw.Length.ToString(System.Globalization.CultureInfo.InvariantCulture)},
-            new Field(96, Convert.ToBase64String(raw)) { Data = true },
-        });
     }
 
     [Benchmark(Baseline = true), BenchmarkCategory("CheckSum")]
