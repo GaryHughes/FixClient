@@ -24,7 +24,7 @@ public enum State
 
 [JsonObject(MemberSerialization.OptIn)]
 [TypeDescriptionProvider(typeof(SessionTypeDescriptionProvider))]
-public partial class Session : ICloneable
+public partial class Session : ICloneable, IDisposable
 {
     protected const string CategorySession = "Session";
     protected const string CategoryCommon = "Common Message Generation";

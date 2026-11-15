@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Fix;
 
-public class PersistentSession : Session, IDisposable
+public class PersistentSession : Session
 {
     readonly Lock _syncObject = new();
 
@@ -355,16 +355,12 @@ public class PersistentSession : Session, IDisposable
 
     #region IDisposable Members
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (!_disposed && disposing)
         {
+            // Release the connection first so the session file written below is the final state.
+            base.Dispose(disposing);
             StopSessionWriter();
             StopHistoryWriter();
             _writeTimer.Dispose();

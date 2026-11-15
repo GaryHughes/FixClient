@@ -61,6 +61,10 @@ public partial class Session
                     Receive(message);
                 }
             }
+            catch (Exception) when (_disposed)
+            {
+                // Disposing the session closed the stream under the read.
+            }
             catch (EndOfStreamException ex)
             {
                 OnError(ex.Message);
@@ -83,6 +87,17 @@ public partial class Session
             if (State == State.Disconnected)
                 return;
 
+            ReleaseConnection();
+
+            State = State.Disconnected;
+        }
+    }
+
+    // Stops the timers and closes the reader, writer and stream. Doesn't change State or raise events.
+    void ReleaseConnection()
+    {
+        lock (_syncRoot)
+        {
             _testRequestTimer?.Dispose();
             _testRequestTimer = null;
 
@@ -106,10 +121,31 @@ public partial class Session
             networkStream?.Socket.Shutdown(SocketShutdown.Send);
             _stream?.Close();
             _stream = null;
-
-            State = State.Disconnected;
         }
     }
+
+    #region IDisposable
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Disposing releases the connection and timers without raising StateChanged or any other event:
+    // whoever disposes the session has finished with it. Use Close to disconnect and be told about it.
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed || !disposing)
+            return;
+
+        _disposed = true;
+        ReleaseConnection();
+    }
+
+    volatile bool _disposed;
+
+    #endregion
 
     public void Send(Message message, bool setSeqNum = true)
     {

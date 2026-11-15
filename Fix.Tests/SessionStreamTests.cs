@@ -36,7 +36,7 @@ public class SessionStreamTests
     public void TestSendWritesEachMessageToTheStreamOnce(bool fragmentMessages)
     {
         using var stream = new WriteCountingStream();
-        var session = new Fix.Session
+        using var session = new Fix.Session
         {
             SenderCompId = "INITIATOR",
             TargetCompId = "ACCEPTOR",
@@ -54,7 +54,7 @@ public class SessionStreamTests
     public void TestSendToAFailedConnectionDisconnects()
     {
         using var stream = new FailingStream();
-        var session = new Fix.Session
+        using var session = new Fix.Session
         {
             SenderCompId = "INITIATOR",
             TargetCompId = "ACCEPTOR",
@@ -64,5 +64,29 @@ public class SessionStreamTests
         session.Send(new Fix.Message(FIX_5_0SP2.Messages.NewOrderSingle));
 
         Assert.AreEqual(Fix.State.Disconnected, session.State);
+    }
+
+    [TestMethod]
+    public void TestDisposeClosesTheStreamWithoutRaisingEvents()
+    {
+        var stream = new MemoryStream();
+        var session = new Fix.Session
+        {
+            SenderCompId = "INITIATOR",
+            TargetCompId = "ACCEPTOR",
+            Stream = stream
+        };
+
+        int stateChanges = 0;
+        session.StateChanged += (sender, ev) => ++stateChanges;
+
+        session.Dispose();
+
+        Assert.IsFalse(stream.CanRead);
+        Assert.AreEqual(0, stateChanges);
+        Assert.IsFalse(session.Connected);
+
+        // A second Dispose does nothing.
+        session.Dispose();
     }
 }
