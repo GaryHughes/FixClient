@@ -335,5 +335,11 @@ public class FieldTests
         Assert.Throws<FormatException>(() => field.ComputeCheckSum());
         Assert.Throws<FormatException>(() => field.ComputeBodyLength());
     }
+
+    [TestMethod]
+    public void TestInvalidBooleanValue()
+    {
+        Assert.Throws<FormatException>(() => (bool)new Fix.Field(141, "X"));
+    }
 }
 

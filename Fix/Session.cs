@@ -214,7 +214,7 @@ public partial class Session : ICloneable
         {
             if (!Field.IsTimestampFormatStringValid(value))
             {
-                throw new Exception($"'{value}' is not a valid DateTime format string");
+                throw new ArgumentException($"'{value}' is not a valid DateTime format string", nameof(value));
             }
             _outgoingTimestampFormat = value;
         }

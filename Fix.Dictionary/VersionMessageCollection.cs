@@ -28,7 +28,7 @@ public partial class Dictionary
             {
                 if (_messages is null)
                 {
-                    throw new NullReferenceException("VersionMessageCollection._messages is unexpectedly null");
+                    throw new InvalidOperationException("VersionMessageCollection._messages is unexpectedly null");
                 }
                 return _messages;
             }

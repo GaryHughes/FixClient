@@ -131,7 +131,7 @@ public partial class MessageFieldDataGridView : DataGridView
 
         if (rowView.Row is not FieldDataRow dataRow)
         {
-            throw new Exception(string.Format("MessageFieldDataGridView RowView.Row at index {0} is not a FieldDataRow", rowIndex));
+            throw new InvalidOperationException(string.Format("MessageFieldDataGridView RowView.Row at index {0} is not a FieldDataRow", rowIndex));
         }
 
         return dataRow.Field;

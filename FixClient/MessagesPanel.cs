@@ -479,7 +479,7 @@ partial class MessagesPanel : FixClientPanel
 
         if (row.DataBoundItem is not DataRowView rowView)
         {
-            throw new Exception(string.Format("MessageFieldDataGridView Row.DataBoundItem at index {0} is not a DataRowView ", row.Index));
+            throw new InvalidOperationException(string.Format("MessageFieldDataGridView Row.DataBoundItem at index {0} is not a DataRowView ", row.Index));
         }
 
         if (rowView.Row is not FieldDataRow dataRow)

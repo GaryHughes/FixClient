@@ -75,7 +75,7 @@ public class Reader : IDisposable
 
             if (direction != '<' && direction != '>')
             {
-                throw new Exception($"Invalid direction prefix, expected '<' or '>', received '{direction}'");
+                throw new FormatException($"Invalid direction prefix, expected '<' or '>', received '{direction}'");
             }
 
             message = Read();
@@ -130,12 +130,12 @@ public class Reader : IDisposable
             {
                 if (previous is null)
                 {
-                    throw new Exception($"Encountered a data type field at index {index} [{definition.Tag}] with no previous field");
+                    throw new FormatException($"Encountered a data type field at index {index} [{definition.Tag}] with no previous field");
                 }
 
                 if (!int.TryParse(previous.Value, out int dataLength))
                 {
-                    throw new Exception($"Encountered a data type field at index {index} [{definition.Tag}] but the previous field {previous} was not numeric");
+                    throw new FormatException($"Encountered a data type field at index {index} [{definition.Tag}] but the previous field {previous} was not numeric");
                 }
 
                 byte[] bytes = new byte[dataLength];
@@ -151,7 +151,7 @@ public class Reader : IDisposable
 
                 if (trailing != Field.Separator)
                 {
-                    throw new Exception($"Read [{trailing}] when expecting SOH field separator after data field [{definition.Tag}]");
+                    throw new FormatException($"Read [{trailing}] when expecting SOH field separator after data field [{definition.Tag}]");
                 }
             }
             else

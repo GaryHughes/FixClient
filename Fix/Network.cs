@@ -8,7 +8,7 @@ public static class Network
     public static IPAddress GetAddress(string name)
     {
         if (string.IsNullOrEmpty(name))
-            throw new Exception("Host has not been specified");
+            throw new ArgumentException("Host has not been specified", nameof(name));
 
         IPAddress[] hostAddresses = Dns.GetHostAddresses(name);
 
@@ -22,7 +22,7 @@ public static class Network
             return address;
         }
 
-        throw new Exception($"Unable to retrieve address for the host {name}");
+        throw new ArgumentException($"Unable to retrieve address for the host {name}", nameof(name));
     }
 
     public static IPAddress? GetLocalAddress(string name)
@@ -34,34 +34,40 @@ public static class Network
             return null;
         }
 
+        string message = $"{name} is not a valid name or address for the local machine";
+
+        IPAddress[] hostAddresses;
+        IPAddress[] localAddresses;
+
         try
         {
-            IPAddress[] hostAddresses = Dns.GetHostAddresses(name);
-            IPAddress[] localAddresses = Dns.GetHostAddresses(Dns.GetHostName());
+            hostAddresses = Dns.GetHostAddresses(name);
+            localAddresses = Dns.GetHostAddresses(Dns.GetHostName());
+        }
+        catch (Exception ex) when (ex is SocketException or ArgumentException)
+        {
+            throw new ArgumentException(message, nameof(name), ex);
+        }
 
-            foreach (IPAddress address in hostAddresses)
+        foreach (IPAddress address in hostAddresses)
+        {
+            if (address.AddressFamily != AddressFamily.InterNetwork)
             {
-                if (address.AddressFamily != AddressFamily.InterNetwork)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (IPAddress.IsLoopback(address))
-                {
-                    return address;
-                }
+            if (IPAddress.IsLoopback(address))
+            {
+                return address;
+            }
 
-                if (localAddresses.Contains(address))
-                {
-                    return address;
-                }
+            if (localAddresses.Contains(address))
+            {
+                return address;
             }
         }
-        catch (Exception)
-        {
-        }
 
-        throw new Exception($"{name} is not a valid name or address for the local machine");
+        throw new ArgumentException(message, nameof(name));
     }
 }
 

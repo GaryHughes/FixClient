@@ -32,13 +32,13 @@ public class FieldCollectionTests
     [TestMethod]
     public void TestFindFromByTagWithNegativeIndex()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, -1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, -1));
     }
 
     [TestMethod]
     public void TestFindFromByTagWithIndexOffTheEnd()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, 11));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Collection.FindFrom(FIX_5_0SP2.Fields.BeginString.Tag, 11));
     }
 
     [TestMethod]

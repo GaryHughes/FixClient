@@ -154,21 +154,21 @@ public class ReaderTests
     public void TestDataFieldWithNoPrecedingSize()
     {
         byte[] data = Encoding.ASCII.GetBytes("89=��#�e���E0LX��10=147");
-        Assert.Throws<Exception>(() => new Fix.Message(data));
+        Assert.Throws<FormatException>(() => new Fix.Message(data));
     }
 
     [TestMethod]
     public void TestDataFieldWithNonNumericPrevious()
     {
         byte[] data = Encoding.ASCII.GetBytes("8=FIX.4.09=13135=C49=KODIAK56=server34=750=kgehvwap52=20090724-07:20:4194=033=158=UserRegisterRequest#7,13,13#93=XX89=\xA1\xE6\x23\x0E\xC9\x65\x95\x98\x18\x9C\x45\x30\x4C\x58\xC1\xD5\x01\x31\x30=147");
-        Assert.Throws<Exception>(() => new Fix.Message(data));
+        Assert.Throws<FormatException>(() => new Fix.Message(data));
     }
 
     [TestMethod]
     public void TestDataFieldWithNoTrailingSeparator()
     {
         byte[] data = Encoding.ASCII.GetBytes("8=FIX.4.09=13135=C49=KODIAK56=server34=750=kgehvwap52=20090724-07:20:4194=033=158=UserRegisterRequest#7,13,13#93=1689=\xA1\xE6\x23\x0E\xC9\x65\x95\x98\x18\x9C\x45\x30\x4C\x58\xC1\xD5\x31\x30=147");
-        Assert.Throws<Exception>(() => new Fix.Message(data));
+        Assert.Throws<FormatException>(() => new Fix.Message(data));
     }
 
     public static byte[] StringToByteArray(string hex)

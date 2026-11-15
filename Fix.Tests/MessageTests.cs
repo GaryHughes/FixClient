@@ -132,4 +132,11 @@ public class MessageTests
         Assert.IsTrue(text.Contains("\u00C7\u00C0\u00CE"), text);
         Assert.IsFalse(text.Contains('\0'), "PrettyPrint output contains trailing NUL characters");
     }
+
+    [TestMethod]
+    public void TestNonNumericBeginSeqNo()
+    {
+        var message = new Fix.Message(new Fix.FieldCollection { { 7, "ONE" } });
+        Assert.Throws<FormatException>(() => message.BeginSeqNo);
+    }
 }

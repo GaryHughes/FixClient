@@ -108,7 +108,7 @@ public static partial class Dictionary
             {
                 if (_fields is null)
                 {
-                    throw new NullReferenceException("VersionFieldCollection._fields is unexpectedly null");
+                    throw new InvalidOperationException("VersionFieldCollection._fields is unexpectedly null");
                 }
                 return _fields;
             }

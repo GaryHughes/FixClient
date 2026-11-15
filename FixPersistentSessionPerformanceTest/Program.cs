@@ -141,7 +141,7 @@ class Program
 
         if (Fix.Network.GetLocalAddress(Host) is not System.Net.IPAddress address)
         {
-            throw new Exception($"Could not resolve IP Address for '{Host}'");
+            throw new InvalidOperationException($"Could not resolve IP Address for '{Host}'");
         }
 
         _listener = new TcpListener(address, Port);
@@ -166,12 +166,12 @@ class Program
     {
         if (Acceptor is null)
         {
-            throw new Exception("Acceptor is null");
+            throw new InvalidOperationException("Acceptor is null");
         }
 
         if (Initiator is null)
         {
-            throw new Exception("Initiator is null");
+            throw new InvalidOperationException("Initiator is null");
         }
 
         Acceptor.SenderCompId = "ACCEPTOR";

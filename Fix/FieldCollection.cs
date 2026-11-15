@@ -147,7 +147,7 @@ public class FieldCollection : IEnumerable<Field>
     public Field? FindFrom(int tag, ref int index)
     {
         if (index < 0 || index >= _fields.Count)
-            throw new IndexOutOfRangeException();
+            throw new ArgumentOutOfRangeException(nameof(index), index, $"Index must be between 0 and {_fields.Count - 1}");
 
         for (; index < _fields.Count; ++index)
         {

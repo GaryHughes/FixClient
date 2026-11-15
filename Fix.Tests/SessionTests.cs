@@ -1574,7 +1574,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
     {
         var session = new Fix.Session();
         Assert.AreEqual(Fix.Field.TimestampFormatLong, session.OutgoingTimestampFormat);
-        Assert.Throws<Exception>(() => session.OutgoingTimestampFormat = "aaa");
+        Assert.Throws<ArgumentException>(() => session.OutgoingTimestampFormat = "aaa");
     }
 
     /*

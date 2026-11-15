@@ -54,7 +54,7 @@ public class PersistentSession : Session, IDisposable
     {
         if (string.IsNullOrEmpty(filename))
         {
-            throw new Exception("filename is null or empty");
+            throw new ArgumentException("filename is null or empty", nameof(filename));
         }
 
         return Path.GetDirectoryName(filename) + Path.DirectorySeparatorChar +
@@ -156,7 +156,7 @@ public class PersistentSession : Session, IDisposable
         {
             if (FileName == null)
             {
-                throw new Exception("FileName has not been set");
+                throw new InvalidOperationException("FileName has not been set");
             }
 
             var serializer = CreateSerializer();

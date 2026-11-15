@@ -120,7 +120,7 @@ public class Field : ICloneable
             return false;
         if (field.Value == "Y" || field.Value == "y" || field.Value == "true" || field.Value == "1")
             return true;
-        throw new Exception($"Field does not contain a valid boolean value {field}");
+        throw new FormatException($"Field does not contain a valid boolean value {field}");
     }
 
     public static explicit operator long?(Field field)
