@@ -24,6 +24,17 @@ public class VersionTests
 
 
     [TestMethod]
+    public void TestLookupByBeginString()
+    {
+        Assert.AreSame(Dictionary.Versions.FIX_4_0, Dictionary.Versions["FIX.4.0"]);
+        Assert.AreSame(Dictionary.Versions.FIX_4_2, Dictionary.Versions["FIX.4.2"]);
+        Assert.AreSame(Dictionary.Versions.FIX_4_4, Dictionary.Versions["FIX.4.4"]);
+        Assert.AreSame(Dictionary.Versions.FIX_5_0SP2, Dictionary.Versions["FIX.5.0SP2"]);
+        Assert.AreSame(Dictionary.Versions.FIXT_1_1, Dictionary.Versions["FIXT.1.1"]);
+        Assert.IsNull(Dictionary.Versions["FIX.9.9"]);
+    }
+
+    [TestMethod]
     public void TestApplVerID()
     {
         Assert.AreEqual("2", Dictionary.Versions.FIX_4_0.ApplVerID);

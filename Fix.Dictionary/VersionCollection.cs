@@ -31,9 +31,15 @@ public static partial class Dictionary
         {
             get
             {
-                return (from version in _versions
-                        where version.BeginString == beginString
-                        select version).FirstOrDefault();
+                foreach (var version in _versions)
+                {
+                    if (version.BeginString == beginString)
+                    {
+                        return version;
+                    }
+                }
+
+                return null;
             }
         }
 
