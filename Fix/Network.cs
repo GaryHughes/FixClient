@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Network.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Net;
 using System.Net.Sockets;
 

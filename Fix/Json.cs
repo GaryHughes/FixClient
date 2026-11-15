@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Json.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Newtonsoft.Json;
 
 namespace Fix;

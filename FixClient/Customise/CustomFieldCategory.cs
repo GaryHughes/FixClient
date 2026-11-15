@@ -1,15 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: CustomFieldCategory.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
-
 namespace FixClient;
 
 class CustomFieldCategory

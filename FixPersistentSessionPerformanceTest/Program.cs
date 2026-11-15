@@ -1,15 +1,4 @@
-﻿/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Program.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Timers;
 using static Fix.Dictionary;
 using static System.Console;

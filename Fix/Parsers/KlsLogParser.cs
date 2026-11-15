@@ -1,15 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: KlsLogParser.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
-
 namespace Fix.Parsers;
 
 public class KlsLogParser : LogParser

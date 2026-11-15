@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: ConnectForm.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Net;
 using System.Net.Sockets;

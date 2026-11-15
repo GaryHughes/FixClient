@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: Field.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Globalization;
 using System.Text;
 using static Fix.Dictionary;

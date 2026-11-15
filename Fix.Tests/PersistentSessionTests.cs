@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: PersistentSessionTests.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Fix.Dictionary;
 

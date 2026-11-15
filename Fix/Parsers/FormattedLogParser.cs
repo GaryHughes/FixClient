@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: FormattedLogParser.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Text.RegularExpressions;
 using static Fix.Dictionary;
 
