@@ -22,7 +22,9 @@ public partial class Session
             if (_stream is Stream)
             {
                 State = State.Connected;
-                _reader = new Reader(_stream)
+                // Reader consumes the stream a byte at a time. A NetworkStream does no buffering of its
+                // own, so without this every byte read was a separate socket receive.
+                _reader = new Reader(new BufferedStream(_stream))
                 {
                     ValidateDataFields = ValidateDataFields
                 };
