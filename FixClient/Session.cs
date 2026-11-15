@@ -852,6 +852,29 @@ public partial class Session : Fix.PersistentSession
         return new Session(this);
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && !_disposed)
+        {
+            _disposed = true;
+
+            // Stop the timers, then write any filter or template change made in the last second so
+            // it isn't lost. A session that was never saved has nowhere to write it.
+            _filterWriteTimer.Dispose();
+            _templateWriteTimer.Dispose();
+
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                _filterWriteTimer.Flush();
+                _templateWriteTimer.Flush();
+            }
+        }
+
+        base.Dispose(disposing);
+    }
+
+    bool _disposed;
+
     public void CopyPropertiesFrom(Session source)
     {
         Type type = GetType();

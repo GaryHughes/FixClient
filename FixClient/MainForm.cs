@@ -764,6 +764,11 @@ partial class MainForm : Form
             {
                 if (form.ShowDialog() != DialogResult.OK)
                 {
+                    // The new session was cancelled before it became the current session.
+                    if (form.Session != CurrentSession)
+                    {
+                        form.Session?.Dispose();
+                    }
                     return;
                 }
 

@@ -31,6 +31,12 @@ public class DirtyTimer : IDisposable
         _timer = null;
     }
 
+    // Raises Dirty now, on the calling thread, if SetDirty has been called since it was last raised.
+    public void Flush()
+    {
+        TimerFired(null);
+    }
+
     void TimerFired(object? context)
     {
         if (Interlocked.CompareExchange(ref _dirty, CLEAN, DIRTY) == DIRTY)
