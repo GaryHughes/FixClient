@@ -41,7 +41,9 @@ public class Writer : IDisposable
         _writer = new BinaryWriter(stream, Encoding.Latin1, leaveOpen);
     }
 
-    public bool FragmentMessages { get; set; }
+    // When true each field is written to the stream as it is encoded rather than the whole message
+    // being collected first and written at once. This matches the Session default.
+    public bool FragmentMessages { get; set; } = true;
 
     public void Close()
     {

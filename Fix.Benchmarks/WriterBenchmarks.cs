@@ -10,11 +10,17 @@ namespace Fix.Benchmarks;
 // another. Both compute the body length and checksum the same way, which is part of the cost of
 // every write. The messages are described in SampleMessages and are written to Stream.Null.
 //
+// FragmentMessages true writes each field to the stream as it is encoded, which is the default for
+// Writer and Session. False collects the message in a MemoryStream and writes it once.
+//
 [MemoryDiagnoser]
 public class WriterBenchmarks : IDisposable
 {
     [Params(SampleMessage.NewOrderSingle, SampleMessage.ExecutionReport, SampleMessage.LargeData)]
     public SampleMessage Message { get; set; }
+
+    [Params(true, false)]
+    public bool FragmentMessages { get; set; }
 
     Fix.Message _message = null!;
     Writer _writer = null!;
@@ -24,8 +30,8 @@ public class WriterBenchmarks : IDisposable
     public void Setup()
     {
         _message = SampleMessages.Create(Message);
-        _writer = new Writer(Stream.Null, leaveOpen: true);
-        _previous = new PreviousWriter(Stream.Null);
+        _writer = new Writer(Stream.Null, leaveOpen: true) { FragmentMessages = FragmentMessages };
+        _previous = new PreviousWriter(Stream.Null) { FragmentMessages = FragmentMessages };
     }
 
     [GlobalCleanup]
@@ -47,11 +53,23 @@ public class WriterBenchmarks : IDisposable
     {
         readonly BinaryWriter _writer = new(stream, Encoding.Latin1, leaveOpen: true);
 
+        public bool FragmentMessages { get; init; }
+
         public void Write(Fix.Message message)
         {
             message.Fields.Set(FIX_5_0SP2.Fields.BodyLength.Tag, message.ComputeBodyLength());
             message.Fields.Remove(FIX_5_0SP2.Fields.CheckSum);
             message.Fields.Add(FIX_5_0SP2.Fields.CheckSum.Tag, message.ComputeCheckSum());
+
+            if (FragmentMessages)
+            {
+                lock (_writer)
+                {
+                    WriteFields(_writer, message);
+                }
+                _writer.Flush();
+                return;
+            }
 
             using MemoryStream buffer = new();
             using (BinaryWriter writer = new(buffer, Encoding.Latin1, true))

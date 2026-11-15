@@ -169,5 +169,13 @@ public class WriterTests
         using Fix.Writer writer = new(stream, leaveOpen: true);
         Assert.Throws<FormatException>(() => writer.Write(message));
     }
+
+    [TestMethod]
+    public void TestFragmentMessagesDefaultsToTrue()
+    {
+        using var stream = new MemoryStream();
+        using Fix.Writer writer = new(stream, leaveOpen: true);
+        Assert.IsTrue(writer.FragmentMessages);
+    }
 }
 
