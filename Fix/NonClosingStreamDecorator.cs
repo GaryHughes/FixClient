@@ -9,14 +9,10 @@ public class NonClosingStreamDecorator : Stream
         _innerStream = stream ?? throw new ArgumentNullException(nameof(stream));
     }
 
-    public override void Close()
-    {
-        // NOP
-    }
-
+    // Disposing (or closing) the decorator leaves the inner stream open; that is the point of it.
     protected override void Dispose(bool disposing)
     {
-        // NOP
+        base.Dispose(disposing);
     }
 
     public override bool CanRead => _innerStream.CanRead;
