@@ -50,6 +50,20 @@ public class ParserTests
     }
 
     [TestMethod]
+    public async Task TestParseRejectsNonFileUri()
+    {
+        var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await foreach (var message in Fix.Parser.Parse(new Uri("http://example.com/log.txt")))
+            {
+            }
+        });
+
+        Assert.AreEqual("uri", exception.ParamName);
+        Assert.IsTrue(exception.Message.Contains("'http'"), exception.Message);
+    }
+
+    [TestMethod]
     [DeploymentItem("Logs/t_kls.log")]
     public async Task TestKlsParser()
     {

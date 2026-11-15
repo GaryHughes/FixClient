@@ -46,7 +46,7 @@ public static class Parser
     {
         if (uri.Scheme != "file")
         {
-            throw new ArgumentException("Exepected a URI with a 'file' scheme and got '{0}'", uri.Scheme);
+            throw new ArgumentException($"Expected a URI with a 'file' scheme and got '{uri.Scheme}'", nameof(uri));
         }
 
         using FileStream stream = new(uri.LocalPath, FileMode.Open);
