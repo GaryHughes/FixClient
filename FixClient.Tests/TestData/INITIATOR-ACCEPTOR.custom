@@ -1,0 +1,12 @@
+{
+  "Fields": [
+    {
+      "Tag": 5001,
+      "Name": "TraderId"
+    },
+    {
+      "Tag": 5002,
+      "Name": "Desk"
+    }
+  ]
+}

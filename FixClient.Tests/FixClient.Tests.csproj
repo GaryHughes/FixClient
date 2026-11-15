@@ -22,4 +22,10 @@
     <ProjectReference Include="..\FixClient\FixClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="TestData\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
