@@ -74,6 +74,21 @@ public class MessageTests
     }
 
     [TestMethod]
+    public void TestMessageFieldsShareTheVersionFieldDefinitions()
+    {
+        foreach (var version in Fix.Dictionary.Versions)
+        {
+            foreach (var message in version.Messages)
+            {
+                foreach (var field in message.Fields)
+                {
+                    Assert.AreSame(version.Fields[field.Tag], field.Field, $"{version.BeginString} {message.Name} {field.Name}");
+                }
+            }
+        }
+    }
+
+    [TestMethod]
     public void TestMessageFieldNotDefined()
     {
         Assert.IsNull(Fix.Dictionary.FIX_4_4.Messages.NewOrderSingle.Fields.Where(f => f.Tag == 6000).FirstOrDefault());

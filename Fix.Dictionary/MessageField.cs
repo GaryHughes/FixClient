@@ -13,6 +13,7 @@ public static partial class Dictionary
             Depth = depth;
         }
 
+        public VersionField Field => @field;
         public int Tag => @field.Tag;
         public string Name => @field.Name;
         public string Description => @field.Description;

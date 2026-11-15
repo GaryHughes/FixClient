@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <OrchestrationFiles Include="..\orchestrations\*.xml" />
+    <GeneratorFiles Include="..\Fix.Lexicographer\*.py" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +41,7 @@
     <Compile Include="@(OutputFiles)" />
   </ItemGroup>
 
-  <Target Name="RunLexicographer" BeforeTargets="BeforeBuild" Inputs="@(OrchestrationFiles)" Outputs="@(OutputFiles)">
+  <Target Name="RunLexicographer" BeforeTargets="BeforeBuild" Inputs="@(OrchestrationFiles);@(GeneratorFiles)" Outputs="@(OutputFiles)">
     <MakeDir Directories="$(MSBuildProjectDirectory)/Generated" />
     <Exec Command="python ../../Fix.Lexicographer/lexicographer.py --namespace FIX_4_0 --prefix FIX_4_0_ --orchestration ../../orchestrations/fix_repository_4_0.xml" WorkingDirectory="$(MSBuildProjectDirectory)/Generated" />
     <Exec Command="python ../../Fix.Lexicographer/lexicographer.py --namespace FIX_4_2 --prefix FIX_4_2_ --orchestration ../../orchestrations/fix_repository_4_2.xml" WorkingDirectory="$(MSBuildProjectDirectory)/Generated" />

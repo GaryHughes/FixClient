@@ -73,7 +73,14 @@ def generate_orchestration_fields(namespace, prefix, orchestration):
         file.write('        }\n')
 
         file.write('\n')
-        file.write('        public static FieldCollection Fields { get; } = new FieldCollection();\n')
+        # The generated messages reference these shared field definitions, so make sure they exist
+        # whatever order the static initialisers of the partial class run in.
+        file.write('        public static FieldCollection Fields => FieldCollectionInstance.Value;\n')
+        file.write('\n')
+        file.write('        static class FieldCollectionInstance\n')
+        file.write('        {\n')
+        file.write('            internal static readonly FieldCollection Value = new FieldCollection();\n')
+        file.write('        }\n')
 
         file.write('    }\n')
         file.write('}\n')
