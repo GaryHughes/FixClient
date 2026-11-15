@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net11.0-windows</TargetFramework>
     <IsPackable>false</IsPackable>
+    <!-- FixClient is a self-contained win-x64 executable and a test project referencing it must match (NETSDK1151). -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>

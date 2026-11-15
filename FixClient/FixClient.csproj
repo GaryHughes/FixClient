@@ -6,7 +6,9 @@
     <UseWindowsForms>true</UseWindowsForms>
 	<UseWPF>true</UseWPF>
     <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
  	<LangVersion>latest</LangVersion>
   </PropertyGroup>
