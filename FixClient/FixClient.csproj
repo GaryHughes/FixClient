@@ -14,6 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- System.Windows.Forms was previously a global using in Program.cs. System.Drawing is left as an explicit
+         per-file using, as before, so it isn't added to files that also use WPF types (ParserPanel).
+         UseWPF removes System.IO from the implicit usings (System.IO.Path clashes with System.Windows.Shapes.Path),
+         so add it back; this project doesn't import System.Windows.Shapes. -->
+    <Using Include="System.Windows.Forms" />
+    <Using Include="System.IO" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fix\Fix.csproj" />
   </ItemGroup>
 

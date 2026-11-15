@@ -9,11 +9,7 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
-using System;
-using System.IO;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using static Fix.Dictionary;
 using static System.Console;

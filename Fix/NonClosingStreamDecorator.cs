@@ -9,7 +9,6 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
-using System.IO;
 
 namespace Fix;
 

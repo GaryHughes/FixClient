@@ -9,7 +9,6 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
-using System.Linq;
 using static Fix.Dictionary;
 
 namespace Fix;

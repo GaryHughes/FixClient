@@ -1,6 +1,3 @@
-global using System;
-global using System.Windows.Forms;
-
 namespace FixClient;
 
 static class Program

@@ -10,9 +10,6 @@
 //
 /////////////////////////////////////////////////
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace FixTests;
 

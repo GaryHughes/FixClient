@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using static Fix.Dictionary;
+﻿using static Fix.Dictionary;
 
 namespace Fix.Examples;
 

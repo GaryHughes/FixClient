@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-namespace Fix.Common;
+﻿namespace Fix.Common;
 
 public class DirtyTimer : IDisposable
 {

@@ -1,8 +1,7 @@
-global using System;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
-using System.Timers;
+using Timer = System.Timers.Timer;
 using static Fix.Dictionary;
 
 namespace Fix;

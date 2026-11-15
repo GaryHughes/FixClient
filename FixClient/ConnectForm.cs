@@ -10,9 +10,9 @@
 //
 /////////////////////////////////////////////////
 using System.ComponentModel;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using Timer = System.Windows.Forms.Timer;
 
 namespace FixClient;
 

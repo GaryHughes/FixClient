@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 //
 // This class produces simple text based tabular reports with column justification. Column headers can contain
 // new lines. An optional footer row is also supported.

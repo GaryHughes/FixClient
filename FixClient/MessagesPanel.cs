@@ -9,13 +9,11 @@
 // Author:   Gary Hughes
 //
 /////////////////////////////////////////////////
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using static Fix.Dictionary;
+using Timer = System.Windows.Forms.Timer;
 
 namespace FixClient;
 

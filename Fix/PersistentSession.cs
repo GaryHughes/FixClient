@@ -3,8 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
-using System.IO;
-using System.Threading;
 
 namespace Fix;
 
