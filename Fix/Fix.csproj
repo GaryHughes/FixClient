@@ -12,5 +12,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Fix.Dictionary\Fix.Dictionary.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Fix.Tests" />
+  </ItemGroup>
   
 </Project>

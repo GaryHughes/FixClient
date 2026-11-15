@@ -986,13 +986,20 @@ public partial class Session : ICloneable
         if (HeartBtInt == 0)
             return;
 
-        _heartbeatTimer = new Timer((HeartBtInt - 1) * 1000)
+        _heartbeatTimer = new Timer(HeartbeatInterval(HeartBtInt))
         {
-            Interval = HeartBtInt * 1000,
             AutoReset = true
         };
         _heartbeatTimer.Elapsed += (sender, args) => Defibrillate();
         _heartbeatTimer.Start();
+    }
+
+    // Send each Heartbeat a second before HeartBtInt expires so it reaches the other side in time
+    // despite network latency. A one second HeartBtInt has no room for that, so use it as is.
+    internal static double HeartbeatInterval(int heartBtInt)
+    {
+        int seconds = heartBtInt > 1 ? heartBtInt - 1 : heartBtInt;
+        return TimeSpan.FromSeconds(seconds).TotalMilliseconds;
     }
 
     void Defibrillate()
