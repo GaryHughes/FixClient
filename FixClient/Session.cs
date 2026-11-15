@@ -1,6 +1,5 @@
 using Fix.Common;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
@@ -590,26 +589,22 @@ public partial class Session : Fix.PersistentSession
             }
 
             using var stream = new FileStream(CustomFieldsFileName, FileMode.Open);
-            using var sr = new StreamReader(stream);
-            using var reader = new JsonTextReader(sr);
+            using JsonDocument document = JsonDocument.Parse(stream);
 
-            JObject filters = JObject.Load(reader);
-
-            if (filters["Fields"] is not JToken fields)
+            if (!document.RootElement.TryGetProperty("Fields", out JsonElement fields))
             {
                 return;
             }
 
-            foreach (var field in fields)
+            foreach (JsonElement field in fields.EnumerateArray())
             {
                 try
                 {
                     AddCustomField(new CustomField
                     {
-
-                        Tag = Convert.ToInt32(field["Tag"]),
-                        Name = field["Name"]?.ToString() ?? string.Empty
-                    }); ;
+                        Tag = ReadInt32(field.GetProperty("Tag")),
+                        Name = field.TryGetProperty("Name", out JsonElement name) ? name.ToString() : string.Empty
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -631,21 +626,26 @@ public partial class Session : Fix.PersistentSession
         }
     }
 
+    // Accepts the tag as a number, or as a string containing one, as the previous reader did.
+    static int ReadInt32(JsonElement element)
+    {
+        return element.ValueKind == JsonValueKind.String
+            ? int.Parse(element.GetString()!, System.Globalization.CultureInfo.InvariantCulture)
+            : element.GetInt32();
+    }
+
     public void WriteCustomFields()
     {
         using FileStream stream = new(CustomFieldsFileName, FileMode.Create);
-        using JsonWriter writer = new JsonTextWriter(new StreamWriter(stream));
-        writer.Formatting = Formatting.Indented;
+        using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
         writer.WriteStartObject();
         writer.WritePropertyName("Fields");
         writer.WriteStartArray();
         foreach (var field in CustomFields.Values)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("Tag");
-            writer.WriteValue(field.Tag);
-            writer.WritePropertyName("Name");
-            writer.WriteValue(field.Name);
+            writer.WriteNumber("Tag", field.Tag);
+            writer.WriteString("Name", field.Name);
             writer.WriteEndObject();
         }
         writer.WriteEndArray();
@@ -662,17 +662,15 @@ public partial class Session : Fix.PersistentSession
             }
 
             using var stream = new FileStream(FiltersFileName, FileMode.Open);
-            using var sr = new StreamReader(stream);
-            using var reader = new JsonTextReader(sr);
+            using JsonDocument document = JsonDocument.Parse(stream);
+            JsonElement filters = document.RootElement;
 
-            JObject filters = JObject.Load(reader);
-
-            if (filters["Messages"] is not JToken messages)
+            if (!filters.TryGetProperty("Messages", out JsonElement messages))
             {
                 return;
             }
 
-            foreach (var item in messages)
+            foreach (JsonElement item in messages.EnumerateArray())
             {
                 foreach (Fix.Dictionary.Message message in Version.Messages)
                 {
@@ -684,31 +682,44 @@ public partial class Session : Fix.PersistentSession
                 }
             }
 
-            if (filters["Fields"] is not JToken fields)
+            if (!filters.TryGetProperty("Fields", out JsonElement fields))
             {
                 return;
             }
 
-            foreach (var entry in fields)
+            foreach (JsonElement entry in fields.EnumerateArray())
             {
-                if (entry.First is not JProperty property)
+                // Each entry is an object with a single property: the message name and its visible fields.
+                if (entry.ValueKind != JsonValueKind.Object)
                 {
                     continue;
                 }
 
-                Fix.Dictionary.Message? message = Version.Messages.FirstOrDefault(item => item.Name == property.Name);
+                JsonElement.ObjectEnumerator properties = entry.EnumerateObject();
+
+                if (!properties.MoveNext())
+                {
+                    continue;
+                }
+
+                string messageName = properties.Current.Name;
+                JsonElement tags = properties.Current.Value;
+
+                Fix.Dictionary.Message? message = Version.Messages.FirstOrDefault(item => item.Name == messageName);
 
                 if (message == null)
                 {
                     continue;
                 }
 
-                foreach (int? fieldEntry in (JArray)property.Value)
+                foreach (JsonElement tag in tags.EnumerateArray())
                 {
-                    if (fieldEntry is null)
+                    if (tag.ValueKind == JsonValueKind.Null)
                     {
                         continue;
                     }
+
+                    int fieldEntry = tag.GetInt32();
 
                     var field = message.Fields.FirstOrDefault(item => item.Tag == fieldEntry);
 
