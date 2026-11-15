@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.ComponentModel;
 using System.Reflection;
 using Timer = System.Timers.Timer;
@@ -22,7 +22,6 @@ public enum State
     Resetting
 };
 
-[JsonObject(MemberSerialization.OptIn)]
 [TypeDescriptionProvider(typeof(SessionTypeDescriptionProvider))]
 public partial class Session : ICloneable, IDisposable
 {
@@ -165,48 +164,48 @@ public partial class Session : ICloneable, IDisposable
     }
 
     [DisplayName("Order Flow")]
-    [JsonProperty]
+    [JsonInclude]
     public Behaviour OrderBehaviour { get; set; }
 
     [Category(CategorySession)]
     [TypeConverter(typeof(Dictionary.BeginStringTypeConverter))]
-    [JsonProperty]
+    [JsonInclude]
     public Dictionary.Version BeginString { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("Default Application Version")]
     [TypeConverter(typeof(Dictionary.ApplVerIdTypeConverter))]
-    [JsonProperty]
+    [JsonInclude]
     public Dictionary.Version DefaultApplVerId { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("Logon")]
-    [JsonProperty]
+    [JsonInclude]
     public Behaviour LogonBehaviour { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("TestRequest Delay")]
-    [JsonProperty]
+    [JsonInclude]
     public int TestRequestDelay { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("SenderCompID")]
-    [JsonProperty]
+    [JsonInclude]
     public string SenderCompId { get; set; } = string.Empty;
 
     [Category(CategorySession)]
     [DisplayName("TargetCompID")]
-    [JsonProperty]
+    [JsonInclude]
     public string TargetCompId { get; set; } = string.Empty;
 
     [Category(CategorySession)]
     [DisplayName("Heartbeat Interval")]
-    [JsonProperty]
+    [JsonInclude]
     public int HeartBtInt { get; set; }
 
     [Category(CategoryCommon)]
     [DisplayName("Outgoing Timestamp Format")]
-    [JsonProperty]
+    [JsonInclude]
     public string OutgoingTimestampFormat
     {
         get => _outgoingTimestampFormat;
@@ -222,7 +221,7 @@ public partial class Session : ICloneable, IDisposable
 
     [Category(CategoryCommon)]
     [DisplayName("Incoming MsgSeqNum")]
-    [JsonProperty]
+    [JsonInclude]
     public int IncomingSeqNum { get; set; }
 
     [Browsable(false)]
@@ -233,27 +232,27 @@ public partial class Session : ICloneable, IDisposable
 
     [Category(CategoryCommon)]
     [DisplayName("Outgoing MsgSeqNum")]
-    [JsonProperty]
+    [JsonInclude]
     public int OutgoingSeqNum { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("Broken NewSeqNo")]
-    [JsonProperty]
+    [JsonInclude]
     public bool BrokenNewSeqNo { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("NextExpectedMsgSeqNum")]
-    [JsonProperty]
+    [JsonInclude]
     public bool NextExpectedMsgSeqNum { get; set; }
 
     [Category(CategoryCommon)]
     [DisplayName("Test Request ID")]
-    [JsonProperty]
+    [JsonInclude]
     public int TestRequestId { get; set; }
 
     [Category(CategorySession)]
     [DisplayName("Validate Data Fields")]
-    [JsonProperty]
+    [JsonInclude]
     public bool ValidateDataFields { get; set; }
 
     [Browsable(false)]
@@ -261,18 +260,18 @@ public partial class Session : ICloneable, IDisposable
 
     [Category(CategoryNetwork)]
     [DisplayName("Fragment Messages")]
-    [JsonProperty]
+    [JsonInclude]
     public bool FragmentMessages { get; set; }
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoSendingTime { get; set; }
 
     [Browsable(false)]
     public MessageCollection Messages { get; }
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool ValidateMessages { get; set; }
 
     public int AllocateOutgoingSeqNum()

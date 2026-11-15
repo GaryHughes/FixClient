@@ -1,8 +1,7 @@
 using Fix.Common;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Fix;
 
@@ -11,7 +10,6 @@ public class PersistentSession : Session
     readonly Lock _syncObject = new();
 
     readonly DirtyTimer _writeTimer = new();
-    JsonSerializer? _serialiser;
     Writer? _historyWriter;
     string? _fileName;
 
@@ -159,12 +157,10 @@ public class PersistentSession : Session
                 throw new InvalidOperationException("FileName has not been set");
             }
 
-            var serializer = CreateSerializer();
-
-            using (var reader = new JsonTextReader(new StreamReader(new FileStream(FileName, FileMode.Open))))
+            using (var stream = new FileStream(FileName, FileMode.Open))
+            using (JsonDocument document = JsonDocument.Parse(stream))
             {
-                serializer.ObjectCreationHandling = ObjectCreationHandling.Replace;
-                serializer.Populate(reader, this);
+                Populate(document.RootElement);
             }
 
             Reading = true;
@@ -178,26 +174,36 @@ public class PersistentSession : Session
         WriteSession();
     }
 
-    static JsonSerializer CreateSerializer()
+    //
+    // Sets the stored properties on this session, in the order they appear in the file, leaving any
+    // property that isn't in the file, or whose stored value reads as null, as it was. Properties
+    // the session doesn't have are ignored, so a file written by a subclass can still be read.
+    //
+    void Populate(JsonElement stored)
     {
-        var serializer = new JsonSerializer
+        JsonTypeInfo typeInfo = Json.SessionOptions.GetTypeInfo(GetType());
+
+        foreach (JsonProperty item in stored.EnumerateObject())
         {
-            NullValueHandling = NullValueHandling.Ignore,
-            Formatting = Formatting.Indented
-        };
+            JsonPropertyInfo? property = typeInfo.Properties.FirstOrDefault(
+                candidate => string.Equals(candidate.Name, item.Name, StringComparison.OrdinalIgnoreCase));
 
-        serializer.Converters.Add(new StringEnumConverter());
-        serializer.Converters.Add(new Json.FixVersionConverter());
+            if (property?.Set is not Action<object, object?> set)
+            {
+                continue;
+            }
 
-        return serializer;
+            if (item.Value.Deserialize(property.PropertyType, Json.SessionOptions) is object value)
+            {
+                set(this, value);
+            }
+        }
     }
 
     void WriteSession()
     {
         try
         {
-            _serialiser ??= CreateSerializer();
-
             PersistentSession session;
 
             lock (_syncObject)
@@ -218,12 +224,7 @@ public class PersistentSession : Session
 
                 using (FileStream stream = new(temporary, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    using (var streamWriter = new StreamWriter(stream, leaveOpen: true))
-                    using (JsonWriter writer = new JsonTextWriter(streamWriter) { Formatting = Formatting.Indented })
-                    {
-                        JObject environment = JObject.FromObject(session, _serialiser);
-                        environment.WriteTo(writer);
-                    }
+                    JsonSerializer.Serialize(stream, session, session.GetType(), Json.SessionOptions);
 
                     stream.Flush(flushToDisk: true);
                 }

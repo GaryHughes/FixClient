@@ -1,9 +1,9 @@
 using Fix.Common;
-using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using static Fix.Dictionary;
 
 namespace FixClient;
@@ -112,35 +112,35 @@ public partial class Session : Fix.PersistentSession
     }
 
     [Category(CategoryNetwork)]
-    [JsonProperty]
+    [JsonInclude]
     public Fix.Behaviour Behaviour { get; set; }
 
     [Category(CategoryNetwork)]
     [DisplayName("Bind Host")]
-    [JsonProperty]
+    [JsonInclude]
     public string BindHost { get; set; }
 
     [Category(CategoryNetwork)]
     [DisplayName("Bind Port")]
-    [JsonProperty]
+    [JsonInclude]
     public int BindPort { get; set; }
 
     [Category(CategoryNetwork)]
-    [JsonProperty]
+    [JsonInclude]
     public string Host { get; set; }
 
     [Category(CategoryNetwork)]
-    [JsonProperty]
+    [JsonInclude]
     public int Port { get; set; }
 
     [Category(CategoryInitiator)]
     [DisplayName("Next ClOrdID")]
-    [JsonProperty]
+    [JsonInclude]
     public int NextClOrdId { get; set; } = 1;
 
     [Category(CategoryInitiator)]
     [DisplayName("Append Date to ClOrdID")]
-    [JsonProperty]
+    [JsonInclude]
     public bool AppendDateToClOrdID { get; set; }
 
     public string FormatClOrdId(int clOrdId)
@@ -155,58 +155,58 @@ public partial class Session : Fix.PersistentSession
 
     [Category(CategoryInitiator)]
     [DisplayName("Next ListID")]
-    [JsonProperty]
+    [JsonInclude]
     public int NextListId { get; set; } = 1;
 
     [Category(CategoryInitiator)]
     [DisplayName("Next AllocID")]
-    [JsonProperty]
+    [JsonInclude]
     public int NextAllocId { get; set; } = 1;
 
     [Category(CategoryAcceptor)]
     [DisplayName("Next OrderID")]
-    [JsonProperty]
+    [JsonInclude]
     public int NextOrderId { get; set; } = 1;
 
     [Category(CategoryAcceptor)]
     [DisplayName("Next ExecID")]
-    [JsonProperty]
+    [JsonInclude]
     public int NextExecId { get; set; } = 1;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoSetMsgSeqNum { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoTotNoOrders { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoNoOrders { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoListId { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoClOrdId { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoListSeqNo { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoTransactTime { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoAllocId { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool AutoScrollMessages { get; set; } = true;
 
     [Browsable(false)]
@@ -215,15 +215,15 @@ public partial class Session : Fix.PersistentSession
     #region Options for the paste message dialog
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool PasteDefineCustomFields { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool PasteFilterEmptyFields { get; set; } = true;
 
     [Browsable(false)]
-    [JsonProperty]
+    [JsonInclude]
     public bool PasteResetExisting { get; set; } = true;
 
     #endregion
@@ -895,7 +895,7 @@ public partial class Session : Fix.PersistentSession
             if (!info.CanWrite || !info.CanRead)
                 continue;
 
-            if (info.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Length == 0)
+            if (info.GetCustomAttributes(typeof(JsonIncludeAttribute), false).Length == 0)
                 continue;
 
             info.SetValue(this, info.GetValue(source));

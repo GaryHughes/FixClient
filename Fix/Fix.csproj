@@ -6,10 +6,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Fix.Dictionary\Fix.Dictionary.csproj" />
   </ItemGroup>
 
