@@ -641,7 +641,7 @@ public partial class Session : ICloneable
 
         int endSeqNo = received;
         //
-        // FIX 4.0 and FIX 4.1 used EndSeqNo 99999 to represent send me everthing
+        // FIX 4.0 and FIX 4.1 used EndSeqNo 999999 to represent send me everything
         // after BeginSeqNo, FIX 4.2 and greater use EndSeqNo 0 for the same purpose.
         //
         /*
@@ -649,7 +649,7 @@ public partial class Session : ICloneable
                 (BeginString.BeginString == Dictionary.Versions.FIX_4_0.BeginString ||
                 BeginString.BeginString == Dictionary.Versions.FIX_4_1.BeginString))
         {
-		    endSeqNo = 99999;
+		    endSeqNo = LegacyInfiniteEndSeqNo;
 	    }
         */
 
@@ -852,19 +852,27 @@ public partial class Session : ICloneable
         PerformResend(beginSeqNo, endSeqNo);
     }
 
+    //
+    // FIX 4.0 and FIX 4.1 used EndSeqNo 999999 to represent send me everything after BeginSeqNo,
+    // FIX 4.2 and greater use EndSeqNo 0 for the same purpose.
+    //
+    internal const int LegacyInfiniteEndSeqNo = 999999;
+
+    internal static int NormaliseEndSeqNo(string beginString, int endSeqNo)
+    {
+        if ((beginString == Versions.FIX_4_0.BeginString || beginString == "FIX.4.1") && endSeqNo == LegacyInfiniteEndSeqNo)
+        {
+            return 0;
+        }
+
+        return endSeqNo;
+    }
+
     void PerformResend(int beginSeqNo, int endSeqNo)
     {
         OnInformation($"Performing resend from BeginSeqNo = {beginSeqNo} to EndSeqNo {endSeqNo}");
 
-        if (BeginString.BeginString == Versions.FIX_4_0.BeginString || BeginString.BeginString == "FIX.4.1")
-        {
-            //
-            // FIX 4.0 and FIX 4.1 used EndSeqNo 99999 to represent send me everthing
-            // after BeginSeqNo, FIX 4.2 and greater use EndSeqNo 0 for the same purpose.
-            //
-            if (endSeqNo == 9999)
-                endSeqNo = 0;
-        }
+        endSeqNo = NormaliseEndSeqNo(BeginString.BeginString, endSeqNo);
         //
         // When we send a GapFill the MsgSeqNum of the message must be the MsgSeqNum of the
         // first message being GapFilled.
