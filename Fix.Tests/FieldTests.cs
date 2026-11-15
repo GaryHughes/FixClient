@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Fix.Dictionary;
 
@@ -168,6 +170,61 @@ public class FieldTests
         Assert.IsNotNull(description);
         Assert.AreEqual("Day", description?.Name);
         Assert.AreEqual("A buy or sell order that, if not executed expires at the end of the trading day on which it was entered.", description?.Description);
+    }
+
+    static void WithCulture(CultureInfo culture, Action action)
+    {
+        var saved = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = culture;
+            action();
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = saved;
+        }
+    }
+
+    static CultureInfo CommaDecimalDotTimeCulture()
+    {
+        var culture = (CultureInfo)CultureInfo.GetCultureInfo("de-DE").Clone();
+        culture.NumberFormat.NumberDecimalSeparator = ",";
+        culture.NumberFormat.NumberGroupSeparator = ".";
+        culture.DateTimeFormat.TimeSeparator = ".";
+        return culture;
+    }
+
+    [TestMethod]
+    public void TestDecimalValueIsWrittenWithInvariantCulture()
+    {
+        WithCulture(CommaDecimalDotTimeCulture(), () =>
+        {
+            Assert.AreEqual("1.5", new Fix.Field(44, 1.5m).Value);
+            Assert.AreEqual("1.5", new Fix.Field(FIX_5_0SP2.Fields.Price, 1.5m).Value);
+        });
+    }
+
+    [TestMethod]
+    public void TestDecimalValueIsReadWithInvariantCulture()
+    {
+        WithCulture(CommaDecimalDotTimeCulture(), () =>
+        {
+            Assert.AreEqual(1.5m, (decimal?)new Fix.Field(44, "1.5"));
+            Assert.AreEqual(1500m, (decimal?)new Fix.Field(44, "1500"));
+        });
+    }
+
+    [TestMethod]
+    public void TestTimestampStringUsesColonsRegardlessOfCulture()
+    {
+        WithCulture(CommaDecimalDotTimeCulture(), () =>
+        {
+            string timestamp = Fix.Field.TimestampString();
+            Assert.IsTrue(Regex.IsMatch(timestamp, @"^\d{8}-\d{2}:\d{2}:\d{2}\.\d{3}$"), timestamp);
+            timestamp = Fix.Field.TimestampString(Fix.Field.TimestampFormatShort);
+            Assert.IsTrue(Regex.IsMatch(timestamp, @"^\d{8}-\d{2}:\d{2}:\d{2}$"), timestamp);
+        });
     }
 }
 

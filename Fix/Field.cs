@@ -13,7 +13,7 @@ public class Field : ICloneable
     public const string TimestampFormatShort = "yyyyMMdd-HH:mm:ss";
     public const string TimestampFormatLong = "yyyyMMdd-HH:mm:ss.fff";
 
-    public static string TimestampString(string timestampFormat = TimestampFormatLong) => DateTime.UtcNow.ToString(timestampFormat);
+    public static string TimestampString(string timestampFormat = TimestampFormatLong) => DateTime.UtcNow.ToString(timestampFormat, CultureInfo.InvariantCulture);
 
     public static bool IsTimestampFormatStringValid(string format)
     {
@@ -42,19 +42,19 @@ public class Field : ICloneable
     public Field(int tag, int value)
     {
         Tag = tag;
-        Value = value.ToString();
+        Value = value.ToString(CultureInfo.InvariantCulture);
     }
 
     public Field(int tag, long value)
     {
         Tag = tag;
-        Value = value.ToString();
+        Value = value.ToString(CultureInfo.InvariantCulture);
     }
 
     public Field(int tag, decimal value)
     {
         Tag = tag;
-        Value = value.ToString();
+        Value = value.ToString(CultureInfo.InvariantCulture);
     }
 
     public Field(int tag, bool value)
@@ -65,7 +65,7 @@ public class Field : ICloneable
 
     public Field(string tag, string value)
     {
-        if (!int.TryParse(tag, out var intTag))
+        if (!int.TryParse(tag, NumberStyles.Integer, CultureInfo.InvariantCulture, out var intTag))
         {
             throw new ArgumentException($"Invalid FIX tag '{tag}' is not an integer");
         }
@@ -95,12 +95,12 @@ public class Field : ICloneable
     }
 
     public Field(VersionField definition, int value)
-    : this(definition.Tag, value.ToString())
+    : this(definition.Tag, value.ToString(CultureInfo.InvariantCulture))
     {
     }
 
     public Field(VersionField definition, decimal value)
-    : this(definition.Tag, value.ToString())
+    : this(definition.Tag, value.ToString(CultureInfo.InvariantCulture))
     {
     }
 
@@ -124,7 +124,7 @@ public class Field : ICloneable
 
     public static explicit operator long?(Field field)
     {
-        if (!long.TryParse(field.Value, out var result))
+        if (!long.TryParse(field.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result))
         {
             return null;
         }
@@ -139,7 +139,7 @@ public class Field : ICloneable
 
     public static explicit operator decimal?(Field field)
     {
-        if (!decimal.TryParse(field.Value, out decimal result))
+        if (!decimal.TryParse(field.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result))
         {
             return null;
         }
