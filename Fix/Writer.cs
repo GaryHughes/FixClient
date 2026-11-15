@@ -60,72 +60,90 @@ public class Writer : IDisposable
 
         OnMessageWriting(message);
 
-        if (FragmentMessages)
-        {
-            lock (_writer)
-            {
-                Write(_writer, message);
-            }
-        }
-        else
-        {
-            using MemoryStream stream = new();
-            using (BinaryWriter writer = new(stream, Encoding.Latin1, true))
-            {
-                Write(writer, message);
-            }
-
-            lock (_writer)
-            {
-                _writer.Write(stream.GetBuffer(), 0, (int)stream.Length);
-            }
-        }
-
-        OnMessageWritten(message);
-    }
-
-    static void Write(BinaryWriter writer, Message message)
-    {
-        int checkSumTag = FIX_5_0SP2.Fields.CheckSum.Tag;
-
-        // Each field is encoded into one pooled buffer, grown as needed, rather than into new strings
-        // and byte arrays for every field.
+        // Fields are encoded into a pooled buffer, grown as needed, rather than into new strings and
+        // byte arrays for every field or a MemoryStream for every message.
         byte[] buffer = ArrayPool<byte>.Shared.Rent(InitialBufferSize);
 
         try
         {
-            foreach (Field field in message.Fields)
+            if (FragmentMessages)
             {
-                if (field.Tag == checkSumTag)
-                    continue;
-
-                WriteField(writer, ref buffer, field.Tag, field.Value, field.Data);
+                lock (_writer)
+                {
+                    Encode(message, ref buffer, _writer);
+                }
             }
+            else
+            {
+                int length = Encode(message, ref buffer, fragments: null);
 
-            WriteField(writer, ref buffer, checkSumTag, message.CheckSum ?? string.Empty, data: false);
+                lock (_writer)
+                {
+                    _writer.Write(buffer, 0, length);
+                }
+            }
         }
         finally
         {
             ArrayPool<byte>.Shared.Return(buffer);
         }
+
+        OnMessageWritten(message);
+    }
+
+    // Encodes the message into buffer. When fragments is given each field is written to it as soon as
+    // it is encoded and the buffer reused for the next field. Otherwise the whole message accumulates
+    // in the buffer and its length is returned.
+    static int Encode(Message message, ref byte[] buffer, BinaryWriter? fragments)
+    {
+        int checkSumTag = FIX_5_0SP2.Fields.CheckSum.Tag;
+        int length = 0;
+
+        foreach (Field field in message.Fields)
+        {
+            if (field.Tag == checkSumTag)
+                continue;
+
+            length = EncodeField(ref buffer, length, field.Tag, field.Value, field.Data);
+
+            if (fragments is not null)
+            {
+                fragments.Write(buffer, 0, length);
+                length = 0;
+            }
+        }
+
+        length = EncodeField(ref buffer, length, checkSumTag, message.CheckSum ?? string.Empty, data: false);
+
+        if (fragments is not null)
+        {
+            fragments.Write(buffer, 0, length);
+            length = 0;
+        }
+
+        return length;
     }
 
     const int InitialBufferSize = 256;
     const int MaxTagBytes = 11;
 
-    static void WriteField(BinaryWriter writer, ref byte[] buffer, int tag, string value, bool data)
+    // Encodes the field at offset in buffer, growing the buffer if needed, and returns the offset just
+    // past it.
+    static int EncodeField(ref byte[] buffer, int offset, int tag, string value, bool data)
     {
         // The tag, '=', the value and SOH. Text is one byte per character in Latin-1 and base64 decodes
         // to fewer bytes than it has characters.
-        int maximum = MaxTagBytes + value.Length + 2;
+        int maximum = offset + MaxTagBytes + value.Length + 2;
 
         if (buffer.Length < maximum)
         {
+            byte[] larger = ArrayPool<byte>.Shared.Rent(Math.Max(maximum, buffer.Length * 2));
+            buffer.AsSpan(0, offset).CopyTo(larger);
             ArrayPool<byte>.Shared.Return(buffer);
-            buffer = ArrayPool<byte>.Shared.Rent(maximum);
+            buffer = larger;
         }
 
-        Span<byte> span = buffer;
+        Span<byte> span = buffer.AsSpan(offset);
 
         tag.TryFormat(span, out int length, default, CultureInfo.InvariantCulture);
         span[length++] = Field.ValueSeparator;
@@ -147,7 +165,7 @@ public class Writer : IDisposable
 
         span[length++] = Field.Separator;
 
-        writer.Write(span[..length]);
+        return offset + length;
     }
 
     public void Write(Message message)
