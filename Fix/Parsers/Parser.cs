@@ -2,12 +2,14 @@ namespace Fix;
 
 public static class Parser
 {
-    static IEnumerable<LogParser> parsers = new LogParser[]
-    {
+    // The parsers keep state while they read a stream (FormattedLogParser remembers the FIX version
+    // it has seen for example) so every parse gets its own instances.
+    static LogParser[] CreateParsers() =>
+    [
         new Parsers.GenericLogParser(),
         new Parsers.FormattedLogParser(),
         new Parsers.KlsLogParser()
-    };
+    ];
 
     public static async IAsyncEnumerable<Message> Parse(Stream stream)
     {
@@ -15,7 +17,7 @@ public static class Parser
 
         using var decorator = new NonClosingStreamDecorator(stream);
 
-        foreach (var parser in parsers)
+        foreach (var parser in CreateParsers())
         {
             bool foundMessages = false;
 

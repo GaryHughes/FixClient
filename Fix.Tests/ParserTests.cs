@@ -22,6 +22,33 @@ public class ParserTests
         return result;
     }
 
+    static async Task<List<Fix.Message>> ParseText(string text)
+    {
+        using var stream = new MemoryStream(System.Text.Encoding.ASCII.GetBytes(text));
+        var messages = new List<Fix.Message>();
+        await foreach (var message in Fix.Parser.Parse(stream))
+        {
+            messages.Add(message);
+        }
+        return messages;
+    }
+
+    [TestMethod]
+    public async Task TestParserStateDoesNotLeakBetweenParses()
+    {
+        // ExecType does not exist in FIX 4.0. If the FIX 4.0 version seen in the first log leaked
+        // into the second parse the ExecType description would not be recognised and stripped.
+        const string fix40 = "{\n    BeginString    (8) - FIX.4.0\n        MsgType   (35) - 0\n}\n";
+        const string noVersion = "{\n        MsgType   (35) - 8\n       ExecType  (150) - 0 - New\n}\n";
+
+        var first = await ParseText(fix40);
+        Assert.HasCount(1, first);
+
+        var second = await ParseText(noVersion);
+        Assert.HasCount(1, second);
+        Assert.AreEqual("0", second[0].Fields.Find(150)?.Value);
+    }
+
     [TestMethod]
     [DeploymentItem("Logs/t_kls.log")]
     public async Task TestKlsParser()
