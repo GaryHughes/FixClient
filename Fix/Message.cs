@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using static Fix.Dictionary;
 
@@ -128,8 +129,18 @@ public partial class Message : ICloneable
         // The checksum is computed by summing all bytes with the message (except those of the
         // checksum field '10=nnn\001' itself) modulo 256.
         //
-        int value = message.Fields.Where(field => field.Tag != FIX_5_0SP2.Fields.CheckSum.Tag).Sum(field => field.ComputeCheckSum()) % 256;
-        return value.ToString("D3");
+        int checkSumTag = FIX_5_0SP2.Fields.CheckSum.Tag;
+        int sum = 0;
+
+        foreach (Field field in message.Fields)
+        {
+            if (field.Tag != checkSumTag)
+            {
+                sum += field.ComputeCheckSum();
+            }
+        }
+
+        return (sum % 256).ToString("D3", CultureInfo.InvariantCulture);
     }
 
     public string ComputeBodyLength()

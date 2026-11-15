@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fix\Fix.csproj" />
     <ProjectReference Include="..\Fix.Dictionary\Fix.Dictionary.csproj" />
   </ItemGroup>
 

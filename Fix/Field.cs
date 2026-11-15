@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Globalization;
 using System.Text;
 using static Fix.Dictionary;
@@ -210,48 +211,102 @@ public class Field : ICloneable
     // Field and an equal FieldValue also have the same hash code.
     public override int GetHashCode() => HashCode.Combine(Tag, Value);
 
+    //
+    // These are called for every field of every message sent and received so they work on stack
+    // or pooled buffers rather than allocating strings and byte arrays for each field.
+    //
     public int ComputeCheckSum()
     {
-        int checksum = Encoding.Latin1.GetBytes(Tag + "=").Select(b => (int)b).Sum();
+        Span<byte> tag = stackalloc byte[MaxTagBytes];
+        int tagLength = FormatTag(tag);
+
+        int checksum = ValueSeparator + Separator;
+
+        foreach (byte b in tag[..tagLength])
+        {
+            checksum += b;
+        }
 
         if (!string.IsNullOrEmpty(Value))
         {
-            if (Data)
-            {
-                byte[] bytes = Convert.FromBase64String(Value);
-                checksum += bytes.Select(b => (int)b).Sum();
-            }
-            else
-            {
-                checksum += Encoding.Latin1.GetBytes(Value).Select(b => (int)b).Sum();
-            }
+            checksum += ProcessValueBytes(sum: true);
         }
-
-        checksum += Encoding.Latin1.GetBytes("\x01").Select(b => (int)b).Sum();
 
         return checksum;
     }
 
     public int ComputeBodyLength()
     {
-        int bodyLength = Encoding.Latin1.GetBytes(string.Format("{0}=", Tag)).Length;
+        Span<byte> tag = stackalloc byte[MaxTagBytes];
+
+        // The tag, '=' and the trailing SOH.
+        int bodyLength = FormatTag(tag) + 2;
 
         if (!string.IsNullOrEmpty(Value))
         {
+            bodyLength += Data ? ProcessValueBytes(sum: false) : Value.Length;
+        }
+
+        return bodyLength;
+    }
+
+    const int MaxTagBytes = 11;
+    const int StackBufferSize = 256;
+
+    int FormatTag(Span<byte> destination)
+    {
+        Tag.TryFormat(destination, out int written, default, CultureInfo.InvariantCulture);
+        return written;
+    }
+
+    // Returns the sum or the count of the bytes the value is sent as: the decoded bytes for a data
+    // field and the Latin-1 encoding of the text otherwise.
+    int ProcessValueBytes(bool sum)
+    {
+        int maximum = Value.Length + 1;
+        byte[]? rented = null;
+        Span<byte> buffer = maximum <= StackBufferSize
+            ? stackalloc byte[StackBufferSize]
+            : (rented = ArrayPool<byte>.Shared.Rent(maximum));
+
+        try
+        {
+            int count;
+
             if (Data)
             {
-                byte[] bytes = Convert.FromBase64String(Value);
-                bodyLength += bytes.Length;
+                if (!Convert.TryFromBase64String(Value, buffer, out count))
+                {
+                    // Not valid base64; let FromBase64String throw the same FormatException as before.
+                    count = Convert.FromBase64String(Value).Length;
+                }
             }
             else
             {
-                bodyLength += Value.Length;
+                count = Encoding.Latin1.GetBytes(Value, buffer);
+            }
+
+            if (!sum)
+            {
+                return count;
+            }
+
+            int total = 0;
+
+            foreach (byte b in buffer[..count])
+            {
+                total += b;
+            }
+
+            return total;
+        }
+        finally
+        {
+            if (rented is not null)
+            {
+                ArrayPool<byte>.Shared.Return(rented);
             }
         }
-
-        bodyLength += 1;
-
-        return bodyLength;
     }
 
     public FieldDescription Describe(Dictionary.Message? messageDefinition)
