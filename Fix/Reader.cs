@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using static Fix.Dictionary;
 
@@ -124,7 +125,7 @@ public class Reader : IDisposable
             VersionField? definition = null;
 
             if (ValidateDataFields &&
-                FIX_5_0SP2.Fields.TryGetValue(int.Parse(_tag.ToString()), out definition) &&
+                FIX_5_0SP2.Fields.TryGetValue(int.Parse(_tag.ToString(), CultureInfo.InvariantCulture), out definition) &&
                 definition != null &&
                 definition.DataType == FIX_5_0SP2.DataTypes.data.Name)
             {

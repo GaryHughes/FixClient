@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 using Timer = System.Timers.Timer;
 using static Fix.Dictionary;
@@ -51,7 +52,7 @@ public partial class Session : ICloneable, IDisposable
         public LogEvent(string format, params object[] args)
         {
             TimeStamp = DateTime.Now;
-            Message = args.Length == 0 ? format : string.Format(format, args);
+            Message = args.Length == 0 ? format : string.Format(CultureInfo.CurrentCulture, format, args);
         }
 
         public DateTime TimeStamp { get; }
@@ -785,7 +786,7 @@ public partial class Session : ICloneable, IDisposable
     {
         try
         {
-            return Convert.ToInt32(s1) == Convert.ToInt32(s2);
+            return Convert.ToInt32(s1, CultureInfo.InvariantCulture) == Convert.ToInt32(s2, CultureInfo.InvariantCulture);
         }
         catch (FormatException)
         {
@@ -952,7 +953,7 @@ public partial class Session : ICloneable, IDisposable
     void SendTestRequest()
     {
         var message = new Message { MsgType = FIX_5_0SP2.Messages.TestRequest.MsgType };
-        ExpectedTestRequestId = AllocateTestRequestId().ToString();
+        ExpectedTestRequestId = AllocateTestRequestId().ToString(CultureInfo.InvariantCulture);
         message.Fields.Set(FIX_5_0SP2.Fields.TestReqID, ExpectedTestRequestId);
         Send(message);
     }

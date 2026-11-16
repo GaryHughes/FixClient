@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using static Fix.Dictionary;
 
@@ -39,7 +40,7 @@ public class FormattedLogParser : LogParser
             if (!match.Success)
                 continue;
 
-            int tag = Convert.ToInt32(match.Groups[1].Value);
+            int tag = Convert.ToInt32(match.Groups[1].Value, CultureInfo.InvariantCulture);
             string value = match.Groups[3].Value;
 
             // If we haven't loaded a version yet or if the version has changed. The version is unlikely to change but sometimes

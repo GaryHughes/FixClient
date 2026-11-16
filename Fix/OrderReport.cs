@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace Fix;
 
@@ -44,7 +45,7 @@ public class OrderReport
                             order.Price,
                             order.CumQty,
                             order.AvgPx,
-                            order.SendingTime.ToString(Field.TimestampFormatLong));
+                            order.SendingTime.ToString(Field.TimestampFormatLong, CultureInfo.InvariantCulture));
         }
 
         var bytes = Encoding.UTF8.GetBytes("\n" + report.ToString() + "\n\n");

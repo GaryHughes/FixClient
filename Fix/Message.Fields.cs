@@ -1,3 +1,4 @@
+using System.Globalization;
 using static Fix.Dictionary;
 
 namespace Fix;
@@ -54,7 +55,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.BodyLength) is Field field)
             {
-                return Convert.ToInt32(@field.Value);
+                return Convert.ToInt32(@field.Value, CultureInfo.InvariantCulture);
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.BodyLength);
@@ -67,7 +68,7 @@ public partial class Message
         {
             if (Fields.Find(FIX_5_0SP2.Fields.MsgSeqNum) is Field field)
             {
-                return Convert.ToInt32(@field.Value);
+                return Convert.ToInt32(@field.Value, CultureInfo.InvariantCulture);
             }
 
             throw new MissingFieldException(FIX_5_0SP2.Fields.MsgSeqNum);

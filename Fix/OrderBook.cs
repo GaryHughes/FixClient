@@ -272,7 +272,7 @@ public class OrderBook
                 if (order == null)
                 {
                     message.Status = MessageStatus.Error;
-                    message.StatusMessage = StatusMessageHeader + string.Format(" because a matching order with ClOrdID = {0} could not be found", OrigClOrdID.Value);
+                    message.StatusMessage = StatusMessageHeader + $" because a matching order with ClOrdID = {OrigClOrdID.Value} could not be found";
                     return OrderBookMessageEffect.Rejected;
                 }
                 //

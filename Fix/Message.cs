@@ -170,7 +170,7 @@ public partial class Message : ICloneable
             bodyLength += field.ComputeBodyLength();
         }
 
-        return bodyLength.ToString();
+        return bodyLength.ToString(CultureInfo.InvariantCulture);
     }
 
     public bool Incoming { get; set; }
@@ -245,7 +245,7 @@ public partial class Message : ICloneable
         {
             writer.WriteLine("    {0} {1} - {2}{3}",
                                 (field.Name ?? "").PadLeft(widestName),
-                                string.Format("({0})", field.Tag).PadLeft(6),
+                                $"({field.Tag})".PadLeft(6),
                                 field.Value,
                                 field.ValueDefinition switch
                                 {
