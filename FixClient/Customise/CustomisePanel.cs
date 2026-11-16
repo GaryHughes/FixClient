@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: CustomisePanel.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -150,11 +139,7 @@ public partial class CustomisePanel : FixClientPanel
                 {
                     var _ = Session.Version.Fields[field.Tag];
                     MessageBox.Show(this,
-                                    string.Format(
-                                    "{0} already had a field with tag = {1} ignoring custom field {1} = {2}",
-                                    Session.Version.BeginString,
-                                    field.Tag,
-                                    field.Name),
+                                    $"{Session.Version.BeginString} already had a field with tag = {field.Tag} ignoring custom field {field.Tag} = {field.Name}",
                                     Application.ProductName,
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);

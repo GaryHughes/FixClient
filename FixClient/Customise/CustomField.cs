@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: CustomField.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 namespace FixClient;
 
 public class CustomField
@@ -58,6 +47,6 @@ public class CustomField
 
     public override string ToString()
     {
-        return string.Format("{0} = {1}", Tag, Name);
+        return $"{Tag} = {Name}";
     }
 }

@@ -160,7 +160,7 @@ public sealed partial class OrderDataGridView : DataGridView
             {
                 int quantity = Convert.ToInt32(quantityValue, CultureInfo.InvariantCulture);
                 int pendingQuantity = Convert.ToInt32(pendingQuantityValue, CultureInfo.InvariantCulture);
-                e.Value = string.Format("{0} ({1})", quantity, pendingQuantity);
+                e.Value = $"{quantity} ({pendingQuantity})";
                 e.FormattingApplied = true;
             }
 
@@ -176,7 +176,7 @@ public sealed partial class OrderDataGridView : DataGridView
             {
                 decimal limit = Convert.ToDecimal(limitValue, CultureInfo.InvariantCulture);
                 decimal pendingLimit = Convert.ToDecimal(pendingLimitValue, CultureInfo.InvariantCulture);
-                e.Value = string.Format("{0} ({1})", limit, pendingLimit);
+                e.Value = $"{limit} ({pendingLimit})";
                 e.FormattingApplied = true;
             }
 

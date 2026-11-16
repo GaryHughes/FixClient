@@ -274,7 +274,7 @@ public partial class Session : Fix.PersistentSession
 
     public void LogInformation(string format, params object[] args)
     {
-        OnInformation(string.Format(format, args));
+        OnInformation(string.Format(CultureInfo.CurrentCulture, format, args));
     }
 
     public void LogWarning(string message)
@@ -303,7 +303,7 @@ public partial class Session : Fix.PersistentSession
     {
         if (_customFields.ContainsKey(field.Tag))
         {
-            throw new ArgumentException(string.Format("Session already contains a custom field with Tag = {0}", field.Tag));
+            throw new ArgumentException($"Session already contains a custom field with Tag = {field.Tag}");
         }
         _customFields[field.Tag] = field;
         OnCustomFieldAdded(field);
@@ -313,7 +313,7 @@ public partial class Session : Fix.PersistentSession
     {
         if (!_customFields.ContainsKey(field.Tag))
         {
-            throw new ArgumentException(string.Format("Session does not contain a custom field with Tag = {0}", field.Tag));
+            throw new ArgumentException($"Session does not contain a custom field with Tag = {field.Tag}");
         }
         _customFields.Remove(field.Tag);
     }

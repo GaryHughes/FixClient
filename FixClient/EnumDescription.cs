@@ -13,7 +13,7 @@ public class EnumDescriptionCollection : List<EnumDescription>
     {
         if (field.Values.Count == 0)
         {
-            throw new ArgumentException(string.Format("Field type must be enumerated! you passed {0}", field.Name));
+            throw new ArgumentException($"Field type must be enumerated! you passed {field.Name}");
         }
 
         foreach (var item in field.Values)

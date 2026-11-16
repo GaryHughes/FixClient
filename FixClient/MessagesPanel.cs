@@ -475,7 +475,7 @@ partial class MessagesPanel : FixClientPanel
 
         if (row.DataBoundItem is not DataRowView rowView)
         {
-            throw new InvalidOperationException(string.Format("MessageFieldDataGridView Row.DataBoundItem at index {0} is not a DataRowView ", row.Index));
+            throw new InvalidOperationException($"MessageFieldDataGridView Row.DataBoundItem at index {row.Index} is not a DataRowView ");
         }
 
         if (rowView.Row is not FieldDataRow dataRow)
@@ -486,7 +486,7 @@ partial class MessagesPanel : FixClientPanel
 
         using GoaEditor editor = new();
 
-        editor.Text = string.Format("{0} - {1}", fieldTag, fieldName);
+        editor.Text = $"{fieldTag} - {fieldName}";
 
         if (row.Cells[FieldDataTable.ColumnValue].Value?.ToString() is string goa)
         {
@@ -539,7 +539,7 @@ partial class MessagesPanel : FixClientPanel
 
             foreach (CustomField field in Session.CustomFields.Values)
             {
-                items[index] = new ToolStripMenuItem(string.Format("{0} - {1}", field.Tag, field.Name));
+                items[index] = new ToolStripMenuItem($"{field.Tag} - {field.Name}");
                 items[index].Click += InsertCustomFieldClick;
                 items[index++].Tag = field;
             }
@@ -1822,7 +1822,7 @@ partial class MessagesPanel : FixClientPanel
         if (_messageTable.Rows.Find(msgType) is not MessageTypeDataRow row)
         {
             MessageBox.Show(this,
-                            string.Format("Unable to find the {0} message", msgType),
+                            $"Unable to find the {msgType} message",
                             Application.ProductName,
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);

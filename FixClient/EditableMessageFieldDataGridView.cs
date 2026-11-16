@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: EditableMessageFieldDataGridView.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -289,7 +278,7 @@ public partial class EditableMessageFieldDataGridView : MessageFieldDataGridView
                 if (!int.TryParse(value, out var _))
                 {
                     MessageBox.Show(this,
-                                    string.Format("{0} must be an integer", definition.Name),
+                                    $"{definition.Name} must be an integer",
                                     Application.ProductName,
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);

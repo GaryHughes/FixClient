@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: AboutForm.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Reflection;
 
 namespace FixClient;
@@ -23,10 +12,10 @@ partial class AboutForm : Form
         //  Change assembly information settings for your application through either:
         //  - Project->Properties->Application->Assembly Information
         //  - AssemblyInfo.cs
-        Text = string.Format("About {0}", "FIX Client");
+        Text = "About FIX Client";
         labelProductName.Text = "FIX Client";
-        labelVersion.Text = string.Format("Version {0}", AssemblyVersion);
-        labelCopyright.Text = string.Format("Original work Copyright VIRTU Financial 2021\r\n\r\nModified work Copyright Gary Hughes 2021");
+        labelVersion.Text = $"Version {AssemblyVersion}";
+        labelCopyright.Text = "Original work Copyright VIRTU Financial 2021\r\n\r\nModified work Copyright Gary Hughes 2021";
     }
 
     #region Assembly Attribute Accessors

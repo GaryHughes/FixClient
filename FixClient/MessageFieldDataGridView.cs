@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: MessageFieldDataGridView.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Data;
 using System.Drawing;
 
@@ -131,7 +120,7 @@ public partial class MessageFieldDataGridView : DataGridView
 
         if (rowView.Row is not FieldDataRow dataRow)
         {
-            throw new InvalidOperationException(string.Format("MessageFieldDataGridView RowView.Row at index {0} is not a FieldDataRow", rowIndex));
+            throw new InvalidOperationException($"MessageFieldDataGridView RowView.Row at index {rowIndex} is not a FieldDataRow");
         }
 
         return dataRow.Field;

@@ -870,12 +870,12 @@ partial class MainForm : Form
 
         if (CurrentSession.Behaviour == Fix.Behaviour.Initiator)
         {
-            title = string.Format("Connecting to remote FIX server at {0}", endPoint);
+            title = $"Connecting to remote FIX server at {endPoint}";
         }
         else
         {
-            title = string.Format("Listening for FIX connections at {0}",
-                                    string.IsNullOrEmpty(CurrentSession.BindHost) ? string.Format("*:{0}", endPoint.Port) : endPoint.ToString());
+            string address = string.IsNullOrEmpty(CurrentSession.BindHost) ? $"*:{endPoint.Port}" : endPoint.ToString();
+            title = $"Listening for FIX connections at {address}";
         }
 
         CurrentSession.LogInformation(title);
