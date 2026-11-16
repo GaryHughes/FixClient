@@ -28,8 +28,7 @@ public class PersistentSessionTests : SessionTestsBase<Fix.PersistentSession>
         Initiator.TargetCompId = TargetCompId;
         Initiator.TestRequestDelay = 0;
         Initiator.NextExpectedMsgSeqNum = true;
-        Initiator.FileName = string.Format("{0}\\{1}-{2}.session", Path.GetTempPath(), Initiator.SenderCompId,
-            Initiator.TargetCompId);
+        Initiator.FileName = Path.Combine(Path.GetTempPath(), $"{Initiator.SenderCompId}-{Initiator.TargetCompId}.session");
         if (File.Exists(Initiator.FileName))
         {
             File.Delete(Initiator.FileName);
@@ -42,7 +41,7 @@ public class PersistentSessionTests : SessionTestsBase<Fix.PersistentSession>
         Acceptor.TargetCompId = SenderCompId;
         Acceptor.TestRequestDelay = 0;
         Acceptor.NextExpectedMsgSeqNum = true;
-        Acceptor.FileName = string.Format("{0}\\{1}-{2}.session", Path.GetTempPath(), Acceptor.SenderCompId, Acceptor.TargetCompId);
+        Acceptor.FileName = Path.Combine(Path.GetTempPath(), $"{Acceptor.SenderCompId}-{Acceptor.TargetCompId}.session");
         if (File.Exists(Acceptor.FileName))
         {
             File.Delete(Acceptor.FileName);
@@ -141,7 +140,7 @@ public class PersistentSessionTests : SessionTestsBase<Fix.PersistentSession>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("NextExpectedMsgSeqNum too high, expecting 1 but received 1086"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "NextExpectedMsgSeqNum too high, expecting 1 but received 1086")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);
@@ -160,7 +159,7 @@ public class PersistentSessionTests : SessionTestsBase<Fix.PersistentSession>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("NextExpectedMsgSeqNum too high, expecting 1 but received 1086"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "NextExpectedMsgSeqNum too high, expecting 1 but received 1086")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);

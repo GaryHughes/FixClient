@@ -209,7 +209,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("Logon does not contain NextExpectedMsgSeqNum"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "Logon does not contain NextExpectedMsgSeqNum")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);
@@ -235,7 +235,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("Logon does not contain NextExpectedMsgSeqNum"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "Logon does not contain NextExpectedMsgSeqNum")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);
@@ -260,7 +260,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("NextExpectedMsgSeqNum too high, expecting 1 but received 50"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "NextExpectedMsgSeqNum too high, expecting 1 but received 50")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);
@@ -970,7 +970,7 @@ public class SessionTests : SessionTestsBase<Fix.Session>
 
         ReceiveAtInitiator(FIX_5_0SP2.Messages.Logout, new[]
         {
-            new Fix.Field(FIX_5_0SP2.Fields.Text, string.Format("MsgSeqNum too low, expecting 5 but received 1"))
+            new Fix.Field(FIX_5_0SP2.Fields.Text, "MsgSeqNum too low, expecting 5 but received 1")
         });
 
         AcceptorStateChange(Fix.State.Disconnected);
