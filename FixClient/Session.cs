@@ -1,5 +1,6 @@
 using Fix.Common;
 using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -147,7 +148,7 @@ public partial class Session : Fix.PersistentSession
     {
         if (AppendDateToClOrdID)
         {
-            return $"{clOrdId}-" + DateTime.Today.Date.ToString("yyyyMMdd");
+            return string.Create(CultureInfo.InvariantCulture, $"{clOrdId}-{DateTime.Today:yyyyMMdd}");
         }
 
         return $"{clOrdId}";
@@ -493,7 +494,7 @@ public partial class Session : Fix.PersistentSession
 
     public string? FieldRowFilter(string msgType, string? searchString = null)
     {
-        var expression = new StringBuilder(string.Format("{0} IN (", FieldDataTable.ColumnTag));
+        var expression = new StringBuilder($"{FieldDataTable.ColumnTag} IN (");
 
         bool items = false;
 
@@ -508,7 +509,7 @@ public partial class Session : Fix.PersistentSession
 
                 items = true;
 
-                expression.AppendFormat("{0}", tag);
+                expression.Append(tag.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -523,7 +524,7 @@ public partial class Session : Fix.PersistentSession
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            result = string.Format("({0}) AND ({1})", searchString, expression);
+            result = $"({searchString}) AND ({expression})";
         }
 
         return result;
@@ -541,7 +542,7 @@ public partial class Session : Fix.PersistentSession
             if (expression.Length > 0)
                 expression.Append(" AND ");
             items = true;
-            expression.Append(string.Format("{0} <> '{1}'", MessageTypeDataTable.ColumnMsgType, filter.Key));
+            expression.Append(CultureInfo.InvariantCulture, $"{MessageTypeDataTable.ColumnMsgType} <> '{filter.Key}'");
         }
 
         if (!items)
@@ -553,7 +554,7 @@ public partial class Session : Fix.PersistentSession
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            result = string.Format("({0}) AND ({1})", searchString, expression);
+            result = $"({searchString}) AND ({expression})";
         }
 
         return result;

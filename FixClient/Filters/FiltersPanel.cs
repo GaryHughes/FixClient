@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: FiltersPanel.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -275,10 +264,7 @@ partial class FiltersPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("CONVERT({0}, System.String) LIKE '%{2}%' OR {1} LIKE '%{2}%'",
-                                    FilterFieldDataTable.ColumnTag,
-                                    FilterFieldDataTable.ColumnName,
-                                    _fieldSearchTextBox.Text);
+            search = $"CONVERT({FilterFieldDataTable.ColumnTag}, System.String) LIKE '%{_fieldSearchTextBox.Text}%' OR {FilterFieldDataTable.ColumnName} LIKE '%{_fieldSearchTextBox.Text}%'";
         }
         _fieldGrid.RowCount = 0;
         _fieldView.RowFilter = search;
@@ -301,10 +287,7 @@ partial class FiltersPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("{1} LIKE '%{0}%' OR {2} LIKE '%{0}%'",
-                                    _messageSearchTextBox.Text,
-                                    FilterMessageDataTable.ColumnMsgType,
-                                    FilterMessageDataTable.ColumnName);
+            search = $"{FilterMessageDataTable.ColumnMsgType} LIKE '%{_messageSearchTextBox.Text}%' OR {FilterMessageDataTable.ColumnName} LIKE '%{_messageSearchTextBox.Text}%'";
         }
 
         _messageGrid.RowCount = 0;

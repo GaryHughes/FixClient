@@ -1,15 +1,5 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: CustomFieldForm.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
+using System.Globalization;
 
 namespace FixClient;
 
@@ -83,7 +73,7 @@ public partial class CustomFieldForm : Form
             return;
         }
 
-        int tag = Convert.ToInt32(valueTextBox.Text);
+        int tag = Convert.ToInt32(valueTextBox.Text, CultureInfo.InvariantCulture);
 
         if (Version.Fields.TryGetValue(tag, out var existing) && existing != null)
         {
@@ -125,7 +115,7 @@ public partial class CustomFieldForm : Form
         set
         {
             _customField = value;
-            valueTextBox.Text = value.Tag.ToString();
+            valueTextBox.Text = value.Tag.ToString(CultureInfo.InvariantCulture);
             nameTextBox.Text = value.Name;
         }
     }

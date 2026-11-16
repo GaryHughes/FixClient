@@ -76,10 +76,7 @@ public partial class DictionaryPanel : FixClientPanel
                 numeric = builder.ToString();
             }
 
-            var uri = new Uri(string.Format("http://onixs.biz/fix-dictionary/{0}/msgType_{1}_{2}.html",
-                                            value.BeginString.Substring(4, 3),
-                                            value.MsgType,
-                                            numeric));
+            var uri = new Uri($"http://onixs.biz/fix-dictionary/{value.BeginString.Substring(4, 3)}/msgType_{value.MsgType}_{numeric}.html");
 
             ThreadPool.QueueUserWorkItem(delegate
                                                 {

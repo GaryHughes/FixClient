@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Xml;
 
@@ -32,7 +33,7 @@ class CustomFieldCollection
                 continue;
             }
 
-            int id = Convert.ToInt32(reader.GetAttribute("id"));
+            int id = Convert.ToInt32(reader.GetAttribute("id"), CultureInfo.InvariantCulture);
 
             if (reader.GetAttribute("categories") is not string categoryAttribute)
             {

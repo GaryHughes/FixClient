@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: FieldDataGridView.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.Data;
 using System.Drawing;
 
@@ -147,12 +136,12 @@ public partial class FieldDataGridView : DataGridView
         if (header.SortGlyphDirection == SortOrder.Ascending)
         {
             header.SortGlyphDirection = SortOrder.Descending;
-            view.Sort = string.Format("{0} DESC", column.Name);
+            view.Sort = $"{column.Name} DESC";
         }
         else
         {
             header.SortGlyphDirection = SortOrder.Ascending;
-            view.Sort = string.Format("{0} ASC", column.Name);
+            view.Sort = $"{column.Name} ASC";
         }
 
         RefreshEdit();

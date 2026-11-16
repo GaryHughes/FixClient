@@ -292,11 +292,8 @@ partial class HistoryPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("CONVERT({0}, System.String) LIKE '%{3}%' OR {1} LIKE '%{3}%' OR {2} LIKE '%{3}%'",
-                                    FieldDataTable.ColumnTag,
-                                    FieldDataTable.ColumnName,
-                                    FieldDataTable.ColumnValue,
-                                    _fieldSearchTextBox.Text);
+            string text = _fieldSearchTextBox.Text;
+            search = $"CONVERT({FieldDataTable.ColumnTag}, System.String) LIKE '%{text}%' OR {FieldDataTable.ColumnName} LIKE '%{text}%' OR {FieldDataTable.ColumnValue} LIKE '%{text}%'";
         }
 
         _fieldView.RowFilter = search;
@@ -320,11 +317,8 @@ partial class HistoryPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("{1} LIKE '%{0}%' OR {2} LIKE '%{0}%' OR {3} LIKE '%{0}%'",
-                                    _messageSearchTextBox.Text,
-                                    MessageDataTable.ColumnSendingTime,
-                                    MessageDataTable.ColumnMsgTypeDescription,
-                                    MessageDataTable.ColumnMsgSeqNum);
+            string text = _messageSearchTextBox.Text;
+            search = $"{MessageDataTable.ColumnSendingTime} LIKE '%{text}%' OR {MessageDataTable.ColumnMsgTypeDescription} LIKE '%{text}%' OR {MessageDataTable.ColumnMsgSeqNum} LIKE '%{text}%'";
         }
 
         if (_session is null)

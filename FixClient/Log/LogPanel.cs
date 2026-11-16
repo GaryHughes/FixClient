@@ -1,14 +1,3 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: LogPanel.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -155,7 +144,7 @@ public partial class LogPanel : FixClientPanel
 
     void SearchTextBoxTextChanged(object? sender, EventArgs e)
     {
-        _messageView.RowFilter = string.IsNullOrEmpty(_searchTextBox.Text) ? null : string.Format("Message LIKE '*{0}*'", _searchTextBox.Text);
+        _messageView.RowFilter = string.IsNullOrEmpty(_searchTextBox.Text) ? null : $"Message LIKE '*{_searchTextBox.Text}*'";
         _searchTextBox.Focus();
     }
 

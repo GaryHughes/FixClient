@@ -609,7 +609,7 @@ partial class MainForm : Form
 
     void LoadMru()
     {
-        string cacheName = string.Format("{0}\\MRU", Application.UserAppDataPath);
+        string cacheName = Path.Combine(Application.UserAppDataPath, "MRU");
 
         if (File.Exists(cacheName))
         {
@@ -643,7 +643,7 @@ partial class MainForm : Form
 
     void SaveMru()
     {
-        string cacheName = string.Format("{0}\\MRU", Application.UserAppDataPath);
+        string cacheName = Path.Combine(Application.UserAppDataPath, "MRU");
         using FileStream stream = new(cacheName, FileMode.Create);
         var ser = new XmlSerializer(typeof(List<string>));
         ser.Serialize(stream, _mru);
@@ -1006,7 +1006,7 @@ partial class MainForm : Form
         //
         // Position the form as it was when we last shutdown.
         //
-        string cacheName = string.Format("{0}\\Location", Application.UserAppDataPath);
+        string cacheName = Path.Combine(Application.UserAppDataPath, "Location");
 
         if (File.Exists(cacheName))
         {
@@ -1030,7 +1030,7 @@ partial class MainForm : Form
             }
         }
 
-        cacheName = string.Format("{0}\\Size", Application.UserAppDataPath);
+        cacheName = Path.Combine(Application.UserAppDataPath, "Size");
 
         if (File.Exists(cacheName))
         {
@@ -1064,7 +1064,7 @@ partial class MainForm : Form
         if (WindowState == FormWindowState.Minimized)
             return;
 
-        string cacheName = string.Format("{0}\\Location", Application.UserAppDataPath);
+        string cacheName = Path.Combine(Application.UserAppDataPath, "Location");
 
         using (FileStream stream = new(cacheName, FileMode.Create))
         {
@@ -1072,7 +1072,7 @@ partial class MainForm : Form
             ser.Serialize(stream, Location);
         }
 
-        cacheName = string.Format("{0}\\Size", Application.UserAppDataPath);
+        cacheName = Path.Combine(Application.UserAppDataPath, "Size");
 
         using (FileStream stream = new(cacheName, FileMode.Create))
         {

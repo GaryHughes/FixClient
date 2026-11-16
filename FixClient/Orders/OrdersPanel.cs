@@ -1,16 +1,6 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: OrdersPanel.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Text;
 using static Fix.Dictionary;
 
@@ -295,11 +285,11 @@ partial class OrdersPanel : FixClientPanel
 
                 if (column.DataType.IsEnum)
                 {
-                    buffer.AppendFormat("{0} LIKE '%{1}%' OR ", column.ColumnName + "String", text);
+                    buffer.Append(CultureInfo.InvariantCulture, $"{column.ColumnName}String LIKE '%{text}%' OR ");
                 }
                 else
                 {
-                    buffer.AppendFormat("CONVERT({0}, System.String) LIKE '%{1}%' OR ", column.ColumnName, text);
+                    buffer.Append(CultureInfo.InvariantCulture, $"CONVERT({column.ColumnName}, System.String) LIKE '%{text}%' OR ");
                 }
             }
             buffer.Remove(buffer.Length - 3, 3);
@@ -392,11 +382,11 @@ partial class OrdersPanel : FixClientPanel
 
                 if (order.OrderID == null)
                 {
-                    order.OrderID = Session.NextOrderId.ToString();
+                    order.OrderID = Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
                 }
 
                 message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
                 message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.CumQty, 0);
@@ -466,11 +456,11 @@ partial class OrdersPanel : FixClientPanel
 
                 if (order.OrderID == null)
                 {
-                    order.OrderID = Session.NextOrderId.ToString();
+                    order.OrderID = Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
                 }
 
                 message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
                 message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.CumQty, 0);
@@ -568,11 +558,11 @@ partial class OrdersPanel : FixClientPanel
 
                 if (order.OrderID == null)
                 {
-                    order.OrderID = Session.NextOrderId.ToString();
+                    order.OrderID = Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
                 }
 
                 message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+                message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
                 message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
                 message.Fields.Set(FIX_5_0SP2.Fields.CumQty, order.OrderQty);

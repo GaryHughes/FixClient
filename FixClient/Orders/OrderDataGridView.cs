@@ -1,17 +1,7 @@
-/////////////////////////////////////////////////
-//
-// FIX Client
-//
-// Copyright @ 2021 VIRTU Financial Inc.
-// All rights reserved.
-//
-// Filename: OrderDataGridView.cs
-// Author:   Gary Hughes
-//
-/////////////////////////////////////////////////
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using static Fix.Dictionary;
 
 namespace FixClient;
@@ -168,8 +158,8 @@ public sealed partial class OrderDataGridView : DataGridView
 
             if (quantityValue != DBNull.Value && pendingQuantityValue != DBNull.Value)
             {
-                int quantity = Convert.ToInt32(quantityValue);
-                int pendingQuantity = Convert.ToInt32(pendingQuantityValue);
+                int quantity = Convert.ToInt32(quantityValue, CultureInfo.InvariantCulture);
+                int pendingQuantity = Convert.ToInt32(pendingQuantityValue, CultureInfo.InvariantCulture);
                 e.Value = string.Format("{0} ({1})", quantity, pendingQuantity);
                 e.FormattingApplied = true;
             }
@@ -184,8 +174,8 @@ public sealed partial class OrderDataGridView : DataGridView
 
             if (limitValue != DBNull.Value && pendingLimitValue != DBNull.Value)
             {
-                decimal limit = Convert.ToDecimal(limitValue);
-                decimal pendingLimit = Convert.ToDecimal(pendingLimitValue);
+                decimal limit = Convert.ToDecimal(limitValue, CultureInfo.InvariantCulture);
+                decimal pendingLimit = Convert.ToDecimal(pendingLimitValue, CultureInfo.InvariantCulture);
                 e.Value = string.Format("{0} ({1})", limit, pendingLimit);
                 e.FormattingApplied = true;
             }

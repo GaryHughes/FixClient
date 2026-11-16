@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using static Fix.Dictionary;
 using Timer = System.Windows.Forms.Timer;
 
@@ -356,11 +357,8 @@ partial class MessagesPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("CONVERT({0}, System.String) LIKE '%{3}%' OR {1} LIKE '%{3}%' OR {2} LIKE '%{3}%'",
-                                        FieldDataTable.ColumnTag,
-                                        FieldDataTable.ColumnName,
-                                        FieldDataTable.ColumnValue,
-                                        _fieldSearchTextBox.Text);
+            string text = _fieldSearchTextBox.Text;
+            search = $"CONVERT({FieldDataTable.ColumnTag}, System.String) LIKE '%{text}%' OR {FieldDataTable.ColumnName} LIKE '%{text}%' OR {FieldDataTable.ColumnValue} LIKE '%{text}%'";
         }
 
         if (_session is null)
@@ -401,10 +399,8 @@ partial class MessagesPanel : FixClientPanel
         }
         else
         {
-            search = string.Format("{0} LIKE '%{2}%' OR {1} LIKE '%{2}%'",
-                                    MessageTypeDataTable.ColumnSearchMsgType,
-                                    MessageTypeDataTable.ColumnSearchMsgTypeDescription,
-                                    _messageSearchTextBox.Text.ToUpper());
+            string text = _messageSearchTextBox.Text.ToUpper();
+            search = $"{MessageTypeDataTable.ColumnSearchMsgType} LIKE '%{text}%' OR {MessageTypeDataTable.ColumnSearchMsgTypeDescription} LIKE '%{text}%'";
         }
 
         if (_session is null)
@@ -577,7 +573,7 @@ partial class MessagesPanel : FixClientPanel
 
         if (sender is ToolStripMenuItem item && item.Tag is CustomField field)
         {
-            message.Fields.Insert(ContextMenuRowIndex, new Fix.Field(field.Tag.ToString(), string.Empty));
+            message.Fields.Insert(ContextMenuRowIndex, new Fix.Field(field.Tag.ToString(CultureInfo.InvariantCulture), string.Empty));
         }
 
         MessageGridSelectionChanged(this, EventArgs.Empty);
@@ -783,7 +779,7 @@ partial class MessagesPanel : FixClientPanel
 
             if (totNoOrders is not null && totNoOrders.Value != null && totNoOrders.Value.Trim() != string.Empty)
             {
-                clOrdIdCount += Convert.ToInt32(totNoOrders.Value);
+                clOrdIdCount += Convert.ToInt32(totNoOrders.Value, CultureInfo.InvariantCulture);
             }
             else
             {
@@ -890,7 +886,7 @@ partial class MessagesPanel : FixClientPanel
                 CustomField custom;
                 if (!Session.CustomFields.TryGetValue(field.Tag, out _) && defineUnknownAsCustom)
                 {
-                    custom = new CustomField { Tag = field.Tag, Name = field.Tag.ToString() };
+                    custom = new CustomField { Tag = field.Tag, Name = field.Tag.ToString(CultureInfo.InvariantCulture) };
                     Session.AddCustomField(custom);
                 }
             }
@@ -1106,8 +1102,8 @@ partial class MessagesPanel : FixClientPanel
 
                 if (field.Tag == FIX_5_0SP2.Fields.MsgSeqNum.Tag)
                 {
-                    defaults.Fields[index].Value = Session.OutgoingSeqNum.ToString();
-                    updatedFields.Add(new KeyValuePair<int, string>(index, Session.OutgoingSeqNum.ToString()));
+                    defaults.Fields[index].Value = Session.OutgoingSeqNum.ToString(CultureInfo.InvariantCulture);
+                    updatedFields.Add(new KeyValuePair<int, string>(index, Session.OutgoingSeqNum.ToString(CultureInfo.InvariantCulture)));
                 }
                 else if (field.Tag == FIX_5_0SP2.Fields.ClOrdID.Tag && Session.AutoClOrdId)
                 {
@@ -1122,15 +1118,15 @@ partial class MessagesPanel : FixClientPanel
                         message.MsgType != FIX_5_0SP2.Messages.OrderCancelReplaceRequest.MsgType)
                     {
                         int listId = Session.NextListId++;
-                        defaults.Fields[index].Value = listId.ToString();
-                        updatedFields.Add(new KeyValuePair<int, string>(index, listId.ToString()));
+                        defaults.Fields[index].Value = listId.ToString(CultureInfo.InvariantCulture);
+                        updatedFields.Add(new KeyValuePair<int, string>(index, listId.ToString(CultureInfo.InvariantCulture)));
                     }
                 }
                 else if (field.Tag == FIX_5_0SP2.Fields.AllocID.Tag && Session.AutoAllocId)
                 {
                     int allocId = Session.NextAllocId++;
-                    defaults.Fields[index].Value = allocId.ToString();
-                    updatedFields.Add(new KeyValuePair<int, string>(index, allocId.ToString()));
+                    defaults.Fields[index].Value = allocId.ToString(CultureInfo.InvariantCulture);
+                    updatedFields.Add(new KeyValuePair<int, string>(index, allocId.ToString(CultureInfo.InvariantCulture)));
                 }
             }
         }
@@ -1142,20 +1138,20 @@ partial class MessagesPanel : FixClientPanel
 
                 if (field.Tag == FIX_5_0SP2.Fields.MsgSeqNum.Tag)
                 {
-                    defaults.Fields[index].Value = Session.OutgoingSeqNum.ToString();
-                    updatedFields.Add(new KeyValuePair<int, string>(index, Session.OutgoingSeqNum.ToString()));
+                    defaults.Fields[index].Value = Session.OutgoingSeqNum.ToString(CultureInfo.InvariantCulture);
+                    updatedFields.Add(new KeyValuePair<int, string>(index, Session.OutgoingSeqNum.ToString(CultureInfo.InvariantCulture)));
                 }
                 else if (field.Tag == FIX_5_0SP2.Fields.OrderID.Tag)
                 {
                     int orderId = Session.NextOrderId++;
-                    defaults.Fields[index].Value = orderId.ToString();
-                    updatedFields.Add(new KeyValuePair<int, string>(index, orderId.ToString()));
+                    defaults.Fields[index].Value = orderId.ToString(CultureInfo.InvariantCulture);
+                    updatedFields.Add(new KeyValuePair<int, string>(index, orderId.ToString(CultureInfo.InvariantCulture)));
                 }
                 else if (field.Tag == FIX_5_0SP2.Fields.ExecID.Tag)
                 {
                     int execId = Session.NextExecId++;
-                    defaults.Fields[index].Value = execId.ToString();
-                    updatedFields.Add(new KeyValuePair<int, string>(index, execId.ToString()));
+                    defaults.Fields[index].Value = execId.ToString(CultureInfo.InvariantCulture);
+                    updatedFields.Add(new KeyValuePair<int, string>(index, execId.ToString(CultureInfo.InvariantCulture)));
                 }
             }
         }
@@ -1372,7 +1368,7 @@ partial class MessagesPanel : FixClientPanel
                 if (field.Tag == FIX_5_0SP2.Fields.NextExpectedMsgSeqNum.Tag &&
                     Session.NextExpectedMsgSeqNum)
                 {
-                    message.Fields[index].Value = Session.IncomingSeqNum.ToString();
+                    message.Fields[index].Value = Session.IncomingSeqNum.ToString(CultureInfo.InvariantCulture);
                 }
 
                 //
@@ -1390,34 +1386,34 @@ partial class MessagesPanel : FixClientPanel
                     }
                     else if (field.Tag == FIX_5_0SP2.Fields.OrderID.Tag)
                     {
-                        message.Fields[index].Value = Session.NextOrderId.ToString();
+                        message.Fields[index].Value = Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
                     }
                     else if (field.Tag == FIX_5_0SP2.Fields.ExecID.Tag)
                     {
-                        message.Fields[index].Value = Session.NextExecId.ToString();
+                        message.Fields[index].Value = Session.NextExecId.ToString(CultureInfo.InvariantCulture);
                     }
                     else if (field.Tag == FIX_5_0SP2.Fields.ListID.Tag)
                     {
-                        message.Fields[index].Value = Session.NextListId.ToString();
+                        message.Fields[index].Value = Session.NextListId.ToString(CultureInfo.InvariantCulture);
                     }
                     else if (field.Tag == FIX_5_0SP2.Fields.ListSeqNo.Tag && message.MsgType != FIX_4_0.Messages.KodiakWaveOrder.MsgType)
                     {
                         if (Session.AutoListSeqNo)
                         {
-                            message.Fields[index].Value = nextListSeqNo.ToString();
+                            message.Fields[index].Value = nextListSeqNo.ToString(CultureInfo.InvariantCulture);
                             ++nextListSeqNo;
                         }
                     }
                     else if (field.Tag == FIX_5_0SP2.Fields.AllocID.Tag)
                     {
-                        message.Fields[index].Value = nextAllocId.ToString();
+                        message.Fields[index].Value = nextAllocId.ToString(CultureInfo.InvariantCulture);
                     }
                 }
                 else if (message.MsgType == FIX_5_0SP2.Messages.AllocationInstruction.MsgType)
                 {
                     if (field.Tag == FIX_5_0SP2.Fields.AllocID.Tag)
                     {
-                        message.Fields[index].Value = nextAllocId.ToString();
+                        message.Fields[index].Value = nextAllocId.ToString(CultureInfo.InvariantCulture);
                     }
                 }
 
@@ -1609,7 +1605,7 @@ partial class MessagesPanel : FixClientPanel
         {
             message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         }
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, order.CumQty ?? 0);
@@ -1655,7 +1651,7 @@ partial class MessagesPanel : FixClientPanel
         {
             message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
         }
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, order.CumQty ?? 0);
@@ -1698,10 +1694,10 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.New);
 
-        order.OrderID ??= Session.NextOrderId.ToString();
+        order.OrderID ??= Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, 0);
@@ -1744,10 +1740,10 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Rejected);
 
-        order.OrderID ??= Session.NextOrderId.ToString();
+        order.OrderID ??= Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, 0);
@@ -1790,10 +1786,10 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Filled);
 
-        order.OrderID ??= Session.NextOrderId.ToString();
+        order.OrderID ??= Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, order.LeavesQty ?? order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, order.Price ?? 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, order.OrderQty);
@@ -1881,10 +1877,10 @@ partial class MessagesPanel : FixClientPanel
         message.Fields.Set(FIX_5_0SP2.Fields.OrderQty, order.OrderQty);
         message.Fields.Set(FIX_5_0SP2.OrdStatus.Canceled);
 
-        order.OrderID ??= Session.NextOrderId.ToString();
+        order.OrderID ??= Session.NextOrderId.ToString(CultureInfo.InvariantCulture);
 
         message.Fields.Set(FIX_5_0SP2.Fields.OrderID, order.OrderID);
-        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString());
+        message.Fields.Set(FIX_5_0SP2.Fields.ExecID, Session.NextExecId.ToString(CultureInfo.InvariantCulture));
         message.Fields.Set(FIX_5_0SP2.Fields.LastQty, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.LastPx, 0);
         message.Fields.Set(FIX_5_0SP2.Fields.CumQty, order.OrderQty);
