@@ -11,3 +11,4 @@ build
 *.egg-info
 BenchmarkDotNet.Artifacts
 .bdn
+**/TestResults
